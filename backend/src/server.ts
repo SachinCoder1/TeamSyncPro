@@ -7,8 +7,8 @@ import helmet from "helmet";
 dotenv.config();
 
 import CONNECT_MONGO_DB from "~/db";
-import { ENV, PORT } from "~/constants";
-import { ENV_TYPE } from "./types";
+import { PORT } from "~/constants";
+import { CLIENT_URL } from "~/config";
 
 const app = express();
 
@@ -19,11 +19,7 @@ app.use(compression());
 app.use(helmet());
 app.use(
   cors({
-    origin: [
-      ENV === ENV_TYPE.DEVELOPMENT
-        ? "http://localhost:3000"
-        : "http://coming::soon",
-    ],
+    origin: [CLIENT_URL],
   })
 );
 
