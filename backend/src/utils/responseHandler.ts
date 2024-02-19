@@ -49,19 +49,10 @@ export type SuccessMessageKeys = keyof typeof successMessages;
 export const successResponseHandler = (
   res: Response,
   messageKey: SuccessMessageKeys | CustomMessage,
-  data: any,
-  token?: string
+  data: any
 ) => {
   if (typeof messageKey === "string") {
     const { status, message } = successMessages[messageKey];
-    if (token) {
-      return res.status(status).json({
-        status,
-        message,
-        data,
-        token,
-      });
-    }
     return res.status(status).json({
       status,
       message,
@@ -69,14 +60,6 @@ export const successResponseHandler = (
     });
   }
   const { status, message } = messageKey;
-  if (token) {
-    return res.status(status).json({
-      status,
-      message,
-      data,
-      token,
-    });
-  }
   return res.status(status).json({
     status,
     message,

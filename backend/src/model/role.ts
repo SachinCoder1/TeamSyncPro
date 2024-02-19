@@ -9,7 +9,7 @@ const userProjectRoleSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "member", "moderator", "project_manager", "viewer"],
+    enum: ["ADMIN", "MEMBER", "MODERATOR", "PROJECT_MANAGER", "VIEWER"],
     required: true,
   },
   // Additional fields can be added here as needed, such as permissions
