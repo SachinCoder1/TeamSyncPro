@@ -27,13 +27,11 @@ const decryptedPassword = (
 export const checkPassword = async (password: string, hash: string) => {
   try {
     const isMatch = await decryptedPassword(password, hash);
-    if (isMatch) {
+    if (!isMatch) {
       console.log("Passwords match");
-      return true;
-    } else {
-      console.log("Passwords do not match");
       return false;
     }
+    return true;
   } catch (err) {
     console.error(err);
     return false;

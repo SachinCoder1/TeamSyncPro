@@ -1,1 +1,1 @@
-export * from "./schema-validator";
+export * from './authMiddleware'
