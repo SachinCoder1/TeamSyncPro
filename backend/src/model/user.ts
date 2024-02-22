@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import { USER_STATUS_ENUM } from "~/types";
+import mongoose, { Schema } from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -18,19 +17,36 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profileImage: {
+    description: {
       type: String,
+      trim: true,
     },
+    job: {
+      role: String,
+      department: String,
+    },
+
+    profileImage: String,
+    pronoun: String,
+
     emailVerified: {
       type: String,
-      enum: ["NOT_VERIFIED", "VERIFIED" ],
+      enum: ["NOT_VERIFIED", "VERIFIED"],
       required: true,
     },
     signupType: {
       type: String,
-      enum: ["GOOGLE", "EMAIL" ],
+      enum: ["GOOGLE", "EMAIL"],
       required: true,
     },
+
+    workspaces: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Workspace",
+        index: true,
+      },
+    ],
   },
   {
     timestamps: true,
