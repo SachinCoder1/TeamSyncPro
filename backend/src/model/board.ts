@@ -25,9 +25,12 @@ const projectSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Workspace",
     },
-    sections: {
-        type: 
-    }
+    sections: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Section",
+      },
+    ],
   },
   {
     timestamps: true,
