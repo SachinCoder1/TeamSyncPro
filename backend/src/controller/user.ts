@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
 import { User } from "~/model";
-import { errorResponseHandler, successResponseHandler } from "~/utils";
-import { encryptedPassword } from "~/utils/encryptPassword";
-import { generateAccessToken, generateRefreshToken } from "~/utils/token";
+import {
+  errorResponseHandler,
+  successResponseHandler,
+  encryptedPassword,
+  generateAccessToken,
+  generateRefreshToken,
+  checkPassword,
+} from "~/utils";
 
 export const signupWithEmail = async (req: Request, res: Response) => {
   try {
@@ -34,7 +39,50 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.log("erro:", error)
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const loginWithEmail = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    const isPasswordCorrect = await checkPassword(password, user.password);
+    if (!isPasswordCorrect) return errorResponseHandler(res, "UNAUTHORIZED");
+
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    return successResponseHandler(res, "SUCCESS", {
+      user: {
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+        emailVerified: user.emailVerified,
+      },
+      secret_tokens: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const MyDetails = (req: Request, res: Response) => {
+  try {
+    console.log("req.user: ", req.user);
+    return successResponseHandler(res, "SUCCESS", {
+      user: req?.user || "not found",
+    });
+  } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
