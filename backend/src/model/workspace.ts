@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { ObjectId } from "~/types";
 
 const workspaceSchema = new mongoose.Schema(
   {
@@ -8,29 +9,29 @@ const workspaceSchema = new mongoose.Schema(
       trim: true,
     },
     admin: {
-      type: Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "User",
     },
     members: [
       {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "User",
         index: true,
       },
     ],
     projects: [
       {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "Project",
       },
     ],
     invitedMembers: {
       emails: [String],
-      users: { type: [Schema.Types.ObjectId], ref: "User" },
+      users: [{ type: ObjectId, ref: "User" }],
     },
     tags: [
       {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "Tag",
       },
     ],
@@ -51,7 +52,7 @@ export const tagsSchema = new mongoose.Schema({
   },
   color: String,
   workspace: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: "Workspace",
   },
 });

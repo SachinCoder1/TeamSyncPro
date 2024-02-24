@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { ObjectId } from "~/types";
 
 const taskSchema = new mongoose.Schema(
   {
@@ -21,7 +22,7 @@ const taskSchema = new mongoose.Schema(
         enum: ["IS_BLOCKED_BY", "BLOCKS"],
       },
       task: {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "Task",
       },
     },
@@ -29,12 +30,12 @@ const taskSchema = new mongoose.Schema(
     storyPoints: Number,
     description: String,
 
-    parentTask: { type: Schema.Types.ObjectId, ref: "Task" }, // this can be deep nested task so parentTask is just a reference of its parent
-    tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
-    assignee: { type: Schema.Types.ObjectId, ref: "User" },
-    likedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    project: { type: Schema.Types.ObjectId, ref: "Project" },
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    parentTask: { type: ObjectId, ref: "Task" }, // this can be deep nested task so parentTask is just a reference of its parent
+    tags: [{ type: ObjectId, ref: "Tag" }],
+    assignee: { type: ObjectId, ref: "User" },
+    likedBy: [{ type: ObjectId, ref: "User" }],
+    project: { type: ObjectId, ref: "Project" },
+    comments: [{ type: ObjectId, ref: "Comment" }],
     activity: {}, // TODO
 
     /* Enums  */

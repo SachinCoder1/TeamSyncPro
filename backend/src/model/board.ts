@@ -1,40 +1,21 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { ObjectId } from "~/types";
 
-const projectSchema = new mongoose.Schema(
+// should we even use this board or not because project can directly ref to section...
+
+const boardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
       trim: true,
     },
-    color: {
-      type: String,
-    },
-    icon: {
-      type: String,
-    },
-    admin: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    members: {
-      type: [Schema.Types.ObjectId],
-      ref: "User",
-    },
-    workspace: {
-      type: Schema.Types.ObjectId,
-      ref: "Workspace",
-    },
-    sections: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Section",
-      },
-    ],
+    project: { type: ObjectId, ref: "Project" },
+    workspace: { type: ObjectId, ref: "Workspace" },
+
+    
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-export const Project = mongoose.model("project", projectSchema);
+export const Board = mongoose.model("board", boardSchema);

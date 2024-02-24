@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { ObjectId } from "~/types";
 
 const userSchema = new mongoose.Schema(
   {
@@ -42,7 +43,7 @@ const userSchema = new mongoose.Schema(
 
     workspaces: [
       {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "Workspace",
         index: true,
       },

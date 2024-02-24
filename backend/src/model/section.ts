@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { ObjectId } from "~/types";
 
 const sectionSchema = new mongoose.Schema(
   {
@@ -11,12 +12,8 @@ const sectionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    tasks: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Task",
-      },
-    ],
+    project: {type: ObjectId, ref: "Project"},
+    tasks: [{ type: ObjectId, ref: "Task" }],
   },
   {
     timestamps: true,

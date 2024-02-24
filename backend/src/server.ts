@@ -9,7 +9,7 @@ dotenv.config();
 import CONNECT_MONGO_DB from "~/db";
 import { PORT } from "~/constants";
 import { CLIENT_URL, DEFAULT_API_URL } from "~/config";
-import routes from "./routes";
+import routes from "~/routes";
 
 const app = express();
 

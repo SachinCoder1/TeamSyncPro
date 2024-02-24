@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { ObjectId } from "~/types";
 
 const commentSchema = new mongoose.Schema(
   {
@@ -8,7 +9,7 @@ const commentSchema = new mongoose.Schema(
       trim: true,
     },
     user: {
-      type: Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "User",
     },
     edited: Boolean,
