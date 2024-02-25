@@ -11,6 +11,8 @@ import { PORT } from "~/constants";
 import { CLIENT_URL, DEFAULT_API_URL } from "~/config";
 import routes from "~/routes";
 
+// 🔴 let's make apis in a way that in frontend we can pass what things we want using fields in request params and it gives only that fields... we can use this fields thing instead of graphql
+
 const app = express();
 
 CONNECT_MONGO_DB();
@@ -28,6 +30,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.use(`${DEFAULT_API_URL}/auth`, routes.auth);
 app.use(`${DEFAULT_API_URL}/user`, routes.user);
 
 app.all("*", (req, res) => {

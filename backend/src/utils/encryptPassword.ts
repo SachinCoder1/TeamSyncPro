@@ -28,7 +28,6 @@ export const checkPassword = async (password: string, hash: string) => {
   try {
     const isMatch = await decryptedPassword(password, hash);
     if (!isMatch) {
-      console.log("Passwords match");
       return false;
     }
     return true;
