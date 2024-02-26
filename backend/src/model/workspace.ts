@@ -12,6 +12,10 @@ const workspaceSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "User",
     },
+    personal: {
+      type: Boolean,
+      default: false,
+    },
     members: [
       {
         type: ObjectId,

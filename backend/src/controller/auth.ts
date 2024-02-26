@@ -25,8 +25,8 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       email,
       name,
       password: hashedPassword,
-      emailVerified: "NOT_VERIFIED",
-      signupType: "EMAIL",
+      signupMethod: "EMAIL",
+      signupType: "SELF"
     }).save();
 
     const accessToken = generateAccessToken(newUser._id);
@@ -39,6 +39,7 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
+    console.log("err", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -65,6 +66,10 @@ export const loginWithEmail = async (req: Request, res: Response) => {
         email: user.email,
         profileImage: user.profileImage,
         emailVerified: user.emailVerified,
+        onboarding: user.onboarding,
+        workspaces: user.workspaces,
+
+        // add more fields
       },
       secret_tokens: {
         accessToken,

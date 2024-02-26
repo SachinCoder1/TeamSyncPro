@@ -6,7 +6,7 @@ import {
   successResponseHandler,
 } from "~/utils";
 import jwt from "jsonwebtoken";
-import { Types } from "mongoose";
+import { UserMiddlewareType } from "~/types";
 
 export const authMiddleware = async (
   req: Request,
@@ -26,7 +26,8 @@ export const authMiddleware = async (
       return errorResponseHandler(res, "UNAUTHORIZED");
     }
 
-    const decoded = jwt.verify(accessToken, JWT_SECRET);
+    const decoded = jwt.verify(accessToken, JWT_SECRET) as UserMiddlewareType;
+    if (!decoded || !decoded.id) return errorResponseHandler(res, "UNAUTHORIZED");
     req.user = decoded;
     next();
   } catch (err: any) {
@@ -58,9 +59,7 @@ export const authRefreshMiddleware = async (req: Request, res: Response) => {
       return errorResponseHandler(res, "UNAUTHORIZED");
     }
 
-    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET) as {
-      id: Types.ObjectId;
-    };
+    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET) as UserMiddlewareType;
     console.log("decoded: ", decoded);
     const accessToken = generateAccessToken(decoded.id);
     return successResponseHandler(res, "SUCCESS", {
