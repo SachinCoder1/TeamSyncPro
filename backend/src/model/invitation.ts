@@ -8,9 +8,18 @@ const invitationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      enum: ["WORKSPACE", "PROJECT"],
+      default: "WORKSPACE",
+    },
     workspace: {
       type: ObjectId,
       ref: "Workspace",
+    },
+    project: {
+      type: ObjectId,
+      ref: "Project",
     },
     status: {
       type: String,

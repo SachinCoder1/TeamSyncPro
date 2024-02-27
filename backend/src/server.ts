@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.send("Hello World!");
 });
 
@@ -33,6 +33,7 @@ app.use(`${DEFAULT_API_URL}/user`, routes.user);
 app.use(`${DEFAULT_API_URL}/onboard`, routes.onboard);
 app.use(`${DEFAULT_API_URL}/workspace`, routes.workspace);
 app.use(`${DEFAULT_API_URL}/project`, routes.project);
+app.use(`${DEFAULT_API_URL}/invite`, routes.invite);
 
 app.all("*", (req, res) => {
   res.status(404).send(`Accessing Invalid route ${req.originalUrl} `);
