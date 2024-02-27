@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Invitation } from "~/model/invitation";
 import { TObjectId } from "~/types";
 import { Types } from "mongoose";
+import { sendEmail } from "~/service/email";
 
 // export const createDefaultWorkspace = async (req: Request, res: Response) => {
 //   try {
@@ -72,6 +73,17 @@ export const createWorkspace = async (req: Request, res: Response) => {
 
       // Send invitation email
       // sendInvitationEmail(email, invitationToken, name);
+      await sendEmail(
+        email,
+        `Invitation to ${workspace.name} `,
+        `<h1>
+           ${email} Invited You to join ${workspace.name}     
+        </h1>
+        <p>You can join It in just 2 mins using the below link</p>
+         <a href=http://localhost:3000/invitation/${invitationToken} />
+         <p> if the above link do not work please use this ${invitationToken} </p>
+        `
+      );
 
       return { email, userId, invitationToken };
     });

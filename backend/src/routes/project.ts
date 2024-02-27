@@ -1,9 +1,35 @@
 import express from "express";
-import { MyDetails } from "~/controller/user";
+import {
+  createProject,
+  deleteProject,
+  updateProject,
+} from "~/controller/project";
 
 import { authMiddleware } from "~/middleware";
+import {
+  validateCreateProjectBody,
+  validateUpdateProjectBody,
+} from "~/middleware/schema-validator/project";
 
 const router = express.Router();
 
+router.post(
+  "/create",
+  validateCreateProjectBody,
+  authMiddleware,
+  createProject
+);
+router.patch(
+  "/update/:projectId",
+  validateUpdateProjectBody,
+  authMiddleware,
+  updateProject
+);
+router.delete("/delete/:projectId", authMiddleware, deleteProject);
 
 export default router;
+
+
+// let's test these apis i just made ^
+
+// get the project

@@ -71,7 +71,7 @@ export const onboardUser = async (req: Request, res: Response) => {
       name: projectName,
       admin: userId,
       workspace: workspace._id,
-      color: randomColor,
+      color: `#${randomColor}`,
       icon: "DEFAULT",
     });
 
@@ -107,6 +107,8 @@ export const onboardUser = async (req: Request, res: Response) => {
     workspace.projects.push(project._id);
     const sectionIds = createdSections.map((item) => item._id);
     project.sections.push(...sectionIds);
+
+    /** @dev We should use promise here */
     await project.save();
     await workspace.save();
     await user.save();
