@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
       trim: true,
     },
     email: {
@@ -16,7 +15,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
@@ -39,6 +37,8 @@ const userSchema = new mongoose.Schema(
     signupType: {
       type: String,
       enum: ["INVITED", "SELF"],
+      required: true,
+      default: "SELF"
     },
 
     emailVerified: {
@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema(
     signupMethod: {
       type: String,
       enum: ["GOOGLE", "EMAIL"],
+      default: "EMAIL",
       required: true,
     },
     onboarding: {

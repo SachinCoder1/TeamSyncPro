@@ -31,7 +31,6 @@ export const authMiddleware = async (
     req.user = decoded;
     next();
   } catch (err: any) {
-    console.log("err: ", err);
     if (err.name === "JsonWebTokenError") {
       return errorResponseHandler(res, "UNAUTHORIZED");
     } else if (err.name === "TokenExpiredError") {
@@ -60,13 +59,11 @@ export const authRefreshMiddleware = async (req: Request, res: Response) => {
     }
 
     const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET) as UserMiddlewareType;
-    console.log("decoded: ", decoded);
     const accessToken = generateAccessToken(decoded.id);
     return successResponseHandler(res, "SUCCESS", {
       secret_tokens: { accessToken },
     });
   } catch (err: any) {
-    console.log("err: ", err);
     if (err.name === "JsonWebTokenError") {
       return errorResponseHandler(res, "UNAUTHORIZED");
     } else if (err.name === "TokenExpiredError") {

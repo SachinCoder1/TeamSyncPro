@@ -80,7 +80,6 @@ export const inviteUsersToWorkspace = async (req: Request, res: Response) => {
       invitations,
     });
   } catch (error) {
-    console.log("error: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -122,7 +121,6 @@ export const inviteMembersToProject = async (req: Request, res: Response) => {
 
       if (existingInvitation) {
         // Invitation already sent, skip this iteration
-        console.log("invitation already sent...", existingInvitation);
         return null;
       }
 
@@ -161,17 +159,74 @@ export const inviteMembersToProject = async (req: Request, res: Response) => {
     const invitations = (await Promise.all(invitationPromises)).filter(
       (invite) => invite !== null
     );
-    console.log("inviations promises...", invitations);
 
     // Save the project if there were changes to its members list
     if (invitations.length > 0) {
-      console.log("it does come here...");
       await project.save();
     }
 
     return successResponseHandler(res, "SUCCESS", {
       project,
       invitations,
+    });
+  } catch (error) {
+    console.error("error: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const acceptWorkspaceInvitation = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { invitationToken } = req.params;
+    // Find the invitation by token
+    const invitation = await Invitation.findOne({
+      invitation_token: invitationToken,
+    });
+
+    if (!invitation) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    if (invitation.status === "ACCEPTED") {
+      return errorResponseHandler(res, "CONFLICT");
+    }
+
+    // Find or create the user
+    let user = await User.findOne({ email: invitation.invited_to });
+    if (!user) {
+      // Create a new user if one doesn't exist
+      user = new User({
+        email: invitation.invited_to,
+        signupType: "INVITED",
+      });
+    }
+
+    // Add the workspace to the user's workspaces if not already present
+    if (!user.workspaces.includes(invitation?.workspace as Types.ObjectId)) {
+      user.workspaces.push(invitation?.workspace as Types.ObjectId);
+    }
+
+    // Add the user to the workspace's members
+    const workspace = await Workspace.findById(invitation.workspace);
+    if (!workspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+    if (!workspace.members.includes(user._id)) {
+      workspace.members.push(user._id as Types.ObjectId);
+    }
+
+    // Mark the invitation as accepted
+    invitation.status = "ACCEPTED";
+    await invitation.save();
+    await workspace.save();
+    await user.save();
+
+    return successResponseHandler(res, "SUCCESS", {
+      user,
+      workspace,
     });
   } catch (error) {
     console.error("error: ", error);

@@ -4,7 +4,6 @@ import { errorResponseHandler, successResponseHandler } from "~/utils";
 
 export const MyDetails = async (req: Request, res: Response) => {
   try {
-    console.log("req.user: ", req.user);
     // Fetch user details excluding password
     const user = await User.findById(req.user?.id).select("-password").lean(); // Use lean for faster execution as we just need the JSON data
 

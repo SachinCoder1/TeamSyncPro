@@ -118,7 +118,6 @@ export const onboardUser = async (req: Request, res: Response) => {
       createdTasks,
     });
   } catch (error) {
-    console.log("err", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };

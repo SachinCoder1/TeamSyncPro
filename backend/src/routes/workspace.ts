@@ -1,10 +1,9 @@
 import express from "express";
-import { MyDetails } from "~/controller/user";
 import {
-  createWorkspace, inviteMembers,
+  createWorkspace, deleteWorkspace,
 } from "~/controller/workspace";
 import { authMiddleware } from "~/middleware";
-import { validateCreateWorkspaceBody, validateInviteMembersWorkspaceBody } from "~/middleware/schema-validator/workspace";
+import { validateCreateWorkspaceBody } from "~/middleware/schema-validator/workspace";
 
 const router = express.Router();
 
@@ -15,7 +14,11 @@ router.post(
   createWorkspace
 );
 
+router.delete(
+  "/delete-workspace/:workspaceId",
+  authMiddleware,
+  deleteWorkspace
+);
 
-// router.patch("/update-workspace", authMiddleware,)
-router.post('/invite-members', validateInviteMembersWorkspaceBody, authMiddleware,inviteMembers )
+
 export default router;

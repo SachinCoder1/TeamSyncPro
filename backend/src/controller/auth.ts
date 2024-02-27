@@ -26,7 +26,7 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       name,
       password: hashedPassword,
       signupMethod: "EMAIL",
-      signupType: "SELF"
+      signupType: "SELF",
     }).save();
 
     const accessToken = generateAccessToken(newUser._id);
@@ -39,7 +39,6 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.log("err", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -54,7 +53,10 @@ export const loginWithEmail = async (req: Request, res: Response) => {
       return errorResponseHandler(res, "NOT_FOUND");
     }
 
-    const isPasswordCorrect = await checkPassword(password, user.password);
+    const isPasswordCorrect = await checkPassword(
+      password,
+      user?.password as string
+    );
     if (!isPasswordCorrect) return errorResponseHandler(res, "UNAUTHORIZED");
 
     const accessToken = generateAccessToken(user._id);

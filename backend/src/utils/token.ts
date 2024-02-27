@@ -10,7 +10,7 @@ const getExpiryDate = (milisecond: number) => {
 
 export const generateAccessToken = (id: Types.ObjectId) => {
   const token = jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "5h",
   });
 
   return { token, expiresIn: getExpiryDate(ACCESS_TOKEN_TIME) };
