@@ -1,19 +1,13 @@
 import express from "express";
 import { MyDetails } from "~/controller/user";
 import {
-  createDefaultWorkspace,
-  createWorkspace,
+  createWorkspace, inviteMembers,
 } from "~/controller/workspace";
 import { authMiddleware } from "~/middleware";
-import { validateCreateWorkspaceBody } from "~/middleware/schema-validator/workspace";
+import { validateCreateWorkspaceBody, validateInviteMembersWorkspaceBody } from "~/middleware/schema-validator/workspace";
 
 const router = express.Router();
 
-router.post(
-  "/create-default-workspace",
-  authMiddleware,
-  createDefaultWorkspace
-);
 router.post(
   "/create-workspace",
   validateCreateWorkspaceBody,
@@ -22,6 +16,6 @@ router.post(
 );
 
 
-router.patch("/update-workspace", authMiddleware,)
-router.post('/invite-members', authMiddleware, )
+// router.patch("/update-workspace", authMiddleware,)
+router.post('/invite-members', validateInviteMembersWorkspaceBody, authMiddleware,inviteMembers )
 export default router;

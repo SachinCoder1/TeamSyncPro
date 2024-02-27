@@ -3,33 +3,35 @@ import { User, Workspace } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 import { v4 as uuidv4 } from "uuid";
 import { Invitation } from "~/model/invitation";
+import { TObjectId } from "~/types";
+import { Types } from "mongoose";
 
-export const createDefaultWorkspace = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user?.id;
-    const user = await User.findById(userId);
-    if (user?.onboarding?.step !== "SIGNED_UP") {
-      return errorResponseHandler(res, "CONFLICT");
-    }
-    const workspace = await new Workspace({
-      name: "My Workspace",
-      admin: userId,
-      personal: true,
-      members: [userId],
-    }).save();
+// export const createDefaultWorkspace = async (req: Request, res: Response) => {
+//   try {
+//     const userId = req.user?.id;
+//     const user = await User.findById(userId);
+//     if (user?.onboarding?.step !== "SIGNED_UP") {
+//       return errorResponseHandler(res, "CONFLICT");
+//     }
+//     const workspace = await new Workspace({
+//       name: "My Workspace",
+//       admin: userId,
+//       personal: true,
+//       members: [userId],
+//     }).save();
 
-    await User.findByIdAndUpdate(userId, {
-      $push: { workspaces: workspace._id },
-      selectedWorkspace: workspace._id,
-      "onboarding.step": "WORKSPACE_CREATED",
-    });
-    return successResponseHandler(res, "SUCCESS", {
-      workspace,
-    });
-  } catch (error) {
-    return errorResponseHandler(res, "SERVER_ERROR");
-  }
-};
+//     await User.findByIdAndUpdate(userId, {
+//       $push: { workspaces: workspace._id },
+//       selectedWorkspace: workspace._id,
+//       "onboarding.step": "WORKSPACE_CREATED",
+//     });
+//     return successResponseHandler(res, "SUCCESS", {
+//       workspace,
+//     });
+//   } catch (error) {
+//     return errorResponseHandler(res, "SERVER_ERROR");
+//   }
+// };
 
 export const createWorkspace = async (req: Request, res: Response) => {
   try {
@@ -99,9 +101,17 @@ export const inviteMembers = async (req: Request, res: Response) => {
     }
 
     const invitationPromises = membersEmails.map(async (email: string) => {
+      const lowerCaseEmail = email.toLowerCase();
       const user = await User.findOne({ email: email.toLowerCase() });
 
       //  check if invitation is already sent.
+      if (
+        workspace.invitedMembers?.users.includes(user?._id as Types.ObjectId) ||
+        workspace.invitedMembers?.emails.includes(lowerCaseEmail)
+      ) {
+        // Invitation already sent, skip this iteration
+        return null;
+      }
 
       let userId = null;
       if (user) {
@@ -134,7 +144,9 @@ export const inviteMembers = async (req: Request, res: Response) => {
     });
 
     // Wait for all invitations to be processed
-    const invitations = await Promise.all(invitationPromises);
+    const invitations = (await Promise.all(invitationPromises)).filter(
+      (invite) => invite !== null
+    );
 
     await workspace.save();
 

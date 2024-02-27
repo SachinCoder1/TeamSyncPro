@@ -35,15 +35,16 @@ export const onboardUser = async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const user = await User.findById(userId).select("-password");
     if (!user) return errorResponseHandler(res, "NOT_FOUND");
-    if (user.onboarding?.step === "COMPLETED")
+    if (user.onboarding?.step === "COMPLETED"){
       return errorResponseHandler(res, "CONFLICT");
-    let workspace = await Workspace.findOne({
-      admin: userId,
-      personal: true,
-    });
+    }
+    // let workspace = await Workspace.findOne({
+    //   admin: userId,
+    //   personal: true,
+    // });
 
-    if (!workspace) {
-      workspace = await new Workspace({
+    // if (!workspace) {
+      let workspace = await new Workspace({
         name: "My Workspace",
         admin: userId,
         personal: true,
@@ -61,7 +62,7 @@ export const onboardUser = async (req: Request, res: Response) => {
       //     selectedWorkspace: workspace._id,
       //     "onboarding.step": "WORKSPACE_CREATED",
       //   });
-    }
+    // }
 
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 
