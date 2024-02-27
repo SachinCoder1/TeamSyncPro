@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
 app.use(`${DEFAULT_API_URL}/auth`, routes.auth);
 app.use(`${DEFAULT_API_URL}/user`, routes.user);
 app.use(`${DEFAULT_API_URL}/workspace`, routes.workspace);
+app.use(`${DEFAULT_API_URL}/onboard`, routes.onboard);
 
 app.all("*", (req, res) => {
   res.status(404).send(`Accessing Invalid route ${req.originalUrl} `);

@@ -3,10 +3,7 @@ import { ObjectId } from "~/types";
 
 const invitationSchema = new mongoose.Schema(
   {
-    invited_from: {
-      email: String,
-      user: { type: ObjectId, ref: "User" },
-    },
+    invited_from: { type: ObjectId, ref: "User" },
     invited_to: {
       type: String,
       required: true,

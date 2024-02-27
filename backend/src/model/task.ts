@@ -37,6 +37,7 @@ const taskSchema = new mongoose.Schema(
     project: { type: ObjectId, ref: "Project" },
     comments: [{ type: ObjectId, ref: "Comment" }],
     activity: {}, // TODO
+    taskCreator: {type: ObjectId, ref: "User"},
 
     /* Enums  */
     priority: {
@@ -53,7 +54,7 @@ const taskSchema = new mongoose.Schema(
     },
     workflow: {
       type: String,
-      enum: ["TODO", "IN_PROGRESS", "DONE"],
+      default: "TODO"
     },
   },
   {

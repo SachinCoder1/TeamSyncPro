@@ -59,7 +59,66 @@ export const createWorkspace = async (req: Request, res: Response) => {
 
       // Create an invitation record
       const invitation = new Invitation({
-        invited_from: { user: adminId },
+        invited_from: adminId,
+        invited_to: email,
+        workspace: workspace._id,
+        invitation_token: invitationToken,
+        status: "INVITED",
+      });
+
+      await invitation.save();
+
+      // Send invitation email
+      // sendInvitationEmail(email, invitationToken, name);
+
+      return { email, userId, invitationToken };
+    });
+
+    // Wait for all invitations to be processed
+    const invitations = await Promise.all(invitationPromises);
+
+    await workspace.save();
+
+    return successResponseHandler(res, "SUCCESS", {
+      workspace,
+      invitations,
+    });
+  } catch (error) {
+    console.log("error: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const inviteMembers = async (req: Request, res: Response) => {
+  try {
+    const id = req.user?.id;
+    const { workspaceId, membersEmails } = req.body;
+    const workspace = await Workspace.findById(workspaceId);
+    if (!workspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    const invitationPromises = membersEmails.map(async (email: string) => {
+      const user = await User.findOne({ email: email.toLowerCase() });
+
+      //  check if invitation is already sent.
+
+      let userId = null;
+      if (user) {
+        // Existing user, add to invitedMembers.users
+        workspace.invitedMembers?.users.push(user._id);
+        userId = { id: user._id, name: user.name, image: user.profileImage };
+      } else {
+        // New user, add to invitedMembers.emails
+        workspace.invitedMembers?.emails.push(email);
+      }
+
+      // Create an invitation token
+      const invitationToken = uuidv4();
+
+      // Create an invitation record
+      const invitation = new Invitation({
+        invited_from: id,
         invited_to: email,
         workspace: workspace._id,
         invitation_token: invitationToken,

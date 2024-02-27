@@ -56,16 +56,18 @@ const userSchema = new mongoose.Schema(
       done: {
         type: Boolean,
         default: false,
+        required:true,
       },
       step: {
         type: String,
         enum: [
           "SIGNED_UP",
+          "PROFILE_SETUP",
           "WORKSPACE_CREATED",
           "PROJECT_CREATED",
-          "TASK_CREATED",
           "SECTION_CREATED",
-          "INVITED_PEOPLE",
+          "TASK_CREATED",
+          "INVITED_PEOPLE_OPTIONAL",
           "COMPLETED",
         ],
         required: true,
@@ -73,7 +75,6 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    // workspaces.. here also confusing.. by default there will be my workspace how it will work here?
     workspaces: [
       {
         type: ObjectId,

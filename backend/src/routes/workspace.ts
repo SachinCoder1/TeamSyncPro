@@ -20,4 +20,8 @@ router.post(
   authMiddleware,
   createWorkspace
 );
+
+
+router.patch("/update-workspace", authMiddleware,)
+router.post('/invite-members', authMiddleware, )
 export default router;

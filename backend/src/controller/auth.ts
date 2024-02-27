@@ -67,9 +67,6 @@ export const loginWithEmail = async (req: Request, res: Response) => {
         profileImage: user.profileImage,
         emailVerified: user.emailVerified,
         onboarding: user.onboarding,
-        workspaces: user.workspaces,
-
-        // add more fields
       },
       secret_tokens: {
         accessToken,
