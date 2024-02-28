@@ -2,6 +2,7 @@ import express from "express";
 import {
   createProject,
   deleteProject,
+  getProjectDetails,
   updateProject,
 } from "~/controller/project";
 
@@ -12,6 +13,8 @@ import {
 } from "~/middleware/schema-validator/project";
 
 const router = express.Router();
+
+router.get("/:id", authMiddleware, getProjectDetails)
 
 router.post(
   "/create",

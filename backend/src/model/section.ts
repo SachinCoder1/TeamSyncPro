@@ -20,4 +20,4 @@ const sectionSchema = new mongoose.Schema(
   }
 );
 
-export const Section = mongoose.model("section", sectionSchema);
+export const Section = mongoose.model("Section", sectionSchema);

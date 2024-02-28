@@ -2,6 +2,35 @@ import { Request, Response } from "express";
 import { Project, Section, Task, Workspace } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 
+export const getProjectDetails = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id; // Assuming authentication middleware sets `req.user`
+    const { id } = req.params;
+
+    // Fetch the project with sections and tasks, ensure the user is associated
+    const project = await Project.findById(id)
+      .populate({
+        path: "sections",
+        options: { sort: { order: 1 } }, // Sorting sections by order
+        populate: {
+          path: "tasks",
+          options: { sort: { order: 1 } }, // Sorting tasks within each section by order
+        },
+      })
+      .populate("members", "name profilePicture _id email")
+      .lean();
+
+    if (!project) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    return successResponseHandler(res, "SUCCESS", project);
+  } catch (error) {
+    console.log("Error getting project details: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
 export const createProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id; // Assuming you have middleware that sets `req.user`
@@ -22,9 +51,8 @@ export const createProject = async (req: Request, res: Response) => {
     const project = new Project({
       name,
       admin: userId,
-      members: [userId],
+      members: [userId, ...workspace.members],
       workspace: workspaceId,
-      // Generate a random color and use a default icon for simplicity
       color: `#${randomColor}`,
       icon: "DEFAULT",
     });
