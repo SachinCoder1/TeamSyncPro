@@ -218,20 +218,20 @@ export const copySection = async (req: Request, res: Response) => {
 
     const copiedTasks = originalSection.tasks.map((task: any) => {
       return {
-        title: task.title,
+        title: `${task.title} (Copy)`,
         order: task.order,
         due: {
-          from: task.due.from,
-          to: task.due.to,
+          from: task?.due?.from,
+          to: task?.due?.to,
         },
-        storyPoints: task.storyPoints,
-        description: task.description,
-        tags: task.tags,
-        assignee: task.assignee,
+        storyPoints: task?.storyPoints,
+        description: task?.description,
+        tags: task?.tags,
+        assignee: task?.assignee,
         project: project._id,
-        taskCreator: task.taskCreator,
-        priority: task.priority,
-        status: task.status,
+        taskCreator: task?.taskCreator,
+        priority: task?.priority,
+        status: task?.status,
       };
     });
 

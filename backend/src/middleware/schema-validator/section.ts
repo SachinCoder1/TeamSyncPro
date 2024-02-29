@@ -56,10 +56,12 @@ export const validateReOrderSectionBody = (
       sectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required(),
-      projectId: Joi.string()
+      beforeSectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required(),
-      newPosition: Joi.number().min(0).required(),
+      afterSectionId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
     });
     const error = schema.validate(data).error;
     if (error) {

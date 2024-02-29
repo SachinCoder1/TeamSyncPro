@@ -28,7 +28,7 @@ router.patch(
 );
 router.patch(
   "/reorder",
-//   validateReOrderSectionBody,
+  validateReOrderSectionBody,
   authMiddleware,
   reorderSection
 );
