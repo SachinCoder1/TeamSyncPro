@@ -33,6 +33,7 @@ app.use(`${DEFAULT_API_URL}/user`, routes.user);
 app.use(`${DEFAULT_API_URL}/onboard`, routes.onboard);
 app.use(`${DEFAULT_API_URL}/workspace`, routes.workspace);
 app.use(`${DEFAULT_API_URL}/project`, routes.project);
+app.use(`${DEFAULT_API_URL}/section`, routes.section);
 app.use(`${DEFAULT_API_URL}/invite`, routes.invite);
 
 app.all("*", (req, res) => {

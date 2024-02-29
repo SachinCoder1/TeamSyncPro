@@ -12,7 +12,7 @@ const sectionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    project: {type: ObjectId, ref: "Project"},
+    project: { type: ObjectId, ref: "Project", required: true },
     tasks: [{ type: ObjectId, ref: "Task" }],
   },
   {

@@ -18,4 +18,4 @@ const boardSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Board = mongoose.model("board", boardSchema);
+export const Board = mongoose.model("Board", boardSchema);

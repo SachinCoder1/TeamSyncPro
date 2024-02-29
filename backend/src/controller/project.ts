@@ -62,13 +62,13 @@ export const createProject = async (req: Request, res: Response) => {
       project: project._id,
       section: project.sections[0], // Assuming the first section is 'Todo'
       taskCreator: userId,
-      order: 0,
+      order: 1,
     });
 
     const defaultSections = [
-      { title: "Todo", order: 0, project: project._id, tasks: [demoTask._id] },
-      { title: "In Progress", order: 1 },
-      { title: "Done", order: 2 },
+      { title: "Todo", order: 1, project: project._id, tasks: [demoTask._id] },
+      { title: "In Progress", order: 2, project: project._id },
+      { title: "Done", order: 3, project: project._id },
     ];
 
     // Create sections and add them to the project

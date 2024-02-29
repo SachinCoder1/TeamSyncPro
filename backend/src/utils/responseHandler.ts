@@ -42,6 +42,8 @@ export const errorResponseHandler = (
 export const successMessages = {
   SUCCESS: { status: 200, message: "SUCCESS" },
   CREATED: { status: 201, message: "CREATED" },
+  UPDATED: { status: 200, message: "UPDATED" },
+  DELETED: { status: 200, message: "DELETED" },
 };
 
 export type SuccessMessageKeys = keyof typeof successMessages;
