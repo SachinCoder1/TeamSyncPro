@@ -10,14 +10,86 @@ export const validateCreateTaskBody = (
   try {
     const data = req.body;
     const schema = Joi.object({
-      name: Joi.string().min(2).required(),
-    //   projectId: Joi.string()
-    //     .regex(/^[0-9a-fA-F]{24}$/)
-    //     .required(),
+      title: Joi.string().min(1).required(),
+      projectId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
       sectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required(),
-      parentTask: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateCreateSubTaskBody = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body;
+    const schema = Joi.object({
+      title: Joi.string().min(1).required(),
+      parentTaskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateTaskIdParam = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.params;
+    const schema = Joi.object({
+      taskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      userId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .optional(),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+export const validateAddDependencyParam = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.params;
+    const schema = Joi.object({
+      taskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      dependencyId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      dependencyType: Joi.string().valid("IS_BLOCKED_BY", "BLOCKS"),
     });
     const error = schema.validate(data).error;
     if (error) {
@@ -38,27 +110,127 @@ export const validateUpdateTaskBody = (
     const data = req.body;
     const schema = Joi.object({
       title: Joi.string().trim(),
-      due: Joi.object({
-        from: Joi.date().iso(), // we can remove this from schema because why do we need from date? 
-        to: Joi.date().iso().greater(Joi.ref("from")),
-      }),
       storyPoints: Joi.number().integer().min(0),
       description: Joi.string().trim(),
-      assignee: Joi.string(), // Assuming this is an ID; validate accordingly
       priority: Joi.string().valid("LOW", "MEDIUM", "HIGH", "HIGHEST"),
-      status: Joi.string().valid("INCOMPLETE", "COMPLETE", "DEFERRED"),
-      workflow: Joi.string(),
-    }).or(
-      "title",
-      "due",
-      "storyPoints",
-      "description",
-      "assignee",
-      "priority",
-      "status",
-      "workflow"
-    ); // At least one must be present
+    }).or("title", "storyPoints", "description", "priority"); // At least one must be present
 
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateDueDateBody = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body;
+    const schema = Joi.object({
+      dueDate: Joi.date().iso().required().greater("now"),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateReOrderTaskBody = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body;
+    const schema = Joi.object({
+      taskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      beforeTaskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      afterTaskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateAddCommentBody = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body;
+    const schema = Joi.object({
+      taskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      comment: Joi.string().required(),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateUpdateCommentBody = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body;
+    const schema = Joi.object({
+      commentId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+      comment: Joi.string().required(),
+    });
+    const error = schema.validate(data).error;
+    if (error) {
+      return errorResponseHandler(res, { status: 400, message: error.message });
+    }
+    next();
+  } catch (err) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const validateDeleteCommentParam = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.params;
+    const schema = Joi.object({
+      commentId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required(),
+    });
     const error = schema.validate(data).error;
     if (error) {
       return errorResponseHandler(res, { status: 400, message: error.message });

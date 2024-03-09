@@ -5,7 +5,7 @@
 
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { Comment, Task } from "~/model";
+import { Comment, Section, Task } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 import { calculateNewOrder } from "~/utils/calculateOrder";
 import { UpdateTaskBody } from "~/types";
@@ -36,46 +36,10 @@ export const createTask = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "CREATED", { task });
   } catch (error) {
+    console.log("err: ", error)
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
-
-// get a complete task by id
-
-export const getTask = async (req: Request, res: Response) => {
-  try {
-    const { taskId } = req.params;
-
-    const task = await Task.findById(taskId).lean();
-
-    if (!task) {
-      return errorResponseHandler(res, "NOT_FOUND");
-    }
-
-    return successResponseHandler(res, "SUCCESS", { task });
-  } catch (error) {
-    return errorResponseHandler(res, "SERVER_ERROR");
-  }
-};
-
-// get all sub tasks of a task
-
-export const getSubTasks = async (req: Request, res: Response) => {
-  try {
-    const { taskId } = req.params;
-
-    const subTasks = await Task.find({ parentTask: taskId }).lean();
-
-    return successResponseHandler(res, "SUCCESS", { subTasks });
-  } catch (error) {
-    return errorResponseHandler(res, "SERVER_ERROR");
-  }
-};
-
-
-
-
-
 
 export const updateTask = async (req: Request, res: Response) => {
   try {
@@ -112,6 +76,7 @@ export const updateTask = async (req: Request, res: Response) => {
 export const assignTask = async (req: Request, res: Response) => {
   try {
     const { taskId, userId } = req.params;
+    if(!taskId || !userId) return errorResponseHandler(res, "BAD_REQUEST");
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -187,11 +152,11 @@ export const removeDependencyFromTask = async (req: Request, res: Response) => {
 export const addDueDateToTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    const { dueOn } = req.body;
+    const { dueDate } = req.body;
 
     const task = await Task.findByIdAndUpdate(
       taskId,
-      { due: dueOn },
+      { due: dueDate },
       { new: true }
     ).lean();
 
@@ -219,28 +184,9 @@ export const removeDueDateFromTask = async (req: Request, res: Response) => {
   }
 };
 
-// update due date of a task
-
-export const updateDueDateOfTask = async (req: Request, res: Response) => {
-  try {
-    const { taskId } = req.params;
-    const { dueOn } = req.body;
-
-    const task = await Task.findByIdAndUpdate(
-      taskId,
-      { due: dueOn },
-      { new: true }
-    ).lean();
-
-    return successResponseHandler(res, "UPDATED", { task });
-  } catch (error) {
-    return errorResponseHandler(res, "SERVER_ERROR");
-  }
-};
-
 // update the order of a task
 
-export const updateOrderOfTask = async (req: Request, res: Response) => {
+export const reorderTask = async (req: Request, res: Response) => {
   try {
     const { taskId, beforeTaskId, afterTaskId } = req.body;
 
@@ -278,28 +224,46 @@ export const copyTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
 
-    const task = await Task.findById(taskId).lean();
-
-    if (!task) {
-      return errorResponseHandler(res, "NOT_FOUND");
+    // Find the original task
+    const originalTask = await Task.findById(taskId).lean();
+    if (!originalTask) {
+        return errorResponseHandler(res, "NOT_FOUND");
     }
 
-    // create a same things where title have (Copy) in the title and comments will be empty, assignee will be empty, likedBy will be empty, and dependency will be empty
+    // Get the last task in the section to determine the new order
+    const lastTask = await Task.findOne({ 
+        section: originalTask.section 
+    }).sort({ order: -1 });
 
-    const newTask = new Task({
-      ...task,
-      title: `${task.title} (Copy)`,
-      comments: [],
-      assignee: null,
-      likedBy: [],
-      dependency: null,
-      activity: {},
-    });
+    const newOrder = lastTask ? lastTask.order + 1 : 1;
 
+    // Create a new task based on the original
+    const newTaskData = {
+        ...originalTask,
+        title: `${originalTask.title} (Copy)`,
+        order: newOrder,
+        // Reset fields that should not be copied directly
+        likedBy: [],
+        comments: [],
+        activity: {},
+        status: "INCOMPLETE",
+        parentTask: null,
+        _id: new Types.ObjectId(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    };
+
+    const newTask = new Task(newTaskData);
     await newTask.save();
 
+    // If the original task is associated with a section, update that section's tasks array
+    if (originalTask.section) {
+        await Section.findByIdAndUpdate(originalTask.section, { $push: { tasks: newTask._id } });
+    }
+
     return successResponseHandler(res, "CREATED", { task: newTask });
-  } catch (error) {
+} catch (error) {
+    console.log("err: ", error)
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -308,16 +272,15 @@ export const copyTask = async (req: Request, res: Response) => {
 
 export const createSubTask = async (req: Request, res: Response) => {
   try {
-    const { parentId } = req.params;
-    const { title } = req.body;
+    const { parentTaskId,title } = req.body;
 
-    const parentTask = await Task.findById(parentId).lean();
+    const parentTask = await Task.findById(parentTaskId).lean();
 
     if (!parentTask) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
 
-    const lastSubTask = await Task.findOne({ parentTask: parentId })
+    const lastSubTask = await Task.findOne({ parentTask: parentTaskId })
       .sort({ order: -1 })
       .lean();
 
@@ -327,7 +290,7 @@ export const createSubTask = async (req: Request, res: Response) => {
 
     const subTask = new Task({
       title,
-      parentTask: parentId,
+      parentTask: parentTaskId,
       order: newOrder,
       project: parentTask.project,
       section: parentTask.section,
@@ -347,6 +310,7 @@ export const deleteTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
 
     const task = await Task.findByIdAndDelete(taskId).lean(); // delete the task
+    if(!task) return errorResponseHandler(res, "NOT_FOUND");
 
     return successResponseHandler(res, "DELETED", {
       task: task?._id,
@@ -428,8 +392,7 @@ export const unlikeTask = async (req: Request, res: Response) => {
 
 export const addCommentToTask = async (req: Request, res: Response) => {
   try {
-    const { taskId } = req.params;
-    const { comment } = req.body;
+    const { taskId, comment } = req.body;
 
     const newComment = new Comment({
       comment,
@@ -440,7 +403,7 @@ export const addCommentToTask = async (req: Request, res: Response) => {
     const savedComment = await newComment.save();
 
     const task = await Task.findByIdAndUpdate(taskId, {
-      $addToSet: { comments: savedComment._id },
+      $push: { comments: savedComment._id },
     }).lean();
 
     return successResponseHandler(res, "UPDATED", {
@@ -456,15 +419,16 @@ export const addCommentToTask = async (req: Request, res: Response) => {
 
 export const deleteCommentFromTask = async (req: Request, res: Response) => {
   try {
-    const { taskId, commentId } = req.params;
+    const { commentId } = req.params;
+    const comment = await Comment.findByIdAndDelete(commentId).lean();
+    if(!comment) return errorResponseHandler(res, "NOT_FOUND");
 
     const task = await Task.findByIdAndUpdate(
-      taskId,
+      comment?.task,
       { $pull: { comments: commentId } },
       { new: true }
     ).lean();
 
-    const comment = await Comment.findByIdAndDelete(commentId).lean();
 
     return successResponseHandler(res, "DELETED", { comment, task });
   } catch (error) {
@@ -476,16 +440,49 @@ export const deleteCommentFromTask = async (req: Request, res: Response) => {
 
 export const updateComment = async (req: Request, res: Response) => {
   try {
-    const { commentId } = req.params;
-    const { comment } = req.body;
+    const { commentId,comment } = req.body;
 
     const updatedComment = await Comment.findByIdAndUpdate(
       commentId,
-      { comment },
+      { comment, edited: true},
       { new: true }
     ).lean();
 
     return successResponseHandler(res, "UPDATED", { comment: updatedComment });
+  } catch (error) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+
+
+// get a complete task by id
+
+export const getTask = async (req: Request, res: Response) => {
+  try {
+    const { taskId } = req.params;
+
+    const task = await Task.findById(taskId).lean();
+
+    if (!task) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    return successResponseHandler(res, "SUCCESS", { task });
+  } catch (error) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+// get all sub tasks of a task
+
+export const getSubTasks = async (req: Request, res: Response) => {
+  try {
+    const { taskId } = req.params;
+
+    const subTasks = await Task.find({ parentTask: taskId }).lean();
+
+    return successResponseHandler(res, "SUCCESS", { subTasks });
   } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
   }
