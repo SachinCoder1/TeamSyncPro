@@ -8,6 +8,10 @@ const commentSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    task: {
+      type: ObjectId,
+      ref: "Task",
+    },
     user: {
       type: ObjectId,
       ref: "User",

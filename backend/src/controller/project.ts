@@ -60,7 +60,7 @@ export const createProject = async (req: Request, res: Response) => {
     const demoTask = new Task({
       title: "Task 1",
       project: project._id,
-      section: project.sections[0], // Assuming the first section is 'Todo'
+      section: project.sections[0]._id,
       taskCreator: userId,
       order: 1,
     });

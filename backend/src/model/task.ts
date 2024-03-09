@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { deleteTask } from "~/controller/task";
 import { ObjectId } from "~/types";
 
 const taskSchema = new mongoose.Schema(
@@ -12,10 +13,7 @@ const taskSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    due: {
-      from: Date,
-      to: Date,
-    },
+    due: Date,
     dependency: {
       by: {
         type: String,
@@ -35,9 +33,10 @@ const taskSchema = new mongoose.Schema(
     assignee: { type: ObjectId, ref: "User" },
     likedBy: [{ type: ObjectId, ref: "User" }],
     project: { type: ObjectId, ref: "Project" },
+    section: { type: ObjectId, ref: "Section" },
     comments: [{ type: ObjectId, ref: "Comment" }],
     activity: {}, // TODO
-    taskCreator: {type: ObjectId, ref: "User"},
+    taskCreator: { type: ObjectId, ref: "User" },
 
     /* Enums  */
     priority: {
@@ -48,13 +47,19 @@ const taskSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["INCOMPLETE", "COMPLETE", "DEFERRED"],
-      index: true,
+      enum: ["INCOMPLETE", "COMPLETE"],
       default: "INCOMPLETE",
     },
     workflow: {
       type: String,
-      default: "TODO"
+      default: "DEFAULT",
+      enum: [
+        "DEFAULT",
+        "DO_TODAY",
+        "DO_LATER",
+        "DO_THIS_WEEK",
+        "DO_THIS_MONTH",
+      ],
     },
   },
   {

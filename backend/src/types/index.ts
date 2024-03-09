@@ -8,3 +8,4 @@ export type UserMiddlewareType = {
 export const TObjectId = Types.ObjectId;
 
 export * from "./enum";
+export * from './reqBody'

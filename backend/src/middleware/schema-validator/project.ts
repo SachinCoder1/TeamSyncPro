@@ -11,7 +11,9 @@ export const validateCreateProjectBody = (
     const data = req.body;
     const schema = Joi.object({
       name: Joi.string().min(2).required(),
-      workspaceId: Joi.string().required().min(24),
+      workspaceId: Joi.string()
+      .regex(/^[0-9a-fA-F]{24}$/)
+      .required(),
     });
     const error = schema.validate(data).error;
     if (error) {

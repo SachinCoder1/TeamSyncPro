@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 import { Project, Section, Task } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
+import { calculateNewOrder } from "~/utils/calculateOrder";
 
 export const addSection = async (req: Request, res: Response) => {
   try {
@@ -131,18 +132,7 @@ export const updateSection = async (req: Request, res: Response) => {
 //   }
 // };
 
-const calculateNewOrder = (
-  beforeOrder: number | null,
-  afterOrder: number | null
-) => {
-  if (beforeOrder === null) {
-    return afterOrder !== null ? afterOrder / 2 : 1; // If no before task, halve the afterOrder or default to 1
-  }
-  if (afterOrder === null) {
-    return beforeOrder + 1; // If no after task, increment beforeOrder
-  }
-  return (beforeOrder + afterOrder) / 2; // Average of beforeOrder and afterOrder
-};
+
 
 // Route to reorder sections
 export const reorderSection = async (req: Request, res: Response) => {

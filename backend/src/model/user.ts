@@ -83,6 +83,30 @@ const userSchema = new mongoose.Schema(
         index: true,
       },
     ],
+
+    projects: [
+      {
+        type: ObjectId,
+        ref: "Project",
+        index: true,
+      },
+    ],
+
+    starredProjects: [
+      {
+        type: ObjectId,
+        ref: "Project",
+        index: true,
+      },
+    ],
+
+    starredWorkspaces: [
+      {
+        type: ObjectId,
+        ref: "Workspace",
+        index: true,
+      },
+    ],
   },
   {
     timestamps: true,
