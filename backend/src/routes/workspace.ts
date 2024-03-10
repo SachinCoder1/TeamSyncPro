@@ -3,6 +3,7 @@ import {
   createWorkspace, deleteWorkspace,
 } from "~/controller/workspace";
 import { authMiddleware } from "~/middleware";
+import { restrictsToWorkspace } from "~/middleware/roles/restrictsToWorkspace";
 import { validateCreateWorkspaceBody } from "~/middleware/schema-validator/workspace";
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.post(
 router.delete(
   "/delete-workspace/:workspaceId",
   authMiddleware,
+  restrictsToWorkspace("ADMIN"),
   deleteWorkspace
 );
 

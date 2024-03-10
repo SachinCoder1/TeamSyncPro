@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { Project, Section, Task, Workspace } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 
 export const getProjectDetails = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id; // Assuming authentication middleware sets `req.user`
-    const { id } = req.params;
+    const { projectId } = req.params;
 
     // Fetch the project with sections and tasks, ensure the user is associated
-    const project = await Project.findById(id)
+    const project = await Project.findById(projectId)
       .populate({
         path: "sections",
         options: { sort: { order: 1 } }, // Sorting sections by order
@@ -33,7 +34,7 @@ export const getProjectDetails = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // Assuming you have middleware that sets `req.user`
+    const userId = req.user?.id as Types.ObjectId; // Assuming you have middleware that sets `req.user`
     const { name, workspaceId } = req.body;
 
     // Check if the workspace exists and the user is part of it
@@ -47,11 +48,24 @@ export const createProject = async (req: Request, res: Response) => {
 
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 
+    const uniqueMembers: Types.ObjectId[] = [];
+    const memberTracker: { [key: string]: boolean } = {};
+    memberTracker[userId.toString()] = true; // Mark the userId as added by its string representation
+    uniqueMembers.push(userId);
+
+    workspace.members?.forEach((memberId) => {
+      const memberIdStr = memberId.toString(); // Convert ObjectId to string for key
+      if (!memberTracker[memberIdStr]) {
+        uniqueMembers.push(memberId);
+        memberTracker[memberIdStr] = true;
+      }
+    });
+
     // Create a new project
     const project = new Project({
       name,
       admin: userId,
-      members: [userId, ...workspace.members],
+      members: uniqueMembers,
       workspace: workspaceId,
       color: `#${randomColor}`,
       icon: "DEFAULT",
@@ -60,7 +74,7 @@ export const createProject = async (req: Request, res: Response) => {
     const demoTask = new Task({
       title: "Task 1",
       project: project._id,
-      section: project.sections[0]._id,
+      // section: project.sections[0]._id,
       taskCreator: userId,
       order: 1,
     });
@@ -77,6 +91,7 @@ export const createProject = async (req: Request, res: Response) => {
     // Add the project ID to the workspace
     workspace.projects.push(project._id);
     const sectionIds = createdSections.map((item) => item._id);
+    demoTask.section = sectionIds[0];
     project.sections.push(...sectionIds);
 
     await demoTask.save();

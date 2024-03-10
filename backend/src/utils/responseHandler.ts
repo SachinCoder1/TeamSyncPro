@@ -8,7 +8,7 @@ interface CustomMessage {
 export const errorMessages = {
   BAD_REQUEST: { status: 400, message: "Bad request" },
   UNAUTHORIZED: { status: 401, message: "UNAUTHORIZED" },
-  FORBIDDEN: { status: 403, message: "Forbidden access" },
+  FORBIDDEN: { status: 403, message: "Permission Required" },
   NOT_FOUND: { status: 404, message: "Resource not found" },
   CONFLICT: { status: 409, message: "CONFLICT" },
   SERVER_ERROR: { status: 500, message: "Internal server error" },

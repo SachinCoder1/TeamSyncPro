@@ -11,6 +11,7 @@ const workspaceSchema = new mongoose.Schema(
     admin: {
       type: ObjectId,
       ref: "User",
+      required: true,
     },
     personal: {
       type: Boolean,
