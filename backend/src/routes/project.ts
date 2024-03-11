@@ -1,4 +1,5 @@
 import express from "express";
+import { ROLES } from "~/constants";
 import {
   createProject,
   deleteProject,
@@ -22,20 +23,20 @@ router.post(
   "/create",
   validateCreateProjectBody,
   authMiddleware,
-  restrictsToWorkspace("MEMBER"),
+  restrictsToWorkspace(ROLES.MEMBER),
   createProject
 );
 router.patch(
   "/update/:projectId",
   validateUpdateProjectBody,
   authMiddleware,
-  restrictsToProject("MEMBER"),
+  restrictsToProject(ROLES.MEMBER),
   updateProject
 );
 router.delete(
   "/delete/:projectId",
   authMiddleware,
-  restrictsToProjectWorkspace("ADMIN"),
+  restrictsToProjectWorkspace(ROLES.ADMIN),
   deleteProject
 );
 

@@ -1,9 +1,12 @@
 import express from "express";
+import { ROLES } from "~/constants";
 import {
   inviteMembersToProject,
   inviteUsersToWorkspace,
 } from "~/controller/invite";
 import { authMiddleware } from "~/middleware";
+import { restrictsToProjectWorkspace } from "~/middleware/roles/restrictsToProject";
+import { restrictsToWorkspace } from "~/middleware/roles/restrictsToWorkspace";
 import {
   validateInviteMembersProjectBody,
   validateInviteMembersWorkspaceBody,
@@ -15,6 +18,7 @@ router.post(
   "/workspace",
   validateInviteMembersWorkspaceBody,
   authMiddleware,
+  restrictsToWorkspace(ROLES.MEMBER),
   inviteUsersToWorkspace
 );
 
@@ -23,6 +27,7 @@ router.post(
   "/project",
   validateInviteMembersProjectBody,
   authMiddleware,
+  restrictsToProjectWorkspace(ROLES.MEMBER),
   inviteMembersToProject
 );
 export default router;

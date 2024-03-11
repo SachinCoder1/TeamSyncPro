@@ -1,4 +1,5 @@
 import express from "express";
+import { ROLES } from "~/constants";
 import {
   addSection,
   copySection,
@@ -7,6 +8,7 @@ import {
   updateSection,
 } from "~/controller/section";
 import { authMiddleware } from "~/middleware";
+import { restrictsToProject } from "~/middleware/roles/restrictsToProject";
 import { validateObjectIDParam } from "~/middleware/schema-validator/idParam";
 import {
   validateCreateSectionBody,
@@ -16,23 +18,25 @@ import {
 
 const router = express.Router();
 
-router.post("/add", validateCreateSectionBody, authMiddleware, addSection);
-router.post("/copy/:id", validateObjectIDParam, authMiddleware, copySection);
+router.post("/add", validateCreateSectionBody, authMiddleware, restrictsToProject(ROLES.MEMBER), addSection);
+router.post("/copy/:projectId/:id", validateObjectIDParam, authMiddleware, restrictsToProject(ROLES.MEMBER), copySection);
 
 router.patch(
   "/update/:id",
   validateUpdateSectionBody,
   validateObjectIDParam,
   authMiddleware,
+  restrictsToProject(ROLES.MEMBER),
   updateSection
 );
 router.patch(
   "/reorder",
   validateReOrderSectionBody,
   authMiddleware,
+  restrictsToProject(ROLES.MEMBER),
   reorderSection
 );
 
-router.delete("/:id", validateObjectIDParam, authMiddleware, deleteSection);
+router.delete("/:projectId/:id", validateObjectIDParam, authMiddleware, restrictsToProject(ROLES.ADMIN), deleteSection);
 
 export default router;

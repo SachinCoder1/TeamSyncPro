@@ -65,6 +65,9 @@ export const validateTaskIdParam = (
       userId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .optional(),
+      projectId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .optional(),
     });
     const error = schema.validate(data).error;
     if (error) {

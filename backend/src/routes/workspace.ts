@@ -1,4 +1,5 @@
 import express from "express";
+import { ROLES } from "~/constants";
 import {
   createWorkspace, deleteWorkspace,
 } from "~/controller/workspace";
@@ -18,7 +19,7 @@ router.post(
 router.delete(
   "/delete-workspace/:workspaceId",
   authMiddleware,
-  restrictsToWorkspace("ADMIN"),
+  restrictsToWorkspace(ROLES.ADMIN),
   deleteWorkspace
 );
 
