@@ -29,14 +29,8 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       signupType: "SELF",
     }).save();
 
-    const accessToken = generateAccessToken(newUser._id);
-    const refreshToken = generateRefreshToken(newUser._id);
-
     return successResponseHandler(res, "CREATED", {
-      secret_tokens: {
-        accessToken,
-        refreshToken,
-      },
+      user: { email: newUser.email, name: newUser.name },
     });
   } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
