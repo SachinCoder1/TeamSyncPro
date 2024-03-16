@@ -8,7 +8,7 @@ import {
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import Image from "next/image";
-import { Icons } from "../Icons";
+import Icon from "../Icon";
 import Link from "next/link";
 import { Gem } from "lucide-react";
 
@@ -40,7 +40,7 @@ const UserAccountNav = async ({
             ) : (
               <AvatarFallback>
                 <span className="sr-only">{name}</span>
-                <Icons.user className="h-4 w-4 text-zinc-900" />
+                <Icon name="user" className="h-4 w-4 text-zinc-900" />
               </AvatarFallback>
             )}
           </Avatar>

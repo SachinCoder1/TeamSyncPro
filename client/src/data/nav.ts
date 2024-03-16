@@ -1,3 +1,5 @@
+import { SquareCheckBig } from "lucide-react";
+
 export const components: {
   title: string;
   href: string;
@@ -86,7 +88,6 @@ export const navLinks = [
         title: "Getting started",
         href: "/",
         description: "Beautify your app with our components. Radix ui and Tailwind CSS.",
-        icon: "Icons.logo",
     }
   },
   {

@@ -6,6 +6,7 @@ import MobileNav from "./MobileNav";
 import MaxWidthWrapper from "../WidthWrapper";
 import { NavigationMenuMain } from "./NavbarMain";
 import { loggedInNavLinks, navLinks } from "@/data/nav";
+import ThemeSwitcher from "./ThemeSwitch";
 
 type MyType = {
   given_name: string;
@@ -16,7 +17,7 @@ type MyType = {
 const Navbar = () => {
   let user: null | MyType = null;
 
-  if (!user && 10 % 2 == 2) {
+  if (!user) {
     user = {
       given_name: "John",
       family_name: "Doe",
@@ -27,7 +28,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
+    <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
           <Link href="/" className="flex z-40 font-semibold">
@@ -64,6 +65,7 @@ const Navbar = () => {
                 />
               </>
             )}
+            <ThemeSwitcher />
           </div>
         </div>
       </MaxWidthWrapper>

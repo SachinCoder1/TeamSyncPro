@@ -8,8 +8,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
-import { Icons } from "../Icons";
 import { cn } from "@/lib/utils";
+import { SquareCheckBig } from "lucide-react";
+import dynamic from 'next/dynamic'
 
 type Props = {
   link: {
@@ -51,7 +52,7 @@ export const NavigationItem = ({ link }: Props) => {
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                       href={link.asChild.href}
                     >
-                      <Icons.logo className="h-6 w-6" />
+                      <SquareCheckBig />
                       <div className="mb-2 mt-4 text-lg font-medium">
                         {link.asChild.title}
                       </div>
