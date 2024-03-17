@@ -30,6 +30,7 @@ export const validateLoginBody = (
 ) => {
   try {
     const data = req.body;
+    console.log("data: ", data)
     const schema = Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),

@@ -23,6 +23,7 @@ const UserAccountNav = async ({
   imageUrl,
   name,
 }: UserAccountNavProps) => {
+  console.log("name: ", name)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">
@@ -39,7 +40,7 @@ const UserAccountNav = async ({
               </div>
             ) : (
               <AvatarFallback>
-                <span className="text-black dark:text-white">{name[0]}</span>
+                <span className="text-black dark:text-white">{name[0].toUpperCase()}</span>
                 {/* <Icon name="user" /> */}
               </AvatarFallback>
             )}
@@ -74,7 +75,7 @@ const UserAccountNav = async ({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem className="cursor-pointer">
-          <Link href={"/"}>Log out</Link>
+          <Link href={"/auth/signout"}>Log out</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

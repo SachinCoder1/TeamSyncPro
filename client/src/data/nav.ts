@@ -85,10 +85,11 @@ export const navLinks = [
     href: "/",
     children: gettingStarted,
     asChild: {
-        title: "Getting started",
-        href: "/",
-        description: "Beautify your app with our components. Radix ui and Tailwind CSS.",
-    }
+      title: "Getting started",
+      href: "/",
+      description:
+        "Beautify your app with our components. Radix ui and Tailwind CSS.",
+    },
   },
   {
     title: "Pricing",
@@ -96,7 +97,7 @@ export const navLinks = [
   },
   {
     title: "Sign in",
-    href: "/pricing",
+    href: "/auth/signin",
   },
 ];
 

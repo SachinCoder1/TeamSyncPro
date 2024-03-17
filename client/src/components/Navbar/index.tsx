@@ -7,34 +7,37 @@ import MaxWidthWrapper from "../WidthWrapper";
 import { NavigationMenuMain } from "./NavbarMain";
 import { loggedInNavLinks, navLinks } from "@/data/nav";
 import ThemeSwitcher from "./ThemeSwitch";
+import SignInButton from "../SignInButton";
+import { Logo } from "../Logo";
+import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 type MyType = {
-  given_name: string;
-  family_name: string;
+  name: string;
   email: string;
   picture?: string;
 };
-const Navbar = () => {
-  let user: null | MyType = null;
+const Navbar = async () => {
+  const session = await getServerSession(authOptions);
+  const user = session?.user as MyType | undefined;
+  // let user: null | MyType = null;
 
-  if (!user && 10%2 === 2) {
-    user = {
-      given_name: "John",
-      family_name: "Doe",
-      email: "saci@gmail.com",
-      // picture:
-      //   "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-    };
-  }
+  // if (!user && 10 % 2 === 2) {
+  //   user = {
+  //     given_name: "John",
+  //     family_name: "Doe",
+  //     email: "saci@gmail.com",
+  //     // picture:
+  //     //   "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+  //   };
+  // }
 
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-          <Link href="/" className="flex z-40 font-semibold">
-            <img src="/logo.webp" alt="TeamSyncPro" width={30} height={30} className="rounded-full" />
-            <span>TeamSyncPro</span>
-          </Link>
+          <Logo />
 
           <MobileNav isAuth={!!user} />
 
@@ -57,9 +60,9 @@ const Navbar = () => {
 
                 <UserAccountNav
                   name={
-                    !user.given_name || !user.family_name
+                    !user.name
                       ? "Your Account"
-                      : `${user.given_name} ${user.family_name}`
+                      : user.name
                   }
                   email={user.email ?? ""}
                   imageUrl={user.picture ?? ""}

@@ -40,8 +40,11 @@ export const signupWithEmail = async (req: Request, res: Response) => {
 export const loginWithEmail = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log("email: ", email, "password: ", password)
 
     const user = await User.findOne({ email });
+
+    console.log("user: ", user)
 
     if (!user) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -55,6 +58,8 @@ export const loginWithEmail = async (req: Request, res: Response) => {
 
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
+
+    console.log("accessToken: ", accessToken, "refreshToken: ", refreshToken)
 
     return successResponseHandler(res, "SUCCESS", {
       user: {

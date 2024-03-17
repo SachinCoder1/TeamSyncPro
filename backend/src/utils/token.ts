@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import { JWT_REFRESH_SECRET, JWT_SECRET } from "~/constants";
 
-const ACCESS_TOKEN_TIME = 20 * 1000;
+const ACCESS_TOKEN_TIME = 60 * 1000  // 1 minute ;
 
 const getExpiryDate = (milisecond: number) => {
   return new Date().setTime(new Date().getTime() + milisecond);
@@ -10,7 +10,7 @@ const getExpiryDate = (milisecond: number) => {
 
 export const generateAccessToken = (id: Types.ObjectId) => {
   const token = jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: "5h",
+    expiresIn: "1m",
   });
 
   return { token, expiresIn: getExpiryDate(ACCESS_TOKEN_TIME) };

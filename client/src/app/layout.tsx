@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "next-themes";
-// import { NavigationMenuDemo } from "@/components/Navbar/Navbar1";
+import AuthProvider from "@/components/providers/auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +20,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <body className={cn("min-h-screen font-sans antialiased grainy")}>
+      <body className={cn("font-sans min-h-screen antialiased grainy")}>
+        <AuthProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
-          enableSystem={true}
+          enableSystem
+          disableTransitionOnChange
         >
-          <Navbar />
-          {children}
+          <div className="relative flex flex-col bg-background">
+            <Navbar />
+            {/* <main className="flex-1 container relative bg-background shadow-md md:shadow-xl overflow-hidden rounded-[0.5rem]"> */}
+            <main className="min-h-[calc(100vh-56px)]">
+              {children}
+            </main>
+          </div>
         </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
