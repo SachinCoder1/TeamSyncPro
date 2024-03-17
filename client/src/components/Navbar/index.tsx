@@ -32,6 +32,7 @@ const Navbar = () => {
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
           <Link href="/" className="flex z-40 font-semibold">
+            <img src="/logo.webp" alt="TeamSyncPro" width={30} height={30} className="rounded-full" />
             <span>TeamSyncPro</span>
           </Link>
 
