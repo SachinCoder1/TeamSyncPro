@@ -4,6 +4,7 @@ import { ArrowRight, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { buttonVariants } from '../ui/button'
 
 const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
   const [isOpen, setOpen] = useState<boolean>(false)
@@ -39,7 +40,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                     onClick={() =>
                       closeOnCurrent('/sign-up')
                     }
-                    className='flex items-center w-full font-semibold text-green-600'
+                    className={buttonVariants()}
                     href='/sign-up'>
                     Get started
                     <ArrowRight className='ml-2 h-5 w-5' />

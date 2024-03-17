@@ -12,18 +12,18 @@ type MyType = {
   given_name: string;
   family_name: string;
   email: string;
-  picture: string;
+  picture?: string;
 };
 const Navbar = () => {
   let user: null | MyType = null;
 
-  if (!user) {
+  if (!user && 10%2 === 2) {
     user = {
       given_name: "John",
       family_name: "Doe",
       email: "saci@gmail.com",
-      picture:
-        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      // picture:
+      //   "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
     };
   }
 
