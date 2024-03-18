@@ -12,6 +12,7 @@ import { LoginFormDataSchema } from "@/lib/zod-validation/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInUser } from "@/app/actions/user";
 import { signIn } from "next-auth/react";
+import { PasswordInput } from "../ui/password-input";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -22,26 +23,40 @@ type FormData = {
 
 export function SignupForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [showPassword, setshowPassword] = React.useState(false);
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(LoginFormDataSchema),
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const re = await signIn("credentials", { username: data.email, password: data.password });
-    console.log("re......................................................: ", re);
-    // if (tryLogin?.error) {
-    //   alert(tryLogin.error);
-    // }
-    // reset();
+    const res = await signIn("credentials", {
+      username: data.email,
+      password: data.password,
+      redirect: false,
+    });
+    if (res?.ok) {
+      reset();
+      signInUser();
+    }
+    if (res?.error) {
+      console.log("error: ", res.error);
+      setError("root", {
+        message: "Invalid email or password. Please try again.",
+      });
+    }
   });
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
+      {errors.root && (
+        <p className="text-red-500 text-sm">{errors?.root.message}</p>
+      )}
       <form onSubmit={onSubmit}>
         <div className="grid gap-4">
           <div className="grid gap-2">
@@ -59,11 +74,11 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input
+            <PasswordInput
               disabled={isLoading}
               id="password"
-              type="password"
               placeholder="******"
+              autoComplete="password"
               {...register("password")}
             />
             {errors.password && (

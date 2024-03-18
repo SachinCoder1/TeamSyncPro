@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
-    error: "/auth/signin",
+    // error: "/auth/signin",
     newUser: "/onboarding/welcome",
   },
   providers: [
