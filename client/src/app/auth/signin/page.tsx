@@ -1,84 +1,74 @@
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-
+import { Icons } from "@/components/Icon/Icons";
+import { Logo } from "@/components/Logo";
+import { SigninForm } from "@/components/forms/SigninForm";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { SignupForm } from "@/components/forms/SignupForm";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import React from "react";
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
+  title: "Signin",
+  description: "Signin to TeamSyncPro to Login your account",
 };
 
-export default async function AuthenticationPage() {
+const LoginPage = async () => {
   const session = await getServerSession();
   if (session) {
     redirect("/");
   }
   return (
-    <>
-      <div className="md:hidden">hello</div>
-      <div className="container relative hidden min-h-[calc(100vh-56px)] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <Link
-          href="/auth/signin"
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
-          )}
-        >
-          Login
-        </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-          <div className="absolute inset-0 bg-zinc-900" />
-          <div className="relative z-20 flex items-center text-lg font-medium">
-            <Image src="/logo.webp" alt="Acme Inc" width={32} height={32} />
-            TeamSyncPro
-          </div>
-          <div className="relative z-20 mt-auto">
-            <blockquote className="space-y-2">
-              <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
-              </p>
-              <footer className="text-sm">Sofia Davis</footer>
-            </blockquote>
-          </div>
+    <div className="container relative hidden min-h-[calc(100vh-56px)] flex-col items-center justify-center md:flex lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="flex w-full !max-h-[60%] max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
+        <div className="hidden bg-cover lg:block lg:w-1/2">
+          <img className="h-full" src="/login.svg" />
         </div>
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Create an account
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Enter your email below to create your account
-              </p>
-            </div>
-            <SignupForm />
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
-              <Link
-                href="/terms"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Privacy Policy
-              </Link>
-              .
-            </p>
+
+        <div className="w-full flex justify-center flex-col px-6 py-8 md:px-8 lg:w-1/2">
+          <div className="flex justify-center mx-auto">
+            <Logo />
+          </div>
+
+          <p className="mt-3 text-xl text-center text-gray-600 dark:text-gray-200">
+            Welcome back!
+          </p>
+
+          <div className="flex items-center justify-between mt-4">
+            <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
+
+            <a
+              href="#"
+              className="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline"
+            >
+              login with email
+            </a>
+
+            <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
+          </div>
+
+          <SigninForm />
+
+          <div className="flex items-center justify-between mt-4">
+            <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+
+            <Link
+              href={"/auth/signup"}
+              className={cn(buttonVariants({ variant: "link" }), "text-xs")}
+            >
+              OR SIGN UP
+            </Link>
+
+            <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+export default LoginPage;

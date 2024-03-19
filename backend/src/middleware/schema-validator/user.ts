@@ -9,6 +9,7 @@ export const validateSignupBody = (
 ) => {
   try {
     const data = req.body;
+    console.log("data: ", data)
     const schema = Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),
@@ -16,10 +17,12 @@ export const validateSignupBody = (
     });
     const error = schema.validate(data).error;
     if (error) {
+      console.log("inside error....", error)
       return errorResponseHandler(res, { status: 400, message: error.message });
     }
     next();
   } catch (err) {
+    console.log("err: ", err)
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };

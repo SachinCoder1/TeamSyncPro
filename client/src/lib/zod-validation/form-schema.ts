@@ -5,9 +5,10 @@ export const LoginFormDataSchema = z.object({
   password: z.string().min(8, "Invalid Password"),
 });
 
-export const FirstTimeLoginSchema = z
+export const FirstTimeSignupSchema = z
   .object({
-    currentPassword: z.string().nonempty("Current Password cannot be empty").min(8, "Password Length must be greater than 8"),
+    name: z.string().nonempty("Name cannot be empty"),
+    email: z.string().email("Email Not Valid").nonempty("Email cannot be empty"),
     password: z
       .string()
       .nonempty("Password cannot be empty")
