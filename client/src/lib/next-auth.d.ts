@@ -1,18 +1,32 @@
 import NextAuth from "next-auth";
 
+const stepType =
+  "SIGNED_UP" |
+  "PROFILE_SETUP" |
+  "WORKSPACE_CREATED" |
+  "PROJECT_CREATED" |
+  "SECTION_CREATED" |
+  "TASK_CREATED" |
+  "INVITED_PEOPLE_OPTIONAL" |
+  "COMPLETED";
 declare module "next-auth" {
   interface Session {
     user: {
       id: number;
       email: string;
       name: string;
+      emailVerified: "VERIFIED" | "NOT_VERIFIED";
+      onboarding: {
+        done: boolean;
+        step: stepType;
+      };
     };
 
     // secret_tokens: {
-      accessToken: {
-        token: string;
-        expiresIn: number;
-      };
+    accessToken: {
+      token: string;
+      expiresIn: number;
+    };
     //   refreshToken: string;
     //   expiresIn: number;
     // };
@@ -27,6 +41,12 @@ declare module "next-auth/jwt" {
       id: number;
       email: string;
       name: string;
+      emailVerified: "VERIFIED" | "NOT_VERIFIED";
+      onboarding: {
+        done: boolean;
+        step: stepType;
+      };
+
     };
 
     secret_tokens: {
