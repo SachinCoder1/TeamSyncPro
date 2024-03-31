@@ -34,8 +34,8 @@ const Navbar = async () => {
   // }
 
   return (
-    <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all">
-      <MaxWidthWrapper>
+    <nav className="sticky h-14 px-8 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all">
+      {/* <MaxWidthWrapper> */}
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
           <Logo />
 
@@ -72,7 +72,7 @@ const Navbar = async () => {
             <ThemeSwitcher />
           </div>
         </div>
-      </MaxWidthWrapper>
+      {/* </MaxWidthWrapper> */}
     </nav>
   );
 };

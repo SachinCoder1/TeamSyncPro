@@ -23,7 +23,6 @@ const UserAccountNav = async ({
   imageUrl,
   name,
 }: UserAccountNavProps) => {
-  console.log("name: ", name)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">

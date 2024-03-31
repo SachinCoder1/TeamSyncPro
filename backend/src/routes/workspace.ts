@@ -1,13 +1,20 @@
 import express from "express";
 import { ROLES } from "~/constants";
 import {
-  createWorkspace, deleteWorkspace,
+  createWorkspace, deleteWorkspace, getWorkspaceById,
 } from "~/controller/workspace";
 import { authMiddleware } from "~/middleware";
 import { restrictsToWorkspace } from "~/middleware/roles/restrictsToWorkspace";
 import { validateCreateWorkspaceBody } from "~/middleware/schema-validator/workspace";
 
 const router = express.Router();
+
+
+router.get(
+  "/:workspaceId",
+  authMiddleware,
+  getWorkspaceById
+);
 
 router.post(
   "/create-workspace",

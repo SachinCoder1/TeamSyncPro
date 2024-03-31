@@ -20,6 +20,7 @@ declare module "next-auth" {
         done: boolean;
         step: stepType;
       };
+      workspace: string;
     };
 
     // secret_tokens: {
@@ -46,6 +47,7 @@ declare module "next-auth/jwt" {
         done: boolean;
         step: stepType;
       };
+      workspace: string;
 
     };
 

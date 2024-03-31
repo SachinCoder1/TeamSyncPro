@@ -1,22 +1,49 @@
-import {  getSession } from "next-auth/react";
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+"use server";
 
-function updateOptions(options: any) {
-  const update = { ...options };
-  if (localStorage.jwt) {
-    update.headers = {
-      ...update.headers,
-      Authorization: `Bearer ${localStorage.jwt}`,
-    };
+import { BACKEND_URL } from "@/config";
+
+/**
+ * Custom fetcher that abstracts away common headers and method selection.
+ * @param {string} url - The endpoint URL, appended to the backend base URL.
+ * @param {object} [options] - Optional settings: method, body, additional headers.
+ * @returns {Promise<any>} - The parsed JSON response from the fetch request.
+ */
+export async function fetcher(url: string, options = {} as any) {
+  const {token, body, ...rest } = options;
+  console.log("token: ", token);
+
+  // Determine the method based on the presence of a body or use the method specified in options.
+  const method = options.method || (body ? "POST" : "GET");
+
+  // Get the access token.
+  // const accessToken = (await getServerAuth()).accessToken.token;
+
+  // Construct the full URL.
+  const fullUrl = `${BACKEND_URL}${url}`;
+
+  // Default headers
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    ...rest.headers, // Allow overriding and addition of headers
+  };
+
+  const fetchOptions: any = {
+    method,
+    headers,
+    ...rest,
+  };
+
+  // If there's a body, stringify it and include in the fetch options.
+  if (body) {
+    fetchOptions.body = JSON.stringify(body);
   }
-  return update;
-}
 
-export default async function fetcher(url: string, options: any) {
-    const session = await getSession();
-    const serverSession = await getServerSession(authOptions);
-    console.log("session........................: ", session);
-    console.log("server session........................: ", serverSession);
-  return fetch(url, updateOptions(options));
+  const response = await fetch(fullUrl, fetchOptions);
+  console.log("response: ", response);
+  // if (response.ok === false) {
+  //   throw new Error(`Network response was not ok: ${response.statusText}`);
+  // }
+
+  return response.json();
 }

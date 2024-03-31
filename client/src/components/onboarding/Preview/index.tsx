@@ -12,7 +12,6 @@ type PreviewProps = {
 
 export default function Preview({ step }: PreviewProps) {
   const { formData } = useOnboardingStore();
-  console.log(formData, "formData");
   return (
     <div className="">
       <div className="h-10 w-full bg-gray-100">Preview</div>

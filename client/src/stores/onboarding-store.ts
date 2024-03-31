@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-type formDataType = {
+export type onboardFormDataType = {
   project: string;
   tasks: string[];
   sections: string[];
@@ -16,7 +16,7 @@ type State = {
 };
 
 type Actions = {
-  setFormData: (data: formDataType) => void;
+  setFormData: (data: onboardFormDataType) => void;
 };
 
 export const useOnboardingStore = create<State & Actions>()(
@@ -26,7 +26,7 @@ export const useOnboardingStore = create<State & Actions>()(
       tasks: [],
       sections: [],
     },
-    setFormData: (data: formDataType) =>
+    setFormData: (data: onboardFormDataType) =>
       set((state) => {
         state.formData = { ...state.formData, ...data };
       }),

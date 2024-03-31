@@ -229,3 +229,35 @@ export const deleteWorkspace = async (req: Request, res: Response) => {
 //     return errorResponseHandler(res, "SERVER_ERROR");
 //   }
 // };
+
+let count = 0;
+export const getWorkspaceById = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId } = req.params;
+    count++;
+    console.log("api calledd..", count);
+    const workspace = await Workspace.findById(workspaceId)
+      .populate({
+        path: "members",
+        select: "name email profileImage",
+        // also get the projects of the workspace
+      })
+      .populate({
+        path: "projects",
+        select: "name description color icon",
+      })
+      .select("-__v -updatedAt")
+      .lean();
+
+    if (!workspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    return successResponseHandler(res, "SUCCESS", {
+      workspace,
+    });
+  } catch (error) {
+    console.log("error: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};

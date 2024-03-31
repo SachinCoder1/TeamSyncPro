@@ -8,9 +8,10 @@ import { Typography } from "../ui/typography";
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import { useOnboardingStore } from "@/stores/onboarding-store";
+import { onboardFormDataType, useOnboardingStore } from "@/stores/onboarding-store";
 import { onboardSchema } from "@/lib/zod-validation/onboard-schema";
 import { sectionsPlaceholders, taskPlaceholders } from "@/data/onboard";
+import { onboardUser } from "@/app/actions/onboard";
 
 export default function OnboardForm({ step }: { step: number }) {
   const { formData, setFormData } = useOnboardingStore();
@@ -26,10 +27,12 @@ export default function OnboardForm({ step }: { step: number }) {
     router.push(`/onboarding?step=${step + 1}`);
   };
 
-  const handleFinalSubmit = (data: any) => {
+  const handleFinalSubmit = async (data: onboardFormDataType) => {
     const finalData = { ...formData, ...data };
     setFormData(finalData);
     console.log("Final Form Data:", finalData);
+    const res = await onboardUser(finalData);
+    console.log("Response:", res);
   };
 
   const onSubmit = (data: any) => {
