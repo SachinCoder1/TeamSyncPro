@@ -1,6 +1,7 @@
 import { getProject } from "@/app/actions/project";
 import { getWorkspace } from "@/app/actions/workspace";
 import { SquareFilledIcon } from "@/components/Sidebar/menu/ProjectMenu";
+import ProjectMain from "@/components/home/project";
 import StarButton from "@/components/ui/StarButton";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
@@ -66,6 +67,7 @@ export default async function page({ params }: Props) {
             </Button>
           </div>
         </div>
+        <ProjectMain />
       </Suspense>
     </div>
   );
