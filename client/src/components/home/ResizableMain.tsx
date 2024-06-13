@@ -28,7 +28,7 @@ export default function ResizableMain({ children }: Props) {
         maxSize={90}
         className="max-h-[calc(100vh-56px)] overflow-hidden"
       >
-        <ScrollArea className="h-full w-full rounded-md px-4">{children}</ScrollArea>
+        <ScrollArea className="h-full w-full rounded-md px-4 pt-2">{children}</ScrollArea>
       </ResizablePanel>
       <ResizableHandle />
     </ResizablePanelGroup>

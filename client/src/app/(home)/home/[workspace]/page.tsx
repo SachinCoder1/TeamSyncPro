@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "@/config";
+import { getWorkspace } from "@/app/actions/workspace";
 import { getServerAuth } from "@/lib/auth";
 import { isValidObjectId } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
@@ -17,19 +17,8 @@ export default async function page({ params }: Props) {
     return redirect(`/home/${session.user.workspace}`);
   }
 
-  const res = await fetch(`${BACKEND_URL}/workspace/${params.workspace}`, {
-    method: "GET",
-    headers: {
-      authorization: `Bearer ${session.accessToken.token}`,
-    },
-  });
-
-  if (!res.ok) {
-    return notFound();
-  }
-
-  const workspace = await res.json();
-  if (workspace.message !== "SUCCESS") {
+  const {success,workspace} = await getWorkspace(params.workspace);
+  if (success === false) {
     return notFound();
   }
   console.log("workspace: ", workspace);
@@ -38,7 +27,7 @@ export default async function page({ params }: Props) {
     <div>
       page and the id is: {params.workspace}
       <Suspense fallback={<div>Loading...</div>}>
-        {JSON.stringify(workspace?.data?.workspace, null, 2)}
+        {JSON.stringify(workspace, null, 2)}
       </Suspense>
     </div>
   );
