@@ -40,7 +40,7 @@ const tabsContent = [
 
 const ProjectMain = (props: Props) => {
   return (
-    <Tabs defaultValue="dashboard" className="w-[400px]">
+    <Tabs defaultValue="dashboard" className="">
       <TabsList>
         {tabs?.map((item, index) => (
           <TabsTrigger key={index} value={item.value}>
