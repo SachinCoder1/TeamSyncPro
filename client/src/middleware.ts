@@ -7,12 +7,12 @@ export default withAuth(
     console.log("req.nextauth.token?.user", req.nextauth.token?.user);
     console.log("req.url....: ", req.url);
     const isOnboardingDone = req.nextauth.token?.user.onboarding.done;
-    if (!isOnboardingDone) {
-      return NextResponse.redirect(new URL("/onboarding?step=1", req.url));
-    }
-    if (req.url.includes("/onboarding") && isOnboardingDone) {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
+    // if (!isOnboardingDone) {
+    //   return NextResponse.rewrite(new URL("/onboarding?step=1", req.url));
+    // }
+    // if (req.url.includes("/onboarding") && isOnboardingDone) {
+    //   return NextResponse.rewrite(new URL("/", req.url));
+    // }
   }
 );
 

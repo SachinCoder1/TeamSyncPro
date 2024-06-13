@@ -1,5 +1,5 @@
 import { BACKEND_URL } from "@/config";
-import fetcher from "../fetcher";
+import { fetcher } from "../fetcher";
 
 // user server actions and mutations of next js
 

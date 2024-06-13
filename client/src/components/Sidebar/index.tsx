@@ -32,11 +32,12 @@ const MenuLink = ({ item }: Props) => {
   );
 };
 
-export default function Sidebar() {
-
+export default async function Sidebar() {
+  const session = await getServerAuth();
   return (
     <aside className="min-h-full w-full px-2 py-2">
       <div className="space-y-1">
+        {session?.user?.workspace}
         {primarySideNav.map((item, index) => (
           <MenuLink key={index} item={item} />
         ))}

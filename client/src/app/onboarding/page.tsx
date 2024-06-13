@@ -1,7 +1,8 @@
+'use client';
+
 import { getServerSession } from "next-auth";
 import React from "react";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import Onboarding from "@/components/onboarding";
@@ -9,21 +10,24 @@ import { Heading, Typography } from "@/components/ui/typography";
 import { MoveLeftIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import OnboardForm from "@/components/forms/OnboardForm";
-import { getServerAuth } from "@/lib/auth";
+// import { getServerAuth } from "@/lib/auth";
 import Preview from "@/components/onboarding/Preview";
 
 export default async function Page({
   params,
-  searchParams,
+  // searchParams,
 }: {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  if (![1, 2, 3].includes(Number(searchParams?.step))) {
+  const searchParams = useSearchParams();
+  const step = Number(searchParams.get('step') || 1);
+  // const step = Number(searchParams.get(step)) || 1;
+
+  if (![1, 2, 3].includes(Number(step))) {
     redirect("/onboarding?step=1");
   }
-  const step = Number(searchParams?.step) || 1;
-  const session = await getServerAuth();
+  // const session = await getServerAuth();
   return (
     <div className="flex gap-y-4 gap-x-8 ml-24 my-6">
       <div className="w-1/3 flex items-start gap-x-2 relative">

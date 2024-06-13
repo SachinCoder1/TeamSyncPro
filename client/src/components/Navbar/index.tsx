@@ -11,7 +11,7 @@ import SignInButton from "../SignInButton";
 import { Logo } from "../Logo";
 import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 type MyType = {
   name: string;

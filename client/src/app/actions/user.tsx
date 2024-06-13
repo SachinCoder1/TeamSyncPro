@@ -4,8 +4,8 @@ import { BACKEND_URL } from "@/config";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { SignupFormData } from "@/components/forms/SignupForm";
+import { authOptions } from "@/utils/authOptions";
 
 export const signInUser = async () => {
   const session = await getServerSession(authOptions);
