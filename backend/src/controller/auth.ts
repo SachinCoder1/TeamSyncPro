@@ -63,6 +63,7 @@ export const loginWithEmail = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "SUCCESS", {
       user: {
+        id: user._id,
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,

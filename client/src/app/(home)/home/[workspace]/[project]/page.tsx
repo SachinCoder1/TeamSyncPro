@@ -3,6 +3,7 @@ import { getWorkspace } from "@/app/actions/workspace";
 import DynamicInputHandler from "@/components/DynamicInputHandler";
 import { SquareFilledIcon } from "@/components/Sidebar/menu/ProjectMenu";
 import ProjectMain from "@/components/home/project";
+import ProjectOptions from "@/components/home/project/ProjectOptions";
 import StarButton from "@/components/ui/StarButton";
 import { Button } from "@/components/ui/button";
 import { Heading, headingClasses } from "@/components/ui/typography";
@@ -60,7 +61,8 @@ export default async function page({ params }: Props) {
             />
 
             {/* <Heading>{project?.name}</Heading> */}
-            <div className="">
+            <ProjectOptions projectId={project?._id} color={project?.color} />
+            {/* <div className="">
               <Button variant={"ghost"} size={"icon"}>
                 <ChevronDown color="#6d6e6f" className="my-1" />
               </Button>
@@ -70,7 +72,7 @@ export default async function page({ params }: Props) {
                   color={project?.color}
                 />
               </Button>
-            </div>
+            </div> */}
           </div>
           <div className="flex gap-x-2">
             <Button variant={"default"} size={"sm"}>
