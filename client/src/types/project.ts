@@ -40,4 +40,5 @@ export type ProjectType = {
   workspace: string;
   createdAt: string;
   updatedAt: string;
+  description: string | undefined;
 };

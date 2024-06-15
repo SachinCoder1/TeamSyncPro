@@ -1,18 +1,46 @@
 "use client";
 
-import { RichTextEditor } from "@/components/ui/RichTextEditor";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
+import { cn } from "@/lib/utils";
+import { updateProject } from "@/app/actions/project";
+import { useParams } from "next/navigation";
+import revalidateTagServer from "@/app/actions/actions";
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 
-type Props = {};
+type Props = {
+  description: string | undefined;
+};
 
-function DescriptionHandler({}: Props) {
+const defaultValue =
+  "<p>asfasfasdfsaf</p><p><strong>safasdfsadfdasfsafasdfs</strong></p>";
+
+function DescriptionHandler({  description }: Props) {
+  const params = useParams();
+
   const [value, setValue] = useState("");
-  console.log("value:", value);
-  const [show, setShow] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const defaultValue =
-    "<p>asfasfasdfsaf</p><p><strong>safasdfsadfdasfsafasdfs</strong></p>";
+
+  const updateValue = async (newValue: string) => {
+    const sanitizedVal = DOMPurify.sanitize(newValue);
+    // call the api
+    const data = await updateProject(params?.project as string, {
+      description: sanitizedVal,
+    });
+    console.log("data we got:", data);
+    const {success} = data;
+    if(success){
+      console.log("data updated successfully")
+      revalidateTagServer('project');
+    }
+  };
+
+  useEffect(() => {
+    if (value && value !== description) {
+      console.log("something changed... updating ");
+      updateValue(value);
+    }
+  }, [isEditing]);
 
   return (
     <div>
@@ -21,22 +49,27 @@ function DescriptionHandler({}: Props) {
           <RichTextEditor
             isEditing={isEditing}
             setIsEditing={setIsEditing}
-            className="border-2"
+            className={cn("border-2", isEditing && "border-primary rounded-xl")} // flex flex-col-reverse to make the options bottom
             placeholder="What's in your mind?"
             value={value}
             setValue={setValue}
           />
         </div>
       ) : (
-        <div className=" border border-transparent hover:border-gray-300 p-4">
-          <h2>Content Preview</h2>
-          <div
-            onClick={() => {
-              setIsEditing(!isEditing);
-              setValue(defaultValue);
-            }}
-            dangerouslySetInnerHTML={{ __html: value || defaultValue }}
-          />
+        <div
+          onClick={() => {
+            setIsEditing(!isEditing);
+            setValue(description || "");
+          }}
+          className={cn(
+            "border border-transparent p-2 min-h-[200px]",
+            !isEditing && "hover:border-gray-300 rounded-xl"
+          )}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(value || description || ""),
+          }}
+        >
+          {/* <div dangerouslySetInnerHTML={{ __html: value || defaultValue }} /> */}
         </div>
       )}
       {/* <button

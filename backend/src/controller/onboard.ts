@@ -74,6 +74,7 @@ export const onboardUser = async (req: Request, res: Response) => {
       workspace: workspace._id,
       color: `#${randomColor}`,
       icon: "DEFAULT",
+      members: [userId]
     });
 
     console.log("project", project)

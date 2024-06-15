@@ -15,6 +15,7 @@ export const getProject = async (projectid?: string) => {
       authorization: `Bearer ${session.accessToken.token}`,
     },
     cache: "force-cache",
+    next: {tags: ['project']}
   });
   if (!res.ok) {
     return { success: false };
@@ -24,4 +25,43 @@ export const getProject = async (projectid?: string) => {
     return { success: false };
   }
   return { success: true, project: project.data as ProjectType };
+};
+
+type UpdateProjectType = {
+  name?: string | undefined;
+  description?: string | undefined;
+  color?: string | undefined;
+  icon?: string | undefined;
+};
+export const updateProject = async (
+  projectid?: string,
+  updateData?: UpdateProjectType
+) => {
+  try {
+    console.log("projectId:", projectid);
+    console.log("update data:", updateData);
+    const session = await getServerSession(authOptions);
+    if (!session) redirect("/auth/signin");
+    const res = await fetch(`${BACKEND_URL}/project/update/${projectid}`, {
+      method: "PATCH",
+      body: JSON.stringify(updateData),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${session.accessToken.token}`,
+      },
+    });
+
+    if (!res.ok) {
+      return { success: false };
+    }
+    const project = await res.json();
+    console.log("project parsed json:", project);
+    if (project.message !== "SUCCESS") {
+      return { success: false };
+    }
+    return { success: true, project: project.data as ProjectType };
+  } catch (error) {
+    console.log("error in updating projectsssss:", error);
+    return { success: false };
+  }
 };

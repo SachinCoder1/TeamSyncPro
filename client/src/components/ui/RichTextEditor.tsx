@@ -45,18 +45,19 @@ export function RichTextEditor({
   const handleBlur = () => {
     setIsEditing(false);
   };
-
+  
   return (
     <div className="relative">
       {isEditing && (
         <ReactQuill
           theme="snow"
-          style={{ border: "none!important" }}
+          style={{borderRadius: "20px", minHeight: "200px"}}
           value={value}
           onChange={setValue}
           modules={modules}
           formats={formats}
           onBlur={handleBlur}
+          className={className}
           {...props}
         />
       )}

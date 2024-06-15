@@ -4,7 +4,9 @@ import ProjectDashboard from "./Dashboard";
 import ProjectList from "./List";
 import ProjecBoard from "./Board";
 
-type Props = {};
+type Props = {
+  projectId: string;
+};
 
 const tabs = [
   {
@@ -35,10 +37,10 @@ const tabsContent = [
     name: "Board",
     value: "board",
     content: ProjecBoard,
-  }
+  },
 ];
 
-const ProjectMain = (props: Props) => {
+const ProjectMain = ({ projectId }: Props) => {
   return (
     <Tabs defaultValue="dashboard" className="">
       <TabsList>
@@ -49,7 +51,9 @@ const ProjectMain = (props: Props) => {
         ))}
       </TabsList>
       {tabsContent?.map((item, index) => (
-        <TabsContent key={`${index}${item.value}`} value={item.value}>{<item.content />}</TabsContent>
+        <TabsContent key={`${index}${item.value}`} value={item.value}>
+          {<item.content projectId={projectId} />}
+        </TabsContent>
       ))}
       {/* <TabsContent value="password">Change your password here.</TabsContent> */}
     </Tabs>

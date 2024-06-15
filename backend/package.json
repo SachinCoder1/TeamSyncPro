@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/server.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
+    "debug": "nodemon --inspect dist/server.js"
   },
   "_moduleAliases": {
     "@root": ".",
@@ -27,6 +28,7 @@
     "@types/uuid": "^9.0.8",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {

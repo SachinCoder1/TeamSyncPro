@@ -109,8 +109,10 @@ export const createProject = async (req: Request, res: Response) => {
 
 export const updateProject = async (req: Request, res: Response) => {
   try {
+    console.log("req.body in updateProject:", req.body);
     const userId = req.user?.id;
     const projectId = req.params.projectId;
+    console.log("req.params:", req.params);
     if (!projectId) return errorResponseHandler(res, "BAD_REQUEST");
     const { name, color, icon, description } = req.body;
 
@@ -119,6 +121,7 @@ export const updateProject = async (req: Request, res: Response) => {
       _id: projectId,
       members: { $in: [userId] },
     });
+    console.log("project:", project)
     if (!project) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
@@ -129,6 +132,7 @@ export const updateProject = async (req: Request, res: Response) => {
     if (color) updateData.color = color;
     if (icon) updateData.icon = icon;
     if (description) updateData.description = description;
+    console.log("updateData object:", updateData)
 
     // Update the project with provided fields
     const updatedProject = await Project.findByIdAndUpdate(
@@ -136,6 +140,7 @@ export const updateProject = async (req: Request, res: Response) => {
       { $set: updateData },
       { new: true }
     );
+    console.log("updateProject db:", updateProject)
 
     if (!updatedProject) {
       return errorResponseHandler(res, "NOT_FOUND");

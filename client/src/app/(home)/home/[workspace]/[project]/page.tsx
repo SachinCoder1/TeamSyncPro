@@ -1,13 +1,21 @@
 import { getProject } from "@/app/actions/project";
 import { getWorkspace } from "@/app/actions/workspace";
+import DynamicInputHandler from "@/components/DynamicInputHandler";
 import { SquareFilledIcon } from "@/components/Sidebar/menu/ProjectMenu";
 import ProjectMain from "@/components/home/project";
 import StarButton from "@/components/ui/StarButton";
 import { Button } from "@/components/ui/button";
-import { Heading } from "@/components/ui/typography";
+import { Heading, headingClasses } from "@/components/ui/typography";
 import { getServerAuth } from "@/lib/auth";
-import { isValidObjectId } from "@/lib/utils";
-import { ChevronDown, List, Sparkles, Star, UserRound, UsersRound } from "lucide-react";
+import { cn, isValidObjectId } from "@/lib/utils";
+import {
+  ChevronDown,
+  List,
+  Sparkles,
+  Star,
+  UserRound,
+  UsersRound,
+} from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import React, { Suspense } from "react";
 
@@ -36,8 +44,8 @@ export default async function page({ params }: Props) {
       {/* page and the id is: {params.project} */}
       <Suspense fallback={<div>Loading...</div>}>
         {/* {JSON.stringify(project, null, 2)} */}
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-x-4">
+        <div className="flex justify-between items-center w-full gap-x-4">
+          <div className="flex items-center gap-x-4 flex-1">
             <SquareFilledIcon
               className="p-2 w-8 h-8"
               color={project?.color || ""}
@@ -45,7 +53,13 @@ export default async function page({ params }: Props) {
               <List className="w-4 h-4" color="white" />
             </SquareFilledIcon>
 
-            <Heading>{project?.name}</Heading>
+            <DynamicInputHandler
+              fieldName="name"
+              className={cn(headingClasses["h3"])}
+              defaultValue={project?.name || ""}
+            />
+
+            {/* <Heading>{project?.name}</Heading> */}
             <div className="">
               <Button variant={"ghost"} size={"icon"}>
                 <ChevronDown color="#6d6e6f" className="my-1" />
@@ -60,14 +74,14 @@ export default async function page({ params }: Props) {
           </div>
           <div className="flex gap-x-2">
             <Button variant={"default"} size={"sm"}>
-              <UsersRound className="w-4 h-4 mr-2" />  Share
+              <UsersRound className="w-4 h-4 mr-2" /> Share
             </Button>
             <Button variant={"outline"} size={"sm"}>
-              <Sparkles className="w-4 h-4 mr-2" />  Ask AI
+              <Sparkles className="w-4 h-4 mr-2" /> Ask AI
             </Button>
           </div>
         </div>
-        <ProjectMain />
+        <ProjectMain projectId={params.project} />
       </Suspense>
     </div>
   );

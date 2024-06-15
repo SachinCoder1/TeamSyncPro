@@ -6,7 +6,7 @@ type HeadingProps = {
   variant?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 };
 
-const headingClasses = {
+export const headingClasses = {
   h1: "text-4xl font-extrabold tracking-tight lg:text-5xl",
   h2: "text-3xl font-semibold tracking-tight",
   h3: "text-2xl font-semibold tracking-tight",
@@ -27,7 +27,7 @@ type TypographyProps = {
   variant?: "large" | "small" | "muted" | "p" | "lead";
 };
 
-const typographyClasses = {
+export const typographyClasses = {
   large: "text-lg font-semibold",
   small: "text-sm font-medium leading-none",
   muted: "text-sm text-muted-foreground",
