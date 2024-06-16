@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import UserLableAvatarCard from "@/components/ui/UserLableAvatarCard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
+import { TeamMembers } from "../TeamMember";
 
 type Props = {
   projectId: string;
@@ -34,12 +35,23 @@ const ProjectDashboard = async ({ projectId }: Props) => {
         /> */}
         <DescriptionHandler description={project?.description} />
       </div>
-      <div>
+      {/* <div>
         <Heading>Project roles</Heading>
         <div className="mt-4 flex gap-x-4 items-center flex-wrap">
           {
             project?.members?.map((item,index) => (
               <UserLableAvatarCard key={item._id+index} id={item._id} name={item.name} label={ project.admin === session?.user.id ? "Project owner" : "Member"} role={project.admin === session?.user.id ? "ADMIN" : "MEMBER"} />
+            ))
+          }
+        </div>
+
+      </div> */}
+      <div>
+        <Heading>Project roles</Heading>
+        <div className="mt-4 flex gap-x-4 items-center flex-wrap">
+          {
+            project?.members?.map((item,index) => (
+              <TeamMembers key={item._id+index} id={item._id} name={item.name} label={ project.admin === session?.user.id ? "Project owner" : "Member"} role={project.admin === session?.user.id ? "ADMIN" : "MEMBER"} />
             ))
           }
         </div>

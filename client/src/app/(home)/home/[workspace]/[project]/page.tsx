@@ -4,6 +4,8 @@ import DynamicInputHandler from "@/components/DynamicInputHandler";
 import { SquareFilledIcon } from "@/components/Sidebar/menu/ProjectMenu";
 import ProjectMain from "@/components/home/project";
 import ProjectOptions from "@/components/home/project/ProjectOptions";
+import ShareProjectAndAi from "@/components/home/project/ProjectOptionsShareAi";
+import { ShareProject } from "@/components/home/project/ShareProject";
 import StarButton from "@/components/ui/StarButton";
 import { Button } from "@/components/ui/button";
 import { Heading, headingClasses } from "@/components/ui/typography";
@@ -75,13 +77,12 @@ export default async function page({ params }: Props) {
             </div> */}
           </div>
           <div className="flex gap-x-2">
-            <Button variant={"default"} size={"sm"}>
-              <UsersRound className="w-4 h-4 mr-2" /> Share
-            </Button>
+            <ShareProject members={project?.members} projectName={project?.name} projectId={project?._id} />
             <Button variant={"outline"} size={"sm"}>
               <Sparkles className="w-4 h-4 mr-2" /> Ask AI
             </Button>
           </div>
+          {/* <ShareProjectAndAi /> */}
         </div>
         <ProjectMain projectId={params.project} />
       </Suspense>
