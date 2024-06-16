@@ -97,7 +97,7 @@ export default async function SettingsLayout({
             className="hidden dark:block"
           />
         </div>
-        <div className="p-2 pb-16">
+        <div className="p-2 pb-4">
           <div className="flex flex-col">
            
             <div className="flex justify-between items-center w-full gap-x-2">

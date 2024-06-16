@@ -25,7 +25,7 @@ const ProjectDashboard = async ({ projectId }: Props) => {
   }
 
   return (
-    <div className="px-10 mt-6 space-y-6">
+    <div className="mt-6 space-y-6">
       <div className="space-y-4">
         <Heading className="px-2" variant="h4">
           Project Description
