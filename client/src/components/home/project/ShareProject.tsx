@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { MembersType } from "@/types";
+import { useEffect, useState } from "react";
 
 type Props = {
   members?: [MembersType];
@@ -41,6 +42,30 @@ type Props = {
 };
 
 export function ShareProject({ members, projectId, projectName }: Props) {
+  const [isClient, setIsClient] = useState(false);
+  const [link, setLink] = useState('');
+  const [copyBtnText, setCopyBtnText] = useState("Copy link")
+
+  useEffect(() => {
+    setIsClient(true);
+    if (isClient) {
+      setLink(window.location.href);
+    }
+  }, [isClient]);
+
+  if (!isClient) {
+    return null;
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(link);
+    setCopyBtnText("Copied!")
+    setTimeout(() => {
+      setCopyBtnText('Copy link')
+    }, 2000);
+  };
+
+  if(!window) return;
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -56,9 +81,9 @@ export function ShareProject({ members, projectId, projectName }: Props) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex space-x-2">
-          <Input value={window.location.href} readOnly />
-          <Button variant="secondary" className="shrink-0">
-            Copy Link
+          <Input value={link} readOnly />
+          <Button disabled={copyBtnText !== "Copy link"} onClick={() => copyToClipboard()} variant="secondary" className="shrink-0">
+            {copyBtnText}
           </Button>
         </div>
         <Separator className="my-2" />

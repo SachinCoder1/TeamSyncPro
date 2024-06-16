@@ -30,7 +30,7 @@ export default function ResizableMain({ children }: Props) {
       >
         <ScrollArea className="h-full w-full rounded-md px-4 pt-2">{children}</ScrollArea>
       </ResizablePanel>
-      <ResizableHandle />
+      {/* <ResizableHandle /> */}
     </ResizablePanelGroup>
   );
 }

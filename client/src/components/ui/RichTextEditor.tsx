@@ -1,9 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
-import ReactQuill, { ReactQuillProps } from "react-quill";
+import { ReactQuillProps } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface Props extends ReactQuillProps {
   value: string;
@@ -42,6 +44,7 @@ export function RichTextEditor({
   className,
   ...props
 }: Props) {
+  if(!isEditing) return null;
   const handleBlur = () => {
     setIsEditing(false);
   };
@@ -51,7 +54,7 @@ export function RichTextEditor({
       {isEditing && (
         <ReactQuill
           theme="snow"
-          style={{borderRadius: "20px", minHeight: "200px"}}
+          style={{borderRadius: "20px", minWidth: "200px"}}
           value={value}
           onChange={setValue}
           modules={modules}

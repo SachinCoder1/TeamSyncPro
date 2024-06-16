@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
@@ -66,7 +66,7 @@ function DescriptionHandler({  description }: Props) {
             !isEditing && "hover:border-gray-300 rounded-xl"
           )}
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(value || description || "What's this project about?"),
+            __html: value || description || "What's this project about?",
           }}
         >
           {/* <div dangerouslySetInnerHTML={{ __html: value || defaultValue }} /> */}
