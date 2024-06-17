@@ -1,12 +1,13 @@
-import { promises as fs } from "fs"
-import path from "path"
-import { Metadata } from "next"
-import Image from "next/image"
-import { z } from "zod"
-import { taskSchema } from "./tasks/data/schema"
-import { DataTable } from "./tasks/components/data-table"
-import { columns } from "./tasks/components/columns"
-import data from './tasks/data/tasks.json'
+import { promises as fs } from "fs";
+import path from "path";
+import { Metadata } from "next";
+import Image from "next/image";
+import { z } from "zod";
+import { taskSchema } from "./tasks/data/schema";
+import { DataTable } from "./tasks/components/data-table";
+import { columns } from "./tasks/components/columns";
+import data from "./tasks/data/tasks.json";
+import { getProject } from "@/app/actions/project";
 
 // import { columns } from "./components/columns"
 // import { DataTable } from "./components/data-table"
@@ -21,11 +22,29 @@ async function getTasks() {
 
   // const tasks = JSON.parse(data.toString())
 
-  return z.array(taskSchema).parse(data)
+  return z.array(taskSchema).parse(data);
 }
+type Props = {
+  projectId: string;
+};
 
-export default async function ProjectList() {
-  const tasks = await getTasks()
+export default async function ProjectList({ projectId }: Props) {
+  // const tasks = await getTasks();
+  const project = await getProject(projectId);
+  const transformedData = project.project?.sections.flatMap((project) =>
+    project.tasks.map((task) => ({
+      id: task._id || "NA",
+      sectionStatus:project.title,
+      title: task.title || "NA",
+      status: task.status || "NA",
+      label: task.workflow || "NA", // Assuming workflow corresponds to label
+      priority: task.priority || "NA",
+      assignee: {
+        name: "Unknown", // Replace with actual assignee if available
+        id: "unknown", // Replace with actual assignee ID if available
+      },
+    }))
+  );
 
   return (
     <>
@@ -45,6 +64,8 @@ export default async function ProjectList() {
           className="hidden dark:block"
         />
       </div>
+      {JSON.stringify(transformedData, null, 2)}
+
       <div className="hidden h-full flex-1 flex-col space-y-8 mt-4 md:flex">
         {/* <div className="flex items-center justify-between space-y-2">
           <div>
@@ -57,8 +78,8 @@ export default async function ProjectList() {
             <UserNav />
           </div>
         </div> */}
-        <DataTable data={tasks} columns={columns} />
+        <DataTable data={transformedData as any} columns={columns} />
       </div>
     </>
-  )
+  );
 }

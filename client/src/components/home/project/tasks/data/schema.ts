@@ -8,6 +8,7 @@ export const taskSchema = z.object({
   status: z.string(),
   label: z.string(),
   priority: z.string(),
+  sectionStatus: z.string(),
   assignee: z.object({
     name: z.string(),
     id: z.string(),
