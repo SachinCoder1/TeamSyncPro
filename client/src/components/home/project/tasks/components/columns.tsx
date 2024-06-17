@@ -10,41 +10,63 @@ import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 
 export const columns: ColumnDef<Task>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
+    // header: ({ table }) => (
+    //   <Checkbox
+    //     checked={
+    //       table.getIsAllPageRowsSelected() ||
+    //       (table.getIsSomePageRowsSelected() && "indeterminate")
+    //     }
+    //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //     aria-label="Select all"
+    //     className="translate-y-[2px]"
+    //   />
+    // ),
+    cell: ({ row }) => {
+      const completedRows = ["1", "4"]
+      const [isSelected, setIsSelected] = useState(completedRows.includes(row.id));
+      useEffect(() => {
+        row.toggleSelected(isSelected);
+      }, [isSelected, row]);
+
+
+      return (
+        <Checkbox
+          // checked={row.getIsSelected()}
+          checked={isSelected}
+          onCheckedChange={(value) => {
+            // console.log("value on change check:", value, "row", row.original);
+            // return row.toggleSelected(!!value);
+            if(value === false) {
+              console.log("Un selected the task", row.original)
+            }
+            if(value === true) {
+              console.log("selected the task:", row.original)
+            }
+            setIsSelected(!!value);
+
+          }}
+          aria-label="Select row"
+          className="translate-y-[2px]"
+        />
+      );
+    },
     enableSorting: false,
     enableHiding: false,
   },
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
-    ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   accessorKey: "id",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Task" />
+  //   ),
+  //   cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "title",
     header: ({ column }) => (
@@ -55,7 +77,7 @@ export const columns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
           </span>
@@ -74,7 +96,10 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <div className="flex items-center gap-x-2">
           <Avatar className="w-8 h-8">
-            <AvatarImage src={src || "https://github.com/shadcn.png"} alt="@shadcn" />
+            <AvatarImage
+              src={src || "https://github.com/shadcn.png"}
+              alt="@shadcn"
+            />
             <AvatarFallback>{name[0]?.toUpperCase()}</AvatarFallback>
           </Avatar>
           {name}
