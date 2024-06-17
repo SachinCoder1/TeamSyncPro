@@ -1,16 +1,18 @@
-import ProjectList from '@/components/home/project/List'
-import { Metadata } from 'next'
-import React from 'react'
+import ProjectList from "@/components/home/project/List";
+import { Metadata } from "next";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 export const metadata: Metadata = {
-    title: "Tasks",
-    description: "A task and issue tracker build using Tanstack Table.",
-  }
-  
+  title: "Tasks",
+  description: "A task and issue tracker build using Tanstack Table.",
+};
+
 export default function Page({}: Props) {
-return <>
-<ProjectList />
-</>
+  return (
+    <>
+      <ProjectList />
+    </>
+  );
 }
