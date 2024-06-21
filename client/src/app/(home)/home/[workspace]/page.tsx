@@ -18,9 +18,9 @@ export default async function page({ params }: Props) {
   }
 
   const {success,workspace} = await getWorkspace(params.workspace);
-  if (success === false) {
-    return notFound();
-  }
+  // if (success === false) {
+  //   return notFound();
+  // }
   console.log("workspace: ", workspace);
 
   return (

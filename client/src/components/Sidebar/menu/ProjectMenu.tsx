@@ -30,9 +30,9 @@ export const SquareFilledIcon = ({ color,className,children }: SquareFilledIconP
 
 const ProjectMenu = async () => {
   const { success, workspace } = await getWorkspace();
-  if (!success) {
-    return notFound();
-  }
+  // if (!success) {
+  //   return notFound();
+  // }
   console.log("workspace in the hello", workspace);
   return (
     <div>

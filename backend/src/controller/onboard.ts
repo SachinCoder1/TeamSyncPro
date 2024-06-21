@@ -32,11 +32,11 @@ export const createDefaultWorkspace = async (req: Request, res: Response) => {
 export const onboardUser = async (req: Request, res: Response) => {
   try {
     const { projectName, tasks, sections } = req.body;
-    console.log("req.body", req.body)
+    console.log("req.body", req.body);
     const userId = req.user?.id;
     const user = await User.findById(userId).select("-password");
     if (!user) return errorResponseHandler(res, "NOT_FOUND");
-    if (user.onboarding?.step === "COMPLETED"){
+    if (user.onboarding?.step === "COMPLETED") {
       return errorResponseHandler(res, "CONFLICT");
     }
     // let workspace = await Workspace.findOne({
@@ -45,24 +45,24 @@ export const onboardUser = async (req: Request, res: Response) => {
     // });
 
     // if (!workspace) {
-      let workspace = await new Workspace({
-        name: "My Workspace",
-        admin: userId,
-        personal: true,
-        members: [userId],
-      }).save();
+    let workspace = await new Workspace({
+      name: "My Workspace",
+      admin: userId,
+      personal: true,
+      members: [userId],
+    }).save();
 
-      user.workspaces.push(workspace._id);
-      user.selectedWorkspace = workspace._id;
-      if (user.onboarding) {
-        user.onboarding.step = "WORKSPACE_CREATED";
-      }
+    user.workspaces.push(workspace._id);
+    user.selectedWorkspace = workspace._id;
+    if (user.onboarding) {
+      user.onboarding.step = "WORKSPACE_CREATED";
+    }
 
-      //   await User.findByIdAndUpdate(userId, {
-      //     $push: { workspaces: workspace._id },
-      //     selectedWorkspace: workspace._id,
-      //     "onboarding.step": "WORKSPACE_CREATED",
-      //   });
+    //   await User.findByIdAndUpdate(userId, {
+    //     $push: { workspaces: workspace._id },
+    //     selectedWorkspace: workspace._id,
+    //     "onboarding.step": "WORKSPACE_CREATED",
+    //   });
     // }
 
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
@@ -74,35 +74,37 @@ export const onboardUser = async (req: Request, res: Response) => {
       workspace: workspace._id,
       color: `#${randomColor}`,
       icon: "DEFAULT",
-      members: [userId]
+      members: [userId],
     });
 
-    console.log("project", project)
-    console.log("tasks", tasks)
-
-    const refractoredTask = tasks.map((task: string, index: number) => ({
-      title: task,
-      project: project._id,
-      order: index,
-      taskCreator: user._id,
-      // workflow: sections[0],
-    }));
-
-    // Add tasks to the project
-    const createdTasks = await Task.insertMany(refractoredTask);
+    console.log("project", project);
+    console.log("tasks", tasks);
 
     const refractoredSections = sections.map(
       (section: string, index: number) => ({
         title: section,
         project: project._id,
         order: index,
-        tasks: index === 0 ? createdTasks.map((item) => item._id) : [],
+        // tasks: index === 0 ? createdTasks.map((item) => item._id) : [],
       })
     );
 
     // Organize tasks into sections (simplified)
     // Note: Real implementation would need to associate tasks with sections more explicitly
     const createdSections = await Section.insertMany(refractoredSections);
+
+    const refractoredTask = tasks.map((task: string, index: number) => ({
+      title: task,
+      project: project._id,
+      order: index,
+      taskCreator: user._id,
+      section: createdSections[0]._id,
+      status: createdSections[0].title
+      // workflow: sections[0],
+    }));
+
+    // Add tasks to the project
+    const createdTasks = await Task.insertMany(refractoredTask);
 
     if (user.onboarding) {
       user.onboarding.step = "COMPLETED";
@@ -125,7 +127,7 @@ export const onboardUser = async (req: Request, res: Response) => {
       createdTasks,
     });
   } catch (error) {
-    console.log("error", error)
+    console.log("error", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };

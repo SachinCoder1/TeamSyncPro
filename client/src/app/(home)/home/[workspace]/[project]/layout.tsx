@@ -73,9 +73,9 @@ export default async function SettingsLayout({
   }
 
   const { success, project } = await getProject(params.project);
-  if (success === false) {
-    return notFound();
-  }
+  // if (success === false) {
+  //   return notFound();
+  // }
   console.log("project: ", project);
 
   return (

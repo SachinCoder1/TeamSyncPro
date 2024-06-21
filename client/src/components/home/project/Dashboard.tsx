@@ -20,9 +20,9 @@ const ProjectDashboard = async ({ projectId }: Props) => {
    const session = await getServerSession(authOptions);
    console.log("session.user...........", session?.user)
   const { success, project } = await getProject(projectId);
-  if (success === false) {
-    return notFound();
-  }
+  // if (success === false) {
+  //   return notFound();
+  // }
 
   return (
     <div className="mt-6 space-y-6">

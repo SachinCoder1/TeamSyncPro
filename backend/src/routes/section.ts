@@ -4,6 +4,7 @@ import {
   addSection,
   copySection,
   deleteSection,
+  getSections,
   reorderSection,
   updateSection,
 } from "~/controller/section";
@@ -18,6 +19,7 @@ import {
 
 const router = express.Router();
 
+router.get("/sections/:projectId", authMiddleware, getSections)
 router.post("/add", validateCreateSectionBody, authMiddleware, restrictsToProject(ROLES.MEMBER), addSection);
 router.post("/copy/:projectId/:id", validateObjectIDParam, authMiddleware, restrictsToProject(ROLES.MEMBER), copySection);
 

@@ -47,8 +47,6 @@ const taskSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["INCOMPLETE", "COMPLETE"],
-      default: "INCOMPLETE",
     },
     workflow: {
       type: String,
@@ -66,4 +64,15 @@ const taskSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+taskSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified("section")) {
+    const section = await mongoose.model("Section").findById(this.section);
+    if (section) {
+      this.status = section.title;
+    }
+  }
+  next();
+});
+
 export const Task = mongoose.model("Task", taskSchema);

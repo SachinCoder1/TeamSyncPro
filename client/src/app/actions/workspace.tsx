@@ -12,6 +12,7 @@ import { WorkspaceType } from "@/stores/workspace-store";
 export const getWorkspace = async(workspaceId?: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
+  console.log("session:", session)
   const res = await fetch(`${BACKEND_URL}/workspace/${workspaceId || session.user.workspace}`, {
     method: "GET",
     headers: {

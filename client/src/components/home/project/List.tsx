@@ -8,6 +8,7 @@ import { DataTable } from "./tasks/components/data-table";
 import { columns } from "./tasks/components/columns";
 import data from "./tasks/data/tasks.json";
 import { getProject } from "@/app/actions/project";
+import { getAllTasks } from "@/app/actions/task";
 
 // import { columns } from "./components/columns"
 // import { DataTable } from "./components/data-table"
@@ -30,21 +31,21 @@ type Props = {
 
 export default async function ProjectList({ projectId }: Props) {
   // const tasks = await getTasks();
-  const project = await getProject(projectId);
-  const transformedData = project.project?.sections.flatMap((project) =>
-    project.tasks.map((task) => ({
-      id: task._id || "NA",
-      sectionStatus:project.title,
-      title: task.title || "NA",
-      status: task.status || "NA",
-      label: task.workflow || "NA", // Assuming workflow corresponds to label
-      priority: task.priority || "NA",
-      assignee: {
-        name: "Unknown", // Replace with actual assignee if available
-        id: "unknown", // Replace with actual assignee ID if available
-      },
-    }))
-  );
+  const project = await getAllTasks(projectId);
+  // const transformedData = project.sections?.sections.flatMap((project) =>
+  //   project.tasks.map((task) => ({
+  //     id: task._id || "NA",
+  //     sectionStatus:project.title,
+  //     title: task.title || "NA",
+  //     status: task.status || "NA",
+  //     label: task.workflow || "NA", // Assuming workflow corresponds to label
+  //     priority: task.priority || "NA",
+  //     assignee: {
+  //       name: "Unknown", // Replace with actual assignee if available
+  //       id: "unknown", // Replace with actual assignee ID if available
+  //     },
+  //   }))
+  // );
 
   return (
     <>
@@ -64,7 +65,7 @@ export default async function ProjectList({ projectId }: Props) {
           className="hidden dark:block"
         />
       </div>
-      {JSON.stringify(transformedData, null, 2)}
+      {JSON.stringify(project, null, 2)}
 
       <div className="hidden h-full flex-1 flex-col space-y-8 mt-4 md:flex">
         {/* <div className="flex items-center justify-between space-y-2">
@@ -78,7 +79,7 @@ export default async function ProjectList({ projectId }: Props) {
             <UserNav />
           </div>
         </div> */}
-        <DataTable data={transformedData as any} columns={columns} />
+        {/* <DataTable data={project as any} columns={columns} /> */}
       </div>
     </>
   );

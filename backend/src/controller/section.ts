@@ -4,6 +4,46 @@ import { Project, Section, Task } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 import { calculateNewOrder } from "~/utils/calculateOrder";
 
+export const getSections = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id; // Assuming authentication middleware sets `req.user`
+    const { projectId } = req.params;
+    console.log("projectId:", projectId);
+
+    // Fetch the project with sections and tasks, ensure the user is associated
+    // Use aggregation to fetch sections and their tasks
+
+    // {
+    //   $lookup: {
+    //     from: 'tasks',
+    //     localField: '_id',
+    //     foreignField: 'section',
+    //     as: 'tasks'
+    //   }
+    // },
+    // Sort sections by order
+    const sections = await Section.aggregate([
+      {
+        $match: { project: projectId },
+      },
+      // {
+      //   $lookup: {
+      //     from: "tasks", // The name of the Task collection
+      //     localField: "_id",
+      //     foreignField: "section",
+      //     as: "tasks",
+      //   },
+      // },
+    ]).exec();
+
+    console.log("sections:", sections);
+
+    return successResponseHandler(res, "SUCCESS", sections);
+  } catch (error) {
+    console.error("Error adding section: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
 export const addSection = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id; // Assuming middleware sets `req.user`
@@ -131,8 +171,6 @@ export const updateSection = async (req: Request, res: Response) => {
 //     return errorResponseHandler(res, "SERVER_ERROR");
 //   }
 // };
-
-
 
 // Route to reorder sections
 export const reorderSection = async (req: Request, res: Response) => {
