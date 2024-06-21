@@ -11,6 +11,8 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
+import { markCompleteIncomplete } from "@/app/actions/task";
+import revalidateTagServer from "@/app/actions/actions";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -27,28 +29,32 @@ export const columns: ColumnDef<Task>[] = [
     //   />
     // ),
     cell: ({ row }) => {
-      const completedRows = ["1", "4"]
-      const [isSelected, setIsSelected] = useState(completedRows.includes(row.id));
+      const completedRows = ["1", "4"];
+      const [isSelected, setIsSelected] = useState(
+        row.original.status === "COMPLETE"
+      );
       useEffect(() => {
         row.toggleSelected(isSelected);
       }, [isSelected, row]);
-
 
       return (
         <Checkbox
           // checked={row.getIsSelected()}
           checked={isSelected}
-          onCheckedChange={(value) => {
+          onCheckedChange={async (value) => {
             // console.log("value on change check:", value, "row", row.original);
             // return row.toggleSelected(!!value);
-            if(value === false) {
-              console.log("Un selected the task", row.original)
-            }
-            if(value === true) {
-              console.log("selected the task:", row.original)
-            }
             setIsSelected(!!value);
-
+            const data = await markCompleteIncomplete(row.original.id, !!value);
+            
+            console.log("data client:", data)
+            if (value === false) {
+              console.log("Un selected the task", row.original);
+            }
+            if (value === true) {
+              console.log("selected the task:", row.original);
+            }
+            revalidateTagServer('project');
           }}
           aria-label="Select row"
           className="translate-y-[2px]"

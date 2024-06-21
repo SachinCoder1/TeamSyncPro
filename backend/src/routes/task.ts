@@ -65,8 +65,8 @@ router.patch( "/remove-dependency/:projectId/:taskId", validateTaskIdParam, auth
 router.patch( "/due/:projectId/:taskId", validateTaskIdParam, validateDueDateBody, authMiddleware,restrictsToProject(ROLES.MEMBER), addDueDateToTask );
 router.patch("/remove-due/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), removeDueDateFromTask);
 router.patch("/reorder/:projectId", validateReOrderTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), reorderTask);
-router.patch("/mark-complete/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), markTaskAsComplete);
-router.patch("/mark-incomplete/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), markTaskAsIncomplete);
+router.patch("/mark-complete/:taskId", validateTaskIdParam, authMiddleware, markTaskAsComplete);
+router.patch("/mark-incomplete/:taskId", validateTaskIdParam, authMiddleware,  markTaskAsIncomplete);
 router.patch("/like/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), likeTask);
 router.patch("/unlike/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), unlikeTask);
 
