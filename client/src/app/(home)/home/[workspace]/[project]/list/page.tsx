@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function Page({params}: Props) {
   return (
     <>
-      <ProjectList projectId={params.project} />
-    </>
+      <ProjectList projectId={params.project} workspaceId={params.workspace} />
+      </>
   );
 }

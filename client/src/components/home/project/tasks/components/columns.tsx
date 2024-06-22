@@ -13,6 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { markCompleteIncomplete } from "@/app/actions/task";
 import revalidateTagServer from "@/app/actions/actions";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -46,15 +48,15 @@ export const columns: ColumnDef<Task>[] = [
             // return row.toggleSelected(!!value);
             setIsSelected(!!value);
             const data = await markCompleteIncomplete(row.original.id, !!value);
-            
-            console.log("data client:", data)
+
+            console.log("data client:", data);
             if (value === false) {
               console.log("Un selected the task", row.original);
             }
             if (value === true) {
               console.log("selected the task:", row.original);
             }
-            revalidateTagServer('project');
+            revalidateTagServer("project");
           }}
           aria-label="Select row"
           className="translate-y-[2px]"
@@ -81,13 +83,22 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label);
 
+      const params = useParams();
+      console.log("params:", params);
+
       return (
-        <div className="flex space-x-2">
-          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-          <span className="max-w-[500px] truncate font-medium ">
-            {row.getValue("title")}
-          </span>
-        </div>
+        <Link
+          href={`/home/${params.workspace}/${params.project}/${row.original.id}`}
+          // href={`/home/${row.original.id}/`}
+          // passHref
+        >
+          <div className="flex space-x-2">
+            {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+            <span className="max-w-[500px] truncate font-medium ">
+              {row.getValue("title")}
+            </span>
+          </div>
+        </Link>
       );
     },
   },
