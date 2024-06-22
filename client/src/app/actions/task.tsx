@@ -28,3 +28,26 @@ export const markCompleteIncomplete = async (taskId?: string, mark?:boolean ) =>
   }
   return { success: true, data: data.data as ProjectType };
 };
+
+export const getPerticularTask = async (taskId: string,projectId:string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("task:", taskId)
+  const res = await fetch(`${BACKEND_URL}/task/get/${projectId}/${taskId}`, {
+    method: "GET",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("data", res)
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("task data:", data)
+  if (data.message !== "SUCCESS") {
+    return { success: false };
+  }
+  return { success: true, task: data.data as ProjectType };
+};

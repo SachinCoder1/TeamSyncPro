@@ -49,7 +49,7 @@ function DescriptionHandler({  description }: Props) {
           <RichTextEditor
             isEditing={isEditing}
             setIsEditing={setIsEditing}
-            className={cn("border-2", isEditing && "border-primary rounded-xl")} // flex flex-col-reverse to make the options bottom
+            className={cn("border-2", isEditing && "border-primary rounded-xl !min-h-52")} // flex flex-col-reverse to make the options bottom
             placeholder="What's in your mind?"
             value={value}
             setValue={setValue}
@@ -63,7 +63,7 @@ function DescriptionHandler({  description }: Props) {
           }}
           className={cn(
             "border border-transparent p-2 min-h-[200px]",
-            !isEditing && "hover:border-gray-300 rounded-xl"
+            !isEditing && "hover:border-gray-300 hover:bg-[#EBECF0] rounded-xl"
           )}
           dangerouslySetInnerHTML={{
             __html: value || description || "What's this project about?",

@@ -467,6 +467,7 @@ export const getTask = async (req: Request, res: Response) => {
     if (!task) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
+    console.log("task:", task)
 
     return successResponseHandler(res, "SUCCESS", { task });
   } catch (error) {
