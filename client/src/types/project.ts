@@ -2,7 +2,7 @@ import { InvitedMembersType, MembersType } from ".";
 
 type Workflow = "DEFAULT" | "DO_TODAY" | "DO_LATER" | "DO_THIS_WEEK"  | "DO_THIS_MONTH";
 
-type TaskType = {
+export type TaskType = {
   _id: string;
   title: string;
   order: number;

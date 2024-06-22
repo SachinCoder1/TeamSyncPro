@@ -4,7 +4,7 @@ import { BACKEND_URL } from "@/config";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
-import { ProjectType } from "@/types/project";
+import { ProjectType, TaskType } from "@/types/project";
 
 export const markCompleteIncomplete = async (taskId?: string, mark?:boolean ) => {
   const session = await getServerSession(authOptions);
@@ -49,5 +49,5 @@ export const getPerticularTask = async (taskId: string,projectId:string) => {
   if (data.message !== "SUCCESS") {
     return { success: false };
   }
-  return { success: true, task: data.data as ProjectType };
+  return { success: true, task: data.data?.task as TaskType };
 };
