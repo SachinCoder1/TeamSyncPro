@@ -7,6 +7,7 @@ import { Heading } from "@/components/ui/typography";
 import { Separator } from "@/components/ui/separator";
 import TagsSelector from "./TagsSelector";
 import { Label } from "@/components/ui/label";
+import TeamSwitcher from "./TeamSwitcher";
 
 type Props = {
   task?: TaskType;
@@ -22,7 +23,7 @@ const LabelValue = ({
   return (
     <div className=" grid grid-cols-3 justify-between w-full items-start">
       <Label>{label}</Label>
-      <div className="col-span-2">{children}</div>
+      <div className="col-span-2 cursor-pointer hover:bg-secondary px-2 py-0.5">{children}</div>
     </div>
   );
 };
@@ -38,7 +39,9 @@ const RightTaskContainer = ({ task }: Props) => {
           <Separator />
         </div>
         <div className="px-4 py-2 space-y-6">
-          <LabelValue label="Assignee">hello</LabelValue>
+          <LabelValue label="Assignee">
+            <TeamSwitcher />
+          </LabelValue>
           <LabelValue label="Tags">
             <TagsSelector />
           </LabelValue>

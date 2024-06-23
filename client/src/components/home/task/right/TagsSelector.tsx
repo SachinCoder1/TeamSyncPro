@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ReactTags } from "react-tag-autocomplete";
 
@@ -38,7 +39,7 @@ export default function TagsSelector() {
   const api = useRef<any>(null);
   const focus = useCallback(() => {
     // if (!api || !api.current) return;
-    console.log("focusing...")
+    console.log("focusing...");
     api.current.input.focus();
   }, [api]);
 
@@ -64,7 +65,7 @@ export default function TagsSelector() {
     if (toggleEditor === true && api.current) {
       focus();
     }
-  }, [toggleEditor,api]);
+  }, [toggleEditor, api]);
 
   return (
     <div>
@@ -76,8 +77,17 @@ export default function TagsSelector() {
           className="flex flex-wrap gap-2"
         >
           {selected.map((item: any, index: any) => (
-            <Card key={`${item.value}:${index}`} className="cursor-pointer px-2 py-1 text-xs">
-              {item.label}
+            <Card
+              key={`${item.value}:${index}`}
+              className="cursor-pointer px-2 py-1 text-xs"
+            >
+              <Link
+                onClick={(e) => e.stopPropagation()}
+                href={`/tags/${item.value}`}
+                className="hover:text-primary"
+              >
+                {item.label}
+              </Link>
             </Card>
           ))}
         </div>
