@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import React from 'react'
 import {
   Card,
   CardContent,
@@ -39,9 +40,10 @@ type Props = {
   members?: [MembersType];
   projectId?: string;
   projectName?: string;
+  btnTrigger?: React.ReactNode
 };
 
-export function ShareProject({ members, projectId, projectName }: Props) {
+export function ShareProject({ members, projectId, projectName,btnTrigger }: Props) {
   const [isClient, setIsClient] = useState(false);
   const [link, setLink] = useState('');
   const [copyBtnText, setCopyBtnText] = useState("Copy link")
@@ -69,9 +71,12 @@ export function ShareProject({ members, projectId, projectName }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
+        {
+          btnTrigger || 
         <Button size={"sm"}>
           <UsersRound className="w-4 h-4 mr-2" /> Share
         </Button>
+        }
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

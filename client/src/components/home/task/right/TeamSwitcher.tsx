@@ -94,7 +94,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
             role="combobox"
             aria-expanded={open}
             aria-label="Select a team"
-            className={cn("justify-between w-full", className)}
+            className={cn("justify-between w-full !py-0 px-0", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage

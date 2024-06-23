@@ -8,6 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import TagsSelector from "./TagsSelector";
 import { Label } from "@/components/ui/label";
 import TeamSwitcher from "./TeamSwitcher";
+import LikeHandler from "./LikeTask";
+import AttachFiles from "./AttachFiles";
+import SubTaskIcon from "./SubTaskIcon";
+import { ShareProject } from "../../project/ShareProject";
+import { Button } from "@/components/ui/button";
+import { Share2Icon, ShareIcon } from "lucide-react";
 
 type Props = {
   task?: TaskType;
@@ -21,16 +27,32 @@ const LabelValue = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className=" grid grid-cols-3 justify-between w-full items-start">
+    <div className=" grid grid-cols-3 justify-between w-full items-center">
       <Label>{label}</Label>
-      <div className="col-span-2 cursor-pointer hover:bg-secondary px-2 py-0.5">{children}</div>
+      <div className="col-span-2 cursor-pointer hover:bg-secondary px-2 py-0.5">
+        {children}
+      </div>
     </div>
   );
 };
 const RightTaskContainer = ({ task }: Props) => {
   return (
     <div className="p-2">
-      <StatusBarDropdown status="todo" label="status" />
+      <div className="flex justify-between w-full">
+        <StatusBarDropdown status="todo" label="status" />
+        <div className="flex gap-x-4 items-center">
+          <LikeHandler isLiked={false} />
+          <AttachFiles />
+          <SubTaskIcon />
+          <ShareProject
+            btnTrigger={
+              <Button variant={"ghost"} size={"icon"}>
+                <Share2Icon className="w-5 h-5" />
+              </Button>
+            }
+          />
+        </div>
+      </div>
       <div className="border my-4 rounded-md py-2">
         <div className=" py-2 space-y-2">
           <Heading className="py-1 px-2" variant="h6">
@@ -44,6 +66,9 @@ const RightTaskContainer = ({ task }: Props) => {
           </LabelValue>
           <LabelValue label="Tags">
             <TagsSelector />
+          </LabelValue>
+          <LabelValue label="Reporter">
+            <TeamSwitcher />
           </LabelValue>
         </div>
       </div>
