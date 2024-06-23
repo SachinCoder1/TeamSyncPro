@@ -5,7 +5,7 @@ import { Heading } from "@/components/ui/typography";
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import DescriptionHandler from "./DescriptionHandler";
-import { getProject } from "@/app/actions/project";
+import { getProject, updateProject } from "@/app/actions/project";
 import { notFound } from "next/navigation";
 import UserLableAvatarCard from "@/components/ui/UserLableAvatarCard";
 import { getServerSession } from "next-auth";
@@ -33,7 +33,7 @@ const ProjectDashboard = async ({ projectId }: Props) => {
         {/* <Textarea
           placeholder="What is this project about? "
         /> */}
-        <DescriptionHandler description={project?.description} />
+        <DescriptionHandler description={project?.description} field="description" id="project" revalidateTag="project" updateFunction={updateProject} />
       </div>
       {/* <div>
         <Heading>Project roles</Heading>

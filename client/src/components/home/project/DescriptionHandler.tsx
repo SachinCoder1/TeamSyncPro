@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
@@ -10,12 +10,24 @@ import { RichTextEditor } from "@/components/ui/RichTextEditor";
 
 type Props = {
   description: string | undefined;
+  updateFunction: (id: string, payload: any) => Promise<any>;
+  revalidateTag: string;
+  field: string;
+  placeholder?: string;
+  id: string;
 };
 
 const defaultValue =
   "<p>asfasfasdfsaf</p><p><strong>safasdfsadfdasfsafasdfs</strong></p>";
 
-function DescriptionHandler({  description }: Props) {
+function DescriptionHandler({
+  description,
+  updateFunction,
+  revalidateTag,
+  field,
+  placeholder,
+  id
+}: Props) {
   const params = useParams();
 
   const [value, setValue] = useState("");
@@ -24,14 +36,13 @@ function DescriptionHandler({  description }: Props) {
   const updateValue = async (newValue: string) => {
     const sanitizedVal = DOMPurify.sanitize(newValue);
     // call the api
-    const data = await updateProject(params?.project as string, {
-      description: sanitizedVal,
-    });
+    const payload = { [field]: sanitizedVal };
+    const data = await updateFunction(params[id] as string, payload);
     console.log("data we got:", data);
-    const {success} = data;
-    if(success){
-      console.log("data updated successfully")
-      revalidateTagServer('project');
+    const { success } = data;
+    if (success) {
+      console.log("data updated successfully");
+      revalidateTagServer(revalidateTag);
     }
   };
 
@@ -49,8 +60,11 @@ function DescriptionHandler({  description }: Props) {
           <RichTextEditor
             isEditing={isEditing}
             setIsEditing={setIsEditing}
-            className={cn("border-2", isEditing && "border-primary rounded-xl !min-h-52")} // flex flex-col-reverse to make the options bottom
-            placeholder="What's in your mind?"
+            className={cn(
+              "border-2",
+              isEditing && "border-primary rounded-xl !min-h-52"
+            )} // flex flex-col-reverse to make the options bottom
+            placeholder={placeholder || "What's in your mind?"}
             value={value}
             setValue={setValue}
           />
@@ -62,11 +76,11 @@ function DescriptionHandler({  description }: Props) {
             setValue(description || "");
           }}
           className={cn(
-            "border border-transparent p-2 min-h-[200px]",
+            "border border-transparent px-2 py-1 min-h-[200px]",
             !isEditing && "hover:border-gray-300 hover:bg-[#EBECF0] rounded-xl"
           )}
           dangerouslySetInnerHTML={{
-            __html: value || description || "What's this project about?",
+            __html: value || description || placeholder || "What's this project about?",
           }}
         >
           {/* <div dangerouslySetInnerHTML={{ __html: value || defaultValue }} /> */}

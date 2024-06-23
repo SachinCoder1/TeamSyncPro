@@ -5,6 +5,7 @@ type Workflow = "DEFAULT" | "DO_TODAY" | "DO_LATER" | "DO_THIS_WEEK"  | "DO_THIS
 export type TaskType = {
   _id: string;
   title: string;
+  description? : string;
   order: number;
   tags: string[];
   likedBy: string[];

@@ -57,7 +57,7 @@ router.get("/get-subtask/:projectId/:taskId", validateTaskIdParam, authMiddlewar
 router.get("/get-comments/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getCommentsOfTask);
 
 
-router.patch("/update/:projectId/:taskId",validateTaskIdParam, validateUpdateTaskBody, authMiddleware,restrictsToProject(ROLES.MEMBER), updateTask);
+router.patch("/update/:taskId",validateTaskIdParam, validateUpdateTaskBody, authMiddleware, updateTask);
 router.patch( "/assign/:projectId/:taskId/:userId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), assignTask);
 router.patch( "/unassign/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), unassignTask);
 router.patch( "/add-dependency/:projectId/:taskId/:dependencyId/:dependencyType", validateAddDependencyParam, authMiddleware,restrictsToProject(ROLES.MEMBER), addDependencyToTask);

@@ -42,6 +42,8 @@ export const createTask = async (req: Request, res: Response) => {
 };
 
 export const updateTask = async (req: Request, res: Response) => {
+  console.log("req.params:", req.params);
+  console.log("req.body:", req.body)
   try {
     const { taskId } = req.params;
     const { title, description, priority, storyPoints } =

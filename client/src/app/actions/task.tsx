@@ -38,7 +38,8 @@ export const getPerticularTask = async (taskId: string,projectId:string) => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    // next: {tags: ['project']}
+    next: {tags: ['task']},
+    cache: "force-cache"
   });
   console.log("data", res)
   if (!res.ok) {
@@ -50,4 +51,37 @@ export const getPerticularTask = async (taskId: string,projectId:string) => {
     return { success: false };
   }
   return { success: true, task: data.data?.task as TaskType };
+};
+
+
+type UpdateTaskType = {
+  title?: string | undefined;
+  description?: string | undefined;
+  storyPoints?: number | undefined;
+  priority?: "LOW" | "MEDIUM" | "HIGH" | "HIGHEST" | undefined;
+};
+
+
+export const updateTask = async (taskId?: string, payload?:UpdateTaskType ) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api")
+  const res = await fetch(`${BACKEND_URL}/task/update/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload)
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data)
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
 };
