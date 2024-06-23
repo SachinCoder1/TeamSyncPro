@@ -4,12 +4,13 @@ import { TaskType } from "@/types/project";
 import React from "react";
 import DescriptionHandler from "../../project/DescriptionHandler";
 import { Label } from "@/components/ui/label";
+import Comments from "./comment/Comments";
 
 type Props = {
   task?: TaskType;
 };
 
-const LeftTaskContainer = ({ task }: Props) => {
+const LeftTaskContainer = async ({ task }: Props) => {
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -29,8 +30,9 @@ const LeftTaskContainer = ({ task }: Props) => {
         </div>
       </div>
 
-      <div>
+      <div className="space-y-4">
         <Heading variant="h6">Activity</Heading>
+        <Comments taskId={task?._id as any} />
       </div>
     </div>
   );

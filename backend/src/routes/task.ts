@@ -47,7 +47,7 @@ const router = express.Router();
 // we can use the same restrictsToProject middleware to check if the user is a member of the project.. we just need to include the projectId in every request.. 
 
 router.post("/create", validateCreateTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), createTask);
-router.post("/add-comment/:projectId", validateAddCommentBody, authMiddleware,restrictsToProject(ROLES.MEMBER), addCommentToTask);
+router.post("/add-comment", validateAddCommentBody, authMiddleware, addCommentToTask);
 router.post("/copy/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), copyTask);
 router.post( "/createSubTask/:projectId", validateCreateSubTaskBody, authMiddleware,restrictsToProject(ROLES.MEMBER), createSubTask);
 

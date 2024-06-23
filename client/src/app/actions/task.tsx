@@ -93,7 +93,7 @@ export const addComment = async (taskId: string, comment: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   console.log("calling api");
-  const res = await fetch(`${BACKEND_URL}/task/add-comment/${taskId}`, {
+  const res = await fetch(`${BACKEND_URL}/task/add-comment`, {
     method: "POST",
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
@@ -106,6 +106,7 @@ export const addComment = async (taskId: string, comment: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
+    console.log("taskId", taskId, comment,"not ok", res)
     return { success: false };
   }
   const data = await res.json();
@@ -113,10 +114,10 @@ export const addComment = async (taskId: string, comment: string) => {
   if (data.message !== "UPDATED") {
     return { success: false };
   }
-  return { success: true, data: data.data?.task as TaskType };
+  return { success: true, data: data.data?.comment as CommentType };
 };
 
-export const getComments = async (taskId: string, comment: string) => {
+export const getComments = async (taskId: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   console.log("calling api");

@@ -182,6 +182,7 @@ export const validateAddCommentBody = (
   next: NextFunction
 ) => {
   try {
+    console.log("validating comment body", req.body)
     const data = req.body;
     const schema = Joi.object({
       taskId: Joi.string()

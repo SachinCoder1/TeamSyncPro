@@ -77,7 +77,8 @@ function DescriptionHandler({
           }}
           className={cn(
             "border border-transparent px-2 py-1 min-h-[200px]",
-            !isEditing && "hover:border-gray-300 hover:bg-[#EBECF0] rounded-xl"
+            !isEditing && "hover:border-gray-300 rounded-xl" 
+            // hover:bg-[#EBECF0]
           )}
           dangerouslySetInnerHTML={{
             __html: value || description || placeholder || "What's this project about?",

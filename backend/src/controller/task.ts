@@ -410,7 +410,6 @@ export const addCommentToTask = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "UPDATED", {
       comment: savedComment,
-      task,
     });
   } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
