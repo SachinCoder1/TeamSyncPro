@@ -497,7 +497,7 @@ export const getCommentsOfTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
 
-    const comments = await Comment.find({ task: taskId }).lean();
+    const comments = await Comment.find({ task: taskId }).populate("user", "name profileImage _id").select("-task -__v").lean();
 
     return successResponseHandler(res, "SUCCESS", { comments });
   } catch (error) {

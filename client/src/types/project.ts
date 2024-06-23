@@ -2,6 +2,19 @@ import { InvitedMembersType, MembersType } from ".";
 
 type Workflow = "DEFAULT" | "DO_TODAY" | "DO_LATER" | "DO_THIS_WEEK"  | "DO_THIS_MONTH";
 
+
+export type CommentType = {
+  _id: string;
+  comment: string;
+  user: {
+    _id: string;
+    name: string;
+    profileImage?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+
+}
 export type TaskType = {
   _id: string;
   title: string;

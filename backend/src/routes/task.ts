@@ -54,7 +54,7 @@ router.post( "/createSubTask/:projectId", validateCreateSubTaskBody, authMiddlew
 
 router.get("/get/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getTask);
 router.get("/get-subtask/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getSubTasks);
-router.get("/get-comments/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getCommentsOfTask);
+router.get("/get-comments/:taskId", validateTaskIdParam, authMiddleware, getCommentsOfTask);
 
 
 router.patch("/update/:taskId",validateTaskIdParam, validateUpdateTaskBody, authMiddleware, updateTask);
@@ -70,7 +70,7 @@ router.patch("/mark-incomplete/:taskId", validateTaskIdParam, authMiddleware,  m
 router.patch("/like/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), likeTask);
 router.patch("/unlike/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), unlikeTask);
 
-router.put("/update-comment/:projectId", validateUpdateCommentBody, authMiddleware, restrictsToProject(ROLES.MEMBER), updateComment)
+router.put("/update-comment", validateUpdateCommentBody, authMiddleware, updateComment)
 
 router.delete("/remove-comment/:projectId/:commentId", validateDeleteCommentParam, authMiddleware, restrictsToProject(ROLES.MEMBER), deleteCommentFromTask);
 router.delete("/delete/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), deleteTask);
