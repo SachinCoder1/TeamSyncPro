@@ -49,6 +49,7 @@
     "react-hook-form": "^7.51.1",
     "react-quill": "^2.0.0",
     "react-resizable-panels": "^2.0.16",
+    "react-tag-autocomplete": "^7.3.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.1",

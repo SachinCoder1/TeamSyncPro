@@ -8,8 +8,15 @@ type Props = {
 
 const LeftTaskContainer = ({ task }: Props) => {
   return (
-    <div>
-      <Heading>{task?.title}</Heading>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Heading>{task?.title}</Heading>
+        <Heading variant="h6">Description</Heading>
+      </div>
+
+      <div>
+        <Heading variant="h6">Activity</Heading>
+      </div>
     </div>
   );
 };
