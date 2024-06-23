@@ -14,6 +14,7 @@ import SubTaskIcon from "./SubTaskIcon";
 import { ShareProject } from "../../project/ShareProject";
 import { Button } from "@/components/ui/button";
 import { Share2Icon, ShareIcon } from "lucide-react";
+import OtherOptions from "./OtherOptions";
 
 type Props = {
   task?: TaskType;
@@ -51,6 +52,7 @@ const RightTaskContainer = ({ task }: Props) => {
               </Button>
             }
           />
+          <OtherOptions />
         </div>
       </div>
       <div className="border my-4 rounded-md py-2">
