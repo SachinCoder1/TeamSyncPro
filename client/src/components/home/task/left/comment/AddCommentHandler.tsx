@@ -7,25 +7,33 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { CommentType } from "@/types/project";
+import { formatFullDate, formatRelativeDate } from "@/utils/formatDate";
 import { useSession } from "next-auth/react";
 import React, { useRef, useState } from "react";
 import { useOptimistic } from "react";
-type Message = {
-  comment: string;
-};
 
 type Props = {
   taskId: string;
-  comments: Message[];
+  comments: CommentType[];
 };
 
 const AddCommentHandler = ({ taskId, comments }: Props) => {
-  const session = useSession();
+  const { data: user } = useSession();
   const formRef = useRef(null);
   const [optimisticMessages, addOptimisticMessage] = useOptimistic<
-    Message[],
+    CommentType[],
     string
-  >(comments, (state, newComment) => [...state, { comment: newComment }]);
+  >(comments, (state, newComment) => [
+    ...state,
+    {
+      comment: newComment,
+      _id: undefined as any,
+      user: { _id: user?.user.id as string, name: user?.user.name as string },
+      createdAt: new Date() as any,
+    },
+  ]);
+  console.log("optimistic messages:", optimisticMessages);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState("");
 
@@ -45,15 +53,15 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
 
   return (
     <div>
-      <div className="flex items-start gap-x-2">
+      <div
+        className={cn("flex items-start gap-x-4", !isEditing && "items-center")}
+      >
         <Avatar className="w-8 h-8">
           <AvatarImage
             //   src={session || "https://github.com/shadcn.png"}
             alt="@shadcn"
           />
-          <AvatarFallback>
-            {session.data?.user.name[0]?.toUpperCase()}
-          </AvatarFallback>
+          <AvatarFallback>{user?.user.name[0]?.toUpperCase()}</AvatarFallback>
         </Avatar>
         {isEditing ? (
           <div className="space-y-4 w-full">
@@ -70,7 +78,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
             />
             <div className="flex gap-x-4">
               <Button onClick={handleCommentHandler}>Send</Button>
-              <Button variant={"secondary"} onClick={handleReset}>
+              <Button variant={"ghost"} onClick={handleReset}>
                 Cancel
               </Button>
             </div>
@@ -86,33 +94,51 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
           )
         )}
       </div>
-      {/* <form
-        ref={formRef}
-        action={async (formData: FormData) => {
-          const message = formData.get("comment") as string;
-          addOptimisticMessage(message);
-          (formRef.current as any)?.reset();
-          const data = await addComment(taskId, message);
-          revalidateTagServer("comments");
-          console.log("data received after done", data);
-        }}
-      >
-        <div className="flex items-center gap-x-2">
-          <Avatar className="w-8 h-8">
-            <AvatarImage
-              //   src={session || "https://github.com/shadcn.png"}
-              alt="@shadcn"
-            />
-            <AvatarFallback>
-              {session.data?.user.name[0]?.toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <Input placeholder="Enter your Comment" type="text" name="comment" />
-        </div>
-      </form> */}
-      {optimisticMessages.map((m, k) => (
-        <div key={k} dangerouslySetInnerHTML={{ __html: m.comment }} />
-      ))}
+      <div className="my-4">
+        {optimisticMessages.map((m, k) => (
+          <div className={cn("flex items-start gap-x-4")}>
+            <Avatar className="w-8 h-8">
+              <AvatarImage
+                //   src={session || "https://github.com/shadcn.png"}
+                alt="@shadcn"
+              />
+              <AvatarFallback>{m?.user.name[0]?.toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <div className="flex gap-x-3">
+                <p className="font-semibold text-[#44546F]">{m.user.name}</p>
+                <p
+                  className="text-sm text-[#626F86]"
+                  title={formatFullDate(m.createdAt)}
+                >
+                  {formatRelativeDate(m.createdAt || "")}
+                </p>
+                {m.createdAt !== m.updatedAt && m.updatedAt && (
+                  <p
+                    className="text-sm text-[#626F86]"
+                    title={formatFullDate(m.createdAt)}
+                  >
+                    Edited
+                  </p>
+                )}
+              </div>
+              <div
+                className="text-[#172B4D] mt-2"
+                key={k}
+                dangerouslySetInnerHTML={{ __html: m.comment }}
+              />
+              <div className="flex gap-x-4">
+                <Button className="!px-0 text-[#44546F]" variant={"link"}>
+                  Edit
+                </Button>
+                <Button className="!px-0 text-[#44546F]" variant={"link"}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

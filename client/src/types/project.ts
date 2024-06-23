@@ -12,7 +12,7 @@ export type CommentType = {
     profileImage?: string;
   };
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 
 }
 export type TaskType = {
