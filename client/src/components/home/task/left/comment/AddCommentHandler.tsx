@@ -1,7 +1,7 @@
 "use client";
 
 import revalidateTagServer from "@/app/actions/actions";
-import { addComment, deleteComment } from "@/app/actions/task";
+import { addComment, deleteComment, getComments } from "@/app/actions/task";
 import DeleteModal from "@/components/ui/DeleteModal";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -19,23 +19,41 @@ type Props = {
   comments: CommentType[];
 };
 
+type DeleteAction = {
+  type: "DELETE";
+  id: string;
+};
+
+type AddAction = {
+  type: "ADD";
+  comment: string;
+};
+
+type Action = AddAction | DeleteAction;
+
 const AddCommentHandler = ({ taskId, comments }: Props) => {
   const { data: user } = useSession();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const formRef = useRef(null);
-//   const [optimisticMessages, addOptimisticMessage] = useOptimistic<
-//     CommentType[],
-//     string
-//   >(comments, (state, newComment) => [
-//     {
-//       comment: newComment,
-//       _id: undefined as any,
-//       user: { _id: user?.user.id as string, name: user?.user.name as string },
-//       createdAt: new Date() as any,
-//     },
-//     ...state,
-//   ]);
-//   console.log("optimistic messages:", optimisticMessages);
+  const [optimisticMessages, addOptimisticMessage] = useOptimistic<
+    CommentType[],
+    Action
+  >(comments, (state, newComment) => {
+    if (newComment.type === "DELETE") {
+      return state.filter((item) => item._id !== newComment.id);
+    }
+
+    return [
+      {
+        comment: newComment.comment,
+        _id: undefined as any,
+        user: { _id: user?.user.id as string, name: user?.user.name as string },
+        createdAt: new Date() as any,
+      },
+      ...state,
+    ];
+  });
+  console.log("optimistic messages:", optimisticMessages);
   const [isEditing, setIsEditing] = useState(false);
   const [currentComment, setCurrentComment] = useState<CommentType | null>(
     null
@@ -45,10 +63,11 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
 
   const handleCommentHandler = async () => {
     const comment = value;
-    // addOptimisticMessage(comment);
+    addOptimisticMessage({ type: "ADD", comment });
     handleReset();
     const data = await addComment(taskId, comment);
-    revalidateTagServer("comments");
+    await revalidateTagServer("comments");
+    await getComments(taskId);
     console.log("data received after done", data);
   };
 
@@ -68,13 +87,22 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
     if (!currentComment) return;
     console.log("deleting..");
     setDeleteModalOpen(false);
+    addOptimisticMessage({
+      type: "DELETE",
+      id: currentComment._id,
+    });
     console.log("deleting comment...", currentComment);
     // return;
-    const isDeleted = await deleteComment(currentComment?._id as string);
+    const isDeleted = await deleteComment(currentComment._id);
     console.log("isDeleted:", isDeleted);
     if (isDeleted.success) {
-      console.log("comment deleted successfully");
-      revalidateTagServer("comments");
+      await revalidateTagServer("comments");
+    } else {
+      // Handle failed deletion by adding the comment back
+      addOptimisticMessage({
+        type: "ADD",
+        comment: currentComment.comment,
+      });
     }
   };
 
@@ -122,7 +150,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
         )}
       </div>
       <div className="my-4">
-        {comments?.map((m, k) => (
+        {optimisticMessages?.map((m, k) => (
           <div key={m._id + k} className={cn("flex items-start gap-x-4")}>
             <Avatar className="w-8 h-8">
               <AvatarImage
