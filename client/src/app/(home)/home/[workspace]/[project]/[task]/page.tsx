@@ -31,22 +31,22 @@ export default async function Page({ params }: Props) {
   }
   return (
     <div>
-      task id: {params.task}
       <Suspense fallback={<div>Loading...</div>}>
-        {JSON.stringify(tasks.task, null, 2)}
-      </Suspense>
-      <BreadcrumbMain />
-      <div className="ml-4">
-
-      <MarkCompleteIncomplete
-        tag="task"
-        isCompleted={tasks.task?.status === "COMPLETE"}
-        />
+        {/* {JSON.stringify(tasks.task, null, 2)} */}
+        <BreadcrumbMain />
+        <div className="ml-4 mt-4">
+          <MarkCompleteIncomplete
+            tag="task"
+            isCompleted={tasks.task?.status === "COMPLETE"}
+          />
         </div>
-      <ResizableMain
-        left={<LeftTaskContainer task={tasks.task} subtasks={subtasks?.data} />}
-        right={<RightTaskContainer task={tasks.task} />}
-      />
+        <ResizableMain
+          left={
+            <LeftTaskContainer task={tasks.task} subtasks={subtasks?.data} />
+          }
+          right={<RightTaskContainer task={tasks.task} />}
+        />
+      </Suspense>
     </div>
   );
 }

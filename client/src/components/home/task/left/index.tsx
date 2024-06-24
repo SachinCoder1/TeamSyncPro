@@ -31,7 +31,9 @@ const LeftTaskContainer = async ({ task,subtasks }: Props) => {
           />
         </div>
         <div>
-          <Label className="px-2 my-1">Description</Label>
+        <p className="text-sm mb-1 px-2">Description</p>
+
+          {/* <Label className="px-2 my-1">Description</Label> */}
           <DescriptionHandler
             description={task?.description}
             field="description"
