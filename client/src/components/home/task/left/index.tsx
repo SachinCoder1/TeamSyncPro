@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import DynamicInputHandler from "@/components/DynamicInputHandler";
 import { cn } from "@/lib/utils";
+import SubTasks from "./subtask";
 
 type Props = {
   task?: TaskType;
+  subtasks?: TaskType[];
 };
 
-const LeftTaskContainer = async ({ task }: Props) => {
+const LeftTaskContainer = async ({ task,subtasks }: Props) => {
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -42,9 +44,7 @@ const LeftTaskContainer = async ({ task }: Props) => {
       </div>
 
       <div>
-        <Button size={"sm"} className="!font-normal" variant={"outline"}>
-          <PlusIcon className="h-4 w-4 !font-normal" /> Add Subtask
-        </Button>
+        <SubTasks taskId={task?._id as string} subtasks={subtasks as TaskType[]} />
       </div>
 
       <div className="space-y-4">

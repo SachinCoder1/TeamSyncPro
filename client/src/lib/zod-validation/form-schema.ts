@@ -4,6 +4,9 @@ export const LoginFormDataSchema = z.object({
   email: z.string().email("Email Not Valid").min(3, "Email not Valid"),
   password: z.string().min(8, "Invalid Password"),
 });
+export const SubTaskFormSchema = z.object({
+  title: z.string().min(1, "Sub task cannot be empty"),
+});
 
 export const FirstTimeSignupSchema = z
   .object({

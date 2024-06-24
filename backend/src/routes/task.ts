@@ -53,7 +53,7 @@ router.post( "/createSubTask", validateCreateSubTaskBody, authMiddleware, create
 
 
 router.get("/get/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getTask);
-router.get("/get-subtask/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getSubTasks);
+router.get("/get-subtask/:taskId", validateTaskIdParam, authMiddleware, getSubTasks);
 router.get("/get-comments/:taskId", validateTaskIdParam, authMiddleware, getCommentsOfTask);
 
 

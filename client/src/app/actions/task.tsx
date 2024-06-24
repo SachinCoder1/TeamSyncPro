@@ -108,7 +108,7 @@ export const getSubTasks = async (parentTaskId: string) => {
   if (data.message !== "SUCCESS") {
     return { success: false };
   }
-  return { success: true, data: data.data?.subTasks as TaskType };
+  return { success: true, data: data.data?.subTasks as TaskType[] };
 };
 
 export const createSubTask = async (parentTaskId: string, title: string) => {
