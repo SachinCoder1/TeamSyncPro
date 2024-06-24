@@ -1,14 +1,19 @@
-import { NetworkIcon } from 'lucide-react'
-import React from 'react'
+"use client";
 
-type Props = {}
+import { useSubTaskOpenerStore } from "@/stores/subtask-opener-store";
+import { NetworkIcon } from "lucide-react";
+import React from "react";
+
+type Props = {};
 
 const SubTaskIcon = (props: Props) => {
+  const { setIsEditing } = useSubTaskOpenerStore();
   return (
-    <div>
-        <NetworkIcon className='h-5 w-5 cursor-pointer' />
-    </div>
-  )
-}
+    <NetworkIcon
+      onClick={() => setIsEditing(true)}
+      className="h-5 w-5 cursor-pointer"
+    />
+  );
+};
 
-export default SubTaskIcon
+export default SubTaskIcon;

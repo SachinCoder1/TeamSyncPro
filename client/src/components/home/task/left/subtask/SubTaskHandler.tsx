@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubTaskFormSchema } from "@/lib/zod-validation/form-schema";
+import { useSubTaskOpenerStore } from "@/stores/subtask-opener-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import React, { useState } from "react";
@@ -20,8 +21,9 @@ type FormValues = {
   title: string;
 };
 const SubTaskHandler = ({ taskId }: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const {isEditing,setIsEditing} = useSubTaskOpenerStore();
 
   const {
     register,
