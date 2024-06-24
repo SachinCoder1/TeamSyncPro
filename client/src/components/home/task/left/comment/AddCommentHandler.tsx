@@ -1,7 +1,8 @@
 "use client";
 
 import revalidateTagServer from "@/app/actions/actions";
-import { addComment } from "@/app/actions/task";
+import { addComment, deleteComment } from "@/app/actions/task";
+import DeleteModal from "@/components/ui/DeleteModal";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,8 @@ import { cn } from "@/lib/utils";
 import { CommentType } from "@/types/project";
 import { formatFullDate, formatRelativeDate } from "@/utils/formatDate";
 import { useSession } from "next-auth/react";
-import React, { useRef, useState } from "react";
-import { useOptimistic } from "react";
+import React, { useOptimistic, useRef, useState } from "react";
+// import { useOptimistic } from "react";
 
 type Props = {
   taskId: string;
@@ -20,26 +21,31 @@ type Props = {
 
 const AddCommentHandler = ({ taskId, comments }: Props) => {
   const { data: user } = useSession();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const formRef = useRef(null);
-  const [optimisticMessages, addOptimisticMessage] = useOptimistic<
-    CommentType[],
-    string
-  >(comments, (state, newComment) => [
-    ...state,
-    {
-      comment: newComment,
-      _id: undefined as any,
-      user: { _id: user?.user.id as string, name: user?.user.name as string },
-      createdAt: new Date() as any,
-    },
-  ]);
-  console.log("optimistic messages:", optimisticMessages);
+//   const [optimisticMessages, addOptimisticMessage] = useOptimistic<
+//     CommentType[],
+//     string
+//   >(comments, (state, newComment) => [
+//     {
+//       comment: newComment,
+//       _id: undefined as any,
+//       user: { _id: user?.user.id as string, name: user?.user.name as string },
+//       createdAt: new Date() as any,
+//     },
+//     ...state,
+//   ]);
+//   console.log("optimistic messages:", optimisticMessages);
   const [isEditing, setIsEditing] = useState(false);
+  const [currentComment, setCurrentComment] = useState<CommentType | null>(
+    null
+  );
+
   const [value, setValue] = useState("");
 
   const handleCommentHandler = async () => {
     const comment = value;
-    addOptimisticMessage(comment);
+    // addOptimisticMessage(comment);
     handleReset();
     const data = await addComment(taskId, comment);
     revalidateTagServer("comments");
@@ -49,6 +55,27 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
   const handleReset = () => {
     setValue("");
     setIsEditing(false);
+  };
+
+  const handleDeleteClick = (comment: any) => {
+    // Set the current comment to be deleted
+    setCurrentComment(comment);
+    // Open the delete modal
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirmClick = async () => {
+    if (!currentComment) return;
+    console.log("deleting..");
+    setDeleteModalOpen(false);
+    console.log("deleting comment...", currentComment);
+    // return;
+    const isDeleted = await deleteComment(currentComment?._id as string);
+    console.log("isDeleted:", isDeleted);
+    if (isDeleted.success) {
+      console.log("comment deleted successfully");
+      revalidateTagServer("comments");
+    }
   };
 
   return (
@@ -95,8 +122,8 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
         )}
       </div>
       <div className="my-4">
-        {optimisticMessages.map((m, k) => (
-          <div className={cn("flex items-start gap-x-4")}>
+        {comments?.map((m, k) => (
+          <div key={m._id + k} className={cn("flex items-start gap-x-4")}>
             <Avatar className="w-8 h-8">
               <AvatarImage
                 //   src={session || "https://github.com/shadcn.png"}
@@ -131,13 +158,36 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
                 <Button className="!px-0 text-[#44546F]" variant={"link"}>
                   Edit
                 </Button>
-                <Button className="!px-0 text-[#44546F]" variant={"link"}>
+                {/* <DeleteModal
+                  open={deleteModalOpen}
+                  setOpen={setDeleteModalOpen}
+                  description="Are you sure you want to delete this comment? This action cannot be undone."
+                  title="Delete Comment?"
+                  triggerBtn={
+                    <Button className="!px-0 text-[#44546F]" variant={"link"}>
+                      Delete
+                    </Button>
+                  }
+                  handleClick={() => handleDeleteClick(m)}
+                /> */}
+                <Button
+                  onClick={() => handleDeleteClick(m)}
+                  className="!px-0 text-[#44546F]"
+                  variant={"link"}
+                >
                   Delete
                 </Button>
               </div>
             </div>
           </div>
         ))}
+        <DeleteModal
+          open={deleteModalOpen}
+          setOpen={setDeleteModalOpen}
+          description="Are you sure you want to delete this comment? This action cannot be undone."
+          title="Delete Comment?"
+          handleClick={handleDeleteConfirmClick}
+        />
       </div>
     </div>
   );

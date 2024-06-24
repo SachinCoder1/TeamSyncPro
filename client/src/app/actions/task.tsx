@@ -179,6 +179,7 @@ export const deleteComment = async (commentId: string) => {
     },
     // next: {tags: ['project']}
   });
+  console.log("res:", res)
   if (!res.ok) {
     return { success: false };
   }

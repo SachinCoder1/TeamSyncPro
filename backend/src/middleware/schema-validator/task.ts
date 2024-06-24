@@ -229,6 +229,7 @@ export const validateDeleteCommentParam = (
   next: NextFunction
 ) => {
   try {
+    console.log("delete comment", req.params)
     const data = req.params;
     const schema = Joi.object({
       commentId: Joi.string()

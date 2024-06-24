@@ -72,7 +72,7 @@ router.patch("/unlike/:projectId/:taskId", validateTaskIdParam, authMiddleware, 
 
 router.put("/update-comment", validateUpdateCommentBody, authMiddleware, updateComment)
 
-router.delete("/remove-comment/:projectId/:commentId", validateDeleteCommentParam, authMiddleware, restrictsToProject(ROLES.MEMBER), deleteCommentFromTask);
+router.delete("/remove-comment/:commentId", validateDeleteCommentParam, authMiddleware, deleteCommentFromTask);
 router.delete("/delete/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), deleteTask);
 
 export default router;
