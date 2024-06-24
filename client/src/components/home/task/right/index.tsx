@@ -15,6 +15,7 @@ import { ShareProject } from "../../project/ShareProject";
 import { Button } from "@/components/ui/button";
 import { Share2Icon, ShareIcon } from "lucide-react";
 import OtherOptions from "./OtherOptions";
+import { useSession } from "next-auth/react";
 
 type Props = {
   task?: TaskType;
@@ -37,12 +38,14 @@ const LabelValue = ({
   );
 };
 const RightTaskContainer = ({ task }: Props) => {
+  const {data:user} = useSession();
+  console.log("user.", user?.user.id)
   return (
     <div className="p-2">
       <div className="flex justify-between w-full">
         <StatusBarDropdown status="todo" label="status" />
         <div className="flex gap-x-4 items-center">
-          <LikeHandler isLiked={false} />
+          <LikeHandler likesCount={task?.likedBy.length} taskId={task?._id as string} isLiked={!!task?.likedBy?.includes(user?.user.id as string)} />
           <AttachFiles />
           <SubTaskIcon />
           <ShareProject

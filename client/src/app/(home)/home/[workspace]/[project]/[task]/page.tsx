@@ -3,6 +3,8 @@ import ResizableMain from "@/components/home/task";
 import BreadcrumbMain from "@/components/home/task/BreadcrumbMain";
 import LeftTaskContainer from "@/components/home/task/left";
 import RightTaskContainer from "@/components/home/task/right";
+import { Button } from "@/components/ui/button";
+import { CircleCheck } from "lucide-react";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
 export const metadata: Metadata = {
@@ -30,6 +32,13 @@ export default async function Page({ params }: Props) {
         {JSON.stringify(taskData.task, null, 2)}
       </Suspense>
       <BreadcrumbMain />
+      <Button
+        variant={"outline"}
+        className="!font-normal flex items-center gap-x-2"
+      >
+        <CircleCheck className="h-4 w-4" />
+        Mark complete
+      </Button>
       <ResizableMain
         left={<LeftTaskContainer task={taskData.task} />}
         right={<RightTaskContainer task={taskData.task} />}

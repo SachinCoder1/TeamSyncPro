@@ -67,8 +67,8 @@ router.patch("/remove-due/:projectId/:taskId", validateTaskIdParam, authMiddlewa
 router.patch("/reorder/:projectId", validateReOrderTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), reorderTask);
 router.patch("/mark-complete/:taskId", validateTaskIdParam, authMiddleware, markTaskAsComplete);
 router.patch("/mark-incomplete/:taskId", validateTaskIdParam, authMiddleware,  markTaskAsIncomplete);
-router.patch("/like/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), likeTask);
-router.patch("/unlike/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), unlikeTask);
+router.patch("/like/:taskId", validateTaskIdParam, authMiddleware, likeTask);
+router.patch("/unlike/:taskId", validateTaskIdParam, authMiddleware, unlikeTask);
 
 router.put("/update-comment", validateUpdateCommentBody, authMiddleware, updateComment)
 

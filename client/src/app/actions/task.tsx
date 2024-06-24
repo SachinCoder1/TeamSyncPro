@@ -106,7 +106,7 @@ export const addComment = async (taskId: string, comment: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    console.log("taskId", taskId, comment,"not ok", res)
+    console.log("taskId", taskId, comment, "not ok", res);
     return { success: false };
   }
   const data = await res.json();
@@ -126,8 +126,8 @@ export const getComments = async (taskId: string) => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    next: {tags: ['comments']},
-    cache: "force-cache"
+    next: { tags: ["comments"] },
+    cache: "force-cache",
   });
   if (!res.ok) {
     return { success: false };
@@ -139,7 +139,6 @@ export const getComments = async (taskId: string) => {
   }
   return { success: true, data: data.data?.comments as CommentType };
 };
-
 
 export const updateComment = async (commentId: string, comment: string) => {
   const session = await getServerSession(authOptions);
@@ -153,7 +152,7 @@ export const updateComment = async (commentId: string, comment: string) => {
     },
     body: JSON.stringify({
       commentId,
-      comment
+      comment,
     }),
     // next: {tags: ['project']}
   });
@@ -179,7 +178,7 @@ export const deleteComment = async (commentId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res)
+  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
@@ -189,4 +188,30 @@ export const deleteComment = async (commentId: string) => {
     return { success: false };
   }
   return { success: true, data: data.data?.comment as CommentType };
+};
+
+export const likeOrUnlikeTask = async (
+  taskId: string,
+  type: "LIKE" | "UNLIKE"
+) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const path = type == "LIKE" ? "like" : "unlike";
+  const res = await fetch(`${BACKEND_URL}/task/${path}/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
 };
