@@ -75,7 +75,7 @@ const SubTaskHandler = ({ taskId }: Props) => {
           </div>
         </form>
       )}
-
+      {!isEditing && <div className="border-t mb-2 -mt-2"></div>}
       <Button
         onClick={() => setIsEditing(true)}
         size={"sm"}
