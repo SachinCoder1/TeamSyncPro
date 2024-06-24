@@ -8,20 +8,21 @@ import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 
 type Props = {
-  //   value: string;
-  //   setValue: () => void;
   defaultValue: string;
   className?: string;
-  mainClassName?: string;
   fieldName: string;
-  //   children?: React.ReactNode;
+  id: string;
+  tag:string;
+  updateFunction: (id: string, payload: any) => Promise<any>;
 };
 
 function DynamicInputHandler({
   defaultValue,
   className,
   fieldName,
-  mainClassName,
+  id,
+  tag,
+  updateFunction,
 }: Props) {
   const params = useParams();
   const [value, setValue] = useState(defaultValue);
@@ -31,14 +32,14 @@ function DynamicInputHandler({
   const updateValue = async (newValue: string) => {
     // return;
     // call the api
-    const data = await updateProject(params?.project as string, {
+    const data = await updateFunction(params[id] as string, {
       [fieldName]: newValue,
     });
     console.log("data we got:", data);
     const { success } = data;
     if (success) {
       console.log("data updated successfully");
-      revalidateTagServer("project");
+      revalidateTagServer(tag);
     }
   };
 

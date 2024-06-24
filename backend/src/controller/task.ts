@@ -463,7 +463,7 @@ export const getTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
 
-    const task = await Task.findById(taskId).lean();
+    const task = await Task.findById(taskId).select("-comments").lean();
 
     if (!task) {
       return errorResponseHandler(res, "NOT_FOUND");

@@ -100,7 +100,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
               value={value}
               setValue={setValue}
             />
-            <div className="flex gap-x-4">
+            <div className="flex gap-x-2">
               <Button onClick={handleCommentHandler}>Send</Button>
               <Button variant={"ghost"} onClick={handleReset}>
                 Cancel

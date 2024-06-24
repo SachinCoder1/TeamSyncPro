@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { getServerAuth } from "@/lib/auth";
 import { cn, isValidObjectId } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
-import { getProject } from "@/app/actions/project";
+import { getProject, updateProject } from "@/app/actions/project";
 import { Suspense } from "react";
 import { SquareFilledIcon } from "@/components/Sidebar/menu/ProjectMenu";
 import { LayoutDashboardIcon, List, ListTodo, Sparkles, SquareKanban } from "lucide-react";
@@ -110,6 +110,9 @@ export default async function SettingsLayout({
                 </SquareFilledIcon>
 
                 <DynamicInputHandler
+                  updateFunction={updateProject}
+                  tag="project"
+                  id="project"
                   fieldName="name"
                   className={cn(headingClasses["h3"])}
                   defaultValue={project?.name || ""}
