@@ -5,7 +5,7 @@ import { markCompleteIncomplete } from "@/app/actions/task";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TaskType } from "@/types/project";
-import { CircleCheckIcon } from "lucide-react";
+import { ChevronRight, CircleCheckIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
@@ -47,28 +47,36 @@ const SubTaskList = ({ subtasks }: Props) => {
           <div
             className={cn(
               buttonVariants({ variant: "ghost" }),
-              "w-full !px-1 !text-left border-t rounded-none flex justify-start gap-x-2 group"
+              "w-full !px-1 !text-left border-t rounded-none flex justify-between gap-x-2 group"
             )}
           >
-            {item.status === "COMPLETE" ||
-            (item._id === markComplete.id && markComplete.mark) ? (
-              <CircleCheckIcon
-                onClick={() => handleCompleteSubTask("INCOMPLETE", item._id)}
-                // fill="#58a182"
-                className="h-6 w-6 -ml-0.5 text-white fill-[#58a182] rounded-full cursor-pointer"
-              />
-            ) : (
-              <CircleCheckIcon
-                onClick={() => handleCompleteSubTask("COMPLETE", item._id)}
-                className="h-5 w-5 hover:text-[#0d7f56] hover:!fill-white rounded-full cursor-pointer"
-              />
-            )}
+            <div className="flex gap-x-2 items-center">
+              {item.status === "COMPLETE" ||
+              (item._id === markComplete.id && markComplete.mark) ? (
+                <CircleCheckIcon
+                  onClick={() => handleCompleteSubTask("INCOMPLETE", item._id)}
+                  // fill="#58a182"
+                  className="h-6 w-6 -ml-0.5 text-white fill-[#58a182] rounded-full cursor-pointer"
+                />
+              ) : (
+                <CircleCheckIcon
+                  onClick={() => handleCompleteSubTask("COMPLETE", item._id)}
+                  className="h-5 w-5 hover:text-[#0d7f56] hover:!fill-white rounded-full cursor-pointer"
+                />
+              )}
+              <Link
+                className={cn("py-2")}
+                key={index + item._id}
+                href={`/home/${params.workspace}/${params.project}/${item._id}`}
+              >
+                <div>{item.title}</div>
+              </Link>
+            </div>
             <Link
-              className={cn("py-2")}
-              key={index + item._id}
               href={`/home/${params.workspace}/${params.project}/${item._id}`}
+              className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
             >
-              <div>{item.title}</div>
+              <ChevronRight className="h-5 w-5" />
             </Link>
           </div>
         ))}
