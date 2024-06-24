@@ -87,6 +87,58 @@ export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
   return { success: true, data: data.data?.comment as CommentType };
 };
 
+
+export const getSubTasks = async (parentTaskId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/get-subtask/${parentTaskId}`, {
+    method: "GET",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    next: {tags: ['subtasks']}
+  });
+  if (!res.ok) {
+    console.log("taskId", parentTaskId, "not ok", res);
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "SUCCESS") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.subTasks as TaskType };
+};
+
+export const createSubTask = async (parentTaskId: string, title: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/createSubTask`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parentTaskId,
+      title,
+    }),
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    console.log("taskId", parentTaskId, title, "not ok", res);
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "CREATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.subTask as TaskType };
+};
+
 // Comments
 
 export const addComment = async (taskId: string, comment: string) => {

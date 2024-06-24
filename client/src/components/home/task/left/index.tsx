@@ -19,7 +19,6 @@ const LeftTaskContainer = async ({ task }: Props) => {
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="">
-          {/* <Heading>{task?.title}</Heading> */}
           <DynamicInputHandler
             className={cn(headingClasses["h3"])}
             defaultValue={task?.title as string}
