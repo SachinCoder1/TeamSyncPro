@@ -1,17 +1,16 @@
 "use client";
 
 import revalidateTagServer from "@/app/actions/actions";
-import { addComment, deleteComment } from "@/app/actions/task";
+import { addComment, deleteComment, updateComment } from "@/app/actions/task";
 import DeleteModal from "@/components/ui/DeleteModal";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { CommentType } from "@/types/project";
 import { formatFullDate, formatRelativeDate } from "@/utils/formatDate";
 import { useSession } from "next-auth/react";
-import React, { useOptimistic, useRef, useState } from "react";
+import React, { useState } from "react";
 // import { useOptimistic } from "react";
 
 type Props = {
@@ -21,21 +20,10 @@ type Props = {
 
 const AddCommentHandler = ({ taskId, comments }: Props) => {
   const { data: user } = useSession();
+  const [editCommentValue, setEditCommentValue] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState("");
+  const [isEditingComment, setIsEditingComment] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const formRef = useRef(null);
-//   const [optimisticMessages, addOptimisticMessage] = useOptimistic<
-//     CommentType[],
-//     string
-//   >(comments, (state, newComment) => [
-//     {
-//       comment: newComment,
-//       _id: undefined as any,
-//       user: { _id: user?.user.id as string, name: user?.user.name as string },
-//       createdAt: new Date() as any,
-//     },
-//     ...state,
-//   ]);
-//   console.log("optimistic messages:", optimisticMessages);
   const [isEditing, setIsEditing] = useState(false);
   const [currentComment, setCurrentComment] = useState<CommentType | null>(
     null
@@ -76,6 +64,15 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
       console.log("comment deleted successfully");
       revalidateTagServer("comments");
     }
+  };
+
+  const handleEditComment = async () => {
+    const data = await updateComment(editingCommentId, editCommentValue);
+    if (data.success) {
+      revalidateTagServer("comments");
+    }
+    setIsEditingComment(false);
+    setEditCommentValue("");
   };
 
   return (
@@ -140,44 +137,72 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
                 >
                   {formatRelativeDate(m.createdAt || "")}
                 </p>
-                {m.createdAt !== m.updatedAt && m.updatedAt && (
+                {m?.edited && m?.updatedAt && (
                   <p
                     className="text-sm text-[#626F86]"
-                    title={formatFullDate(m.createdAt)}
+                    title={formatFullDate(m.updatedAt)}
                   >
                     Edited
                   </p>
                 )}
               </div>
-              <div
-                className="text-[#172B4D] mt-2"
-                key={k}
-                dangerouslySetInnerHTML={{ __html: m.comment }}
-              />
-              <div className="flex gap-x-4">
-                <Button className="!px-0 text-[#44546F]" variant={"link"}>
-                  Edit
-                </Button>
-                {/* <DeleteModal
-                  open={deleteModalOpen}
-                  setOpen={setDeleteModalOpen}
-                  description="Are you sure you want to delete this comment? This action cannot be undone."
-                  title="Delete Comment?"
-                  triggerBtn={
-                    <Button className="!px-0 text-[#44546F]" variant={"link"}>
+
+              {isEditingComment && m._id === editingCommentId ? (
+                <>
+                  <div className="space-y-4 w-full">
+                    <RichTextEditor
+                      isEditing={isEditingComment}
+                      setIsEditing={setIsEditingComment}
+                      className={cn(
+                        "border-2 !w-full",
+                        isEditingComment &&
+                          "border-primary rounded-xl !min-h-32"
+                      )} // flex flex-col-reverse to make the options bottom
+                      placeholder={"Edit the comment..."}
+                      value={editCommentValue}
+                      setValue={setEditCommentValue}
+                    />
+                    <div className="flex gap-x-2">
+                      <Button onClick={handleEditComment}>Update</Button>
+                      <Button
+                        variant={"ghost"}
+                        onClick={() => setIsEditingComment(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
+                    className="text-[#172B4D] mt-2"
+                    key={k}
+                    dangerouslySetInnerHTML={{ __html: m.comment }}
+                  />
+                  <div className="flex gap-x-4">
+                    <Button
+                      onClick={() => {
+                        setIsEditingComment(true);
+                        setEditingCommentId(m._id);
+                        setEditCommentValue(m.comment);
+                      }}
+                      className="!px-0 text-[#44546F]"
+                      variant={"link"}
+                    >
+                      Edit
+                    </Button>
+
+                    <Button
+                      onClick={() => handleDeleteClick(m)}
+                      className="!px-0 text-[#44546F]"
+                      variant={"link"}
+                    >
                       Delete
                     </Button>
-                  }
-                  handleClick={() => handleDeleteClick(m)}
-                /> */}
-                <Button
-                  onClick={() => handleDeleteClick(m)}
-                  className="!px-0 text-[#44546F]"
-                  variant={"link"}
-                >
-                  Delete
-                </Button>
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         ))}

@@ -13,6 +13,7 @@ export type CommentType = {
   };
   createdAt: string;
   updatedAt?: string;
+  edited?: boolean;
 
 }
 export type TaskType = {
