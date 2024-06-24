@@ -130,7 +130,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
             </Avatar>
             <div className="flex flex-col">
               <div className="flex gap-x-3">
-                <p className="font-semibold text-[#44546F]">{m.user.name}</p>
+                <p className="font-semibold text-[#44546F] dark:text-gray-100">{m.user.name}</p>
                 <p
                   className="text-sm text-[#626F86]"
                   title={formatFullDate(m.createdAt)}
@@ -139,7 +139,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
                 </p>
                 {m?.edited && m?.updatedAt && (
                   <p
-                    className="text-sm text-[#626F86]"
+                    className="text-sm text-[#626F86] dark:text-gray-400"
                     title={formatFullDate(m.updatedAt)}
                   >
                     Edited
@@ -176,7 +176,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
               ) : (
                 <>
                   <div
-                    className="text-[#172B4D] mt-2"
+                    className="text-[#172B4D] dark:text-gray-300 mt-2"
                     key={k}
                     dangerouslySetInnerHTML={{ __html: m.comment }}
                   />
@@ -187,7 +187,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
                         setEditingCommentId(m._id);
                         setEditCommentValue(m.comment);
                       }}
-                      className="!px-0 text-[#44546F]"
+                      className="!px-0 text-[#44546F] dark:text-gray-500"
                       variant={"link"}
                     >
                       Edit
@@ -195,7 +195,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
 
                     <Button
                       onClick={() => handleDeleteClick(m)}
-                      className="!px-0 text-[#44546F]"
+                      className="!px-0 text-[#44546F] dark:text-gray-500"
                       variant={"link"}
                     >
                       Delete
