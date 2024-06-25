@@ -45,6 +45,7 @@ const SubTaskList = ({ subtasks }: Props) => {
         .sort((a, b) => a.order - b.order)
         ?.map((item, index) => (
           <div
+            key={index + item._id}
             className={cn(
               buttonVariants({ variant: "ghost" }),
               "w-full !px-1 !text-left border-t rounded-none flex justify-between gap-x-2 group"
@@ -66,7 +67,6 @@ const SubTaskList = ({ subtasks }: Props) => {
               )}
               <Link
                 className={cn("py-2")}
-                key={index + item._id}
                 href={`/home/${params.workspace}/${params.project}/${item._id}`}
               >
                 <div>{item.title}</div>
