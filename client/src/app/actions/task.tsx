@@ -161,6 +161,29 @@ export const deleteTask = async (taskId: string) => {
   return { success: true, data: data.data as { task: string; title: string } };
 };
 
+export const copyTask = async (taskId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/copy/${taskId}`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "CREATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType};
+};
+
 // Comments
 
 export const addComment = async (taskId: string, comment: string) => {

@@ -48,7 +48,7 @@ const router = express.Router();
 
 router.post("/create", validateCreateTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), createTask);
 router.post("/add-comment", validateAddCommentBody, authMiddleware, addCommentToTask);
-router.post("/copy/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), copyTask);
+router.post("/copy/:taskId", validateTaskIdParam, authMiddleware, copyTask);
 router.post( "/createSubTask", validateCreateSubTaskBody, authMiddleware, createSubTask);
 
 
