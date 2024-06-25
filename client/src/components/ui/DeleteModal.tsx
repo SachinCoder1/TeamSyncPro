@@ -8,8 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Icons } from "../Icon/Icons";
 
 type Props = {
+  isLoading?: boolean;
   open: boolean;
   setOpen: (bool: boolean) => void;
   triggerBtn?: React.ReactNode;
@@ -25,6 +27,7 @@ const DeleteModal = ({
   title,
   description,
   handleClick,
+  isLoading,
 }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -35,10 +38,21 @@ const DeleteModal = ({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <div className="flex justify-end w-full gap-x-4">
-          <Button onClick={handleClick} variant={"destructive"}>
+          <Button
+            disabled={isLoading}
+            onClick={handleClick}
+            variant={"destructive"}
+          >
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
             Delete
           </Button>
-          <Button onClick={() => setOpen(false)} variant={"ghost"}>
+          <Button
+            disabled={isLoading}
+            onClick={() => setOpen(false)}
+            variant={"ghost"}
+          >
             Cancel
           </Button>
         </div>

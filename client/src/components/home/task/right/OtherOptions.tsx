@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useState } from "react";
 import { Dialog } from "@radix-ui/react-dialog";
 import { EllipsisIcon } from "lucide-react";
 
@@ -32,14 +32,30 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import DeleteModal from "@/components/ui/DeleteModal";
+import { deleteTask } from "@/app/actions/task";
+import { useParams, useRouter } from "next/navigation";
+import revalidateTagServer from "@/app/actions/actions";
 
 export default function OtherOptions() {
+  const params = useParams();
+  const router = useRouter();
   const [open, setIsOpen] = React.useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleDeleteConfirmClick = () => {
+  const handleDeleteConfirmClick = async () => {
+    setLoading(true);
     console.log("deleting");
-    setShowDeleteDialog(false);
+
+    const isDeleted = await deleteTask(params?.task as string);
+    if (isDeleted.success) {
+      revalidateTagServer("project");
+      setLoading(false);
+      setShowDeleteDialog(false);
+      setTimeout(() => {
+        router.push(`/home/${params.workspace}/${params.project}`);
+      }, 500);
+    }
   };
 
   return (
@@ -66,10 +82,11 @@ export default function OtherOptions() {
           </DropdownMenuItem>
           <DeleteModal
             description="This action cannot be undone. This task will no longer be accessible by you or others you've shared it with."
-            title="Are you absolutely sure?"
+            title="Delete this Task?"
             open={showDeleteDialog}
             setOpen={setShowDeleteDialog}
             handleClick={handleDeleteConfirmClick}
+            isLoading={loading}
           />
         </DropdownMenuContent>
       </DropdownMenu>

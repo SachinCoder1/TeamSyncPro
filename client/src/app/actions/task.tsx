@@ -87,7 +87,6 @@ export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
   return { success: true, data: data.data?.comment as CommentType };
 };
 
-
 export const getSubTasks = async (parentTaskId: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
@@ -97,7 +96,7 @@ export const getSubTasks = async (parentTaskId: string) => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    next: {tags: ['subtasks']}
+    next: { tags: ["subtasks"] },
   });
   if (!res.ok) {
     console.log("taskId", parentTaskId, "not ok", res);
@@ -137,6 +136,29 @@ export const createSubTask = async (parentTaskId: string, title: string) => {
     return { success: false };
   }
   return { success: true, data: data.data?.subTask as TaskType };
+};
+
+export const deleteTask = async (taskId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/delete/${taskId}`, {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "DELETED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data as { task: string; title: string } };
 };
 
 // Comments
