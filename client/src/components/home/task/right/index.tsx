@@ -55,7 +55,7 @@ const RightTaskContainer = ({ task }: Props) => {
               </Button>
             }
           />
-          <OtherOptions />
+          <OtherOptions taskTitle={task?.title as string} />
         </div>
       </div>
       <div className="border my-4 rounded-md py-2">

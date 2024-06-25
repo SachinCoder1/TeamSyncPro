@@ -31,12 +31,13 @@ const taskSchema = new mongoose.Schema(
     parentTask: { type: ObjectId, ref: "Task" }, // this can be deep nested task so parentTask is just a reference of its parent
     tags: [{ type: ObjectId, ref: "Tag" }],
     assignee: { type: ObjectId, ref: "User" },
-    likedBy: [{ type: ObjectId, ref: "User" }],
+    likedBy: [{ type: ObjectId, ref: "User", default: [] }],
     project: { type: ObjectId, ref: "Project" },
-    section: { type: ObjectId, ref: "Section" },
+    section: { type: ObjectId, ref: "Section", default: [] },
     comments: [{ type: ObjectId, ref: "Comment" }],
     activity: {}, // TODO
     taskCreator: { type: ObjectId, ref: "User" },
+    done: { type: Boolean, default: false },
 
     /* Enums  */
     priority: {
@@ -46,10 +47,10 @@ const taskSchema = new mongoose.Schema(
     },
 
     status: {
-      type: String,
-      enum: ["INCOMPLETE", "COMPLETE"],
-      default: "INCOMPLETE",
+      title: {type: String},
+      sectionId: { type: ObjectId, ref: "Section" },
     },
+
     workflow: {
       type: String,
       default: "DEFAULT",

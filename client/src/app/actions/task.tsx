@@ -161,12 +161,39 @@ export const deleteTask = async (taskId: string) => {
   return { success: true, data: data.data as { task: string; title: string } };
 };
 
-export const copyTask = async (taskId: string) => {
+export const cloneTask = async (taskId: string, title: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/copy/${taskId}`, {
     method: "POST",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title,
+    }),
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "CREATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
+export const changeTaskStatus = async (taskId: string, sectionId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/change-status/${sectionId}/${taskId}`, {
+    method: "PATCH",
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
@@ -181,7 +208,7 @@ export const copyTask = async (taskId: string) => {
   if (data.message !== "CREATED") {
     return { success: false };
   }
-  return { success: true, data: data.data?.task as TaskType};
+  return { success: true, data: data.data?.task as TaskType };
 };
 
 // Comments

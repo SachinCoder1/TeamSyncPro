@@ -1,26 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Dialog } from "@radix-ui/react-dialog";
 import { EllipsisIcon } from "lucide-react";
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,20 +14,53 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { toast } from "@/components/ui/use-toast";
 import DeleteModal from "@/components/ui/DeleteModal";
-import { deleteTask } from "@/app/actions/task";
+import { cloneTask, deleteTask } from "@/app/actions/task";
 import { useParams, useRouter } from "next/navigation";
 import revalidateTagServer from "@/app/actions/actions";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { SubTaskFormSchema } from "@/lib/zod-validation/form-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Icons } from "@/components/Icon/Icons";
 
-export default function OtherOptions() {
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+
+type Props = {
+  taskTitle: string;
+};
+
+type FormValues = {
+  title: string;
+};
+
+export default function OtherOptions({ taskTitle }: Props) {
   const params = useParams();
   const router = useRouter();
   const [open, setIsOpen] = React.useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [loading, setLoading] = useState(false);
+  // const { toast } = useToast();
+
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(SubTaskFormSchema),
+  });
 
   const handleDeleteConfirmClick = async () => {
     setLoading(true);
@@ -52,44 +71,111 @@ export default function OtherOptions() {
       revalidateTagServer("project");
       setLoading(false);
       setShowDeleteDialog(false);
+      toast("Task Deleted Successfully, Redirecting...", {
+        description: "Please wait while we redirect you",
+      });
       setTimeout(() => {
         router.push(`/home/${params.workspace}/${params.project}`);
       }, 500);
     }
   };
 
+  const onSubmit = handleSubmit(async (data) => {
+    setLoading(true);
+    const res = await cloneTask(params?.task as string, data.title);
+    if (res.success) {
+      revalidateTagServer("project");
+      console.log("res:", res.data);
+      toast("Cloning complete", {
+        duration: 7000,
+        description:
+          "You can find the cloned task in the list or by clicking the link below",
+        action: {
+          label: "Open cloned issue",
+          onClick: () =>
+            router.push(
+              `/home/${params.workspace}/${params.project}/${res.data?._id}`
+            ),
+        },
+      });
+      resetHandler();
+    }
+  });
+  const resetHandler = () => {
+    clearErrors();
+    setLoading(false);
+    setIsOpen(false);
+    reset();
+  };
+
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size={"icon"}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost">
             <EllipsisIcon className="h-5 w-5" />
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={() => setIsOpen(true)}>
+        </PopoverTrigger>
+        <PopoverContent className="mr-10 !-mt-1 !w-max !p-0 !px-0 !py-0">
+          <Button
+            className="w-full justify-start rounded-none"
+            variant={"ghost"}
+            size={"sm"}
+            onClick={() => setIsOpen(true)}
+          >
             Clone
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={(e) => {
-              e.preventDefault();
-              setShowDeleteDialog(true);
-            }}
-            className="text-red-600"
+          </Button>
+          <Separator />
+          <Button
+            className="w-full justify-start text-destructive rounded-none"
+            variant={"ghost"}
+            size={"sm"}
+            onClick={() => setShowDeleteDialog(true)}
           >
             Delete Task
-          </DropdownMenuItem>
-          <DeleteModal
-            description="This action cannot be undone. This task will no longer be accessible by you or others you've shared it with."
-            title="Delete this Task?"
-            open={showDeleteDialog}
-            setOpen={setShowDeleteDialog}
-            handleClick={handleDeleteConfirmClick}
-            isLoading={loading}
-          />
-        </DropdownMenuContent>
-      </DropdownMenu>
+          </Button>
+        </PopoverContent>
+      </Popover>
+
+      <ResponsiveModal
+        open={open}
+        setOpen={setIsOpen}
+        title="Clone task"
+        description="This will clone everything the task have except the id"
+      >
+        <form
+          onSubmit={onSubmit}
+          className={cn("grid items-start gap-4 relative]")}
+        >
+          <div className="grid gap-2">
+            <Label htmlFor="title">title</Label>
+            <Input
+              autoFocus={true}
+              defaultValue={`Clone - ${taskTitle}`}
+              {...register("title")}
+              placeholder="What's in your mind?"
+              className="z-[99999999]"
+            />
+          </div>
+          <div className="flex items-start justify-end">
+            <Button disabled={loading} type="submit">
+              {loading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Clone Task
+            </Button>
+          </div>
+        </form>
+      </ResponsiveModal>
+
+      <DeleteModal
+        description="This action cannot be undone. This task will no longer be accessible by you or others you've shared it with."
+        title="Delete this Task?"
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        handleClick={handleDeleteConfirmClick}
+        isLoading={loading}
+      />
     </>
   );
 }

@@ -25,6 +25,8 @@ export const getProjectDetails = async (req: Request, res: Response) => {
       return errorResponseHandler(res, "NOT_FOUND");
     }
 
+    console.log("project:", project.sections[0])
+
     return successResponseHandler(res, "SUCCESS", project);
   } catch (error) {
     console.log("Error getting project details: ", error);

@@ -5,6 +5,7 @@ import {
   addDependencyToTask,
   addDueDateToTask,
   assignTask,
+  changeTaskStatus,
   copyTask,
   createSubTask,
   createTask,
@@ -66,6 +67,7 @@ router.patch( "/due/:projectId/:taskId", validateTaskIdParam, validateDueDateBod
 router.patch("/remove-due/:projectId/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), removeDueDateFromTask);
 router.patch("/reorder/:projectId", validateReOrderTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), reorderTask);
 router.patch("/mark-complete/:taskId", validateTaskIdParam, authMiddleware, markTaskAsComplete);
+router.patch("/change-status/:sectionId/:taskId", validateTaskIdParam, authMiddleware, changeTaskStatus);
 router.patch("/mark-incomplete/:taskId", validateTaskIdParam, authMiddleware,  markTaskAsIncomplete);
 router.patch("/like/:taskId", validateTaskIdParam, authMiddleware, likeTask);
 router.patch("/unlike/:taskId", validateTaskIdParam, authMiddleware, unlikeTask);

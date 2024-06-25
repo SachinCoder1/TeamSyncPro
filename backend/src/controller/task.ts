@@ -36,14 +36,14 @@ export const createTask = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "CREATED", { task });
   } catch (error) {
-    console.log("err: ", error)
+    console.log("err: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
 
 export const updateTask = async (req: Request, res: Response) => {
   console.log("req.params:", req.params);
-  console.log("req.body:", req.body)
+  console.log("req.body:", req.body);
   try {
     const { taskId } = req.params;
     const { title, description, priority, storyPoints } =
@@ -78,7 +78,7 @@ export const updateTask = async (req: Request, res: Response) => {
 export const assignTask = async (req: Request, res: Response) => {
   try {
     const { taskId, userId } = req.params;
-    if(!taskId || !userId) return errorResponseHandler(res, "BAD_REQUEST");
+    if (!taskId || !userId) return errorResponseHandler(res, "BAD_REQUEST");
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -225,47 +225,60 @@ export const reorderTask = async (req: Request, res: Response) => {
 export const copyTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
+    const { title } = req.body;
 
     // Find the original task
     const originalTask = await Task.findById(taskId).lean();
     if (!originalTask) {
-        return errorResponseHandler(res, "NOT_FOUND");
+      return errorResponseHandler(res, "NOT_FOUND");
     }
 
     // Get the last task in the section to determine the new order
-    const lastTask = await Task.findOne({ 
-        section: originalTask.section 
+    const lastTask = await Task.findOne({
+      section: originalTask.section,
     }).sort({ order: -1 });
 
     const newOrder = lastTask ? lastTask.order + 1 : 1;
 
     // Create a new task based on the original
     const newTaskData = {
-        ...originalTask,
-        title: `${originalTask.title} (Copy)`,
-        order: newOrder,
-        // Reset fields that should not be copied directly
-        likedBy: [],
-        comments: [],
-        activity: {},
-        status: "INCOMPLETE",
-        parentTask: null,
-        _id: new Types.ObjectId(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      ...originalTask,
+      title: title || `${originalTask.title} (Copy)`,
+      order: newOrder,
+      // Reset fields that should not be copied directly
+      likedBy: [],
+      comments: [],
+      activity: {},
+      status: "INCOMPLETE",
+      parentTask: null,
+      _id: new Types.ObjectId(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
+
+    console.log("adding...");
 
     const newTask = new Task(newTaskData);
     await newTask.save();
 
+    console.log("added...");
+
     // If the original task is associated with a section, update that section's tasks array
     if (originalTask.section) {
-        await Section.findByIdAndUpdate(originalTask.section, { $push: { tasks: newTask._id } });
+      console.log(
+        "updating...",
+        originalTask.section,
+        "new task id:",
+        newTask._id
+      );
+      await Section.findByIdAndUpdate(originalTask.section, {
+        $push: { tasks: newTask._id },
+      });
     }
 
     return successResponseHandler(res, "CREATED", { task: newTask });
-} catch (error) {
-    console.log("err: ", error)
+  } catch (error) {
+    console.log("err: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -274,7 +287,7 @@ export const copyTask = async (req: Request, res: Response) => {
 
 export const createSubTask = async (req: Request, res: Response) => {
   try {
-    const { parentTaskId,title } = req.body;
+    const { parentTaskId, title } = req.body;
 
     const parentTask = await Task.findById(parentTaskId).lean();
 
@@ -312,7 +325,7 @@ export const deleteTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
 
     const task = await Task.findByIdAndDelete(taskId).lean(); // delete the task
-    if(!task) return errorResponseHandler(res, "NOT_FOUND");
+    if (!task) return errorResponseHandler(res, "NOT_FOUND");
 
     return successResponseHandler(res, "DELETED", {
       task: task?._id,
@@ -329,7 +342,7 @@ export const markTaskAsComplete = async (req: Request, res: Response) => {
 
     const task = await Task.findByIdAndUpdate(
       taskId,
-      { status: "COMPLETE" },
+      { done: true },
       { new: true }
     ).lean();
 
@@ -345,9 +358,39 @@ export const markTaskAsIncomplete = async (req: Request, res: Response) => {
 
     const task = await Task.findByIdAndUpdate(
       taskId,
-      { status: "INCOMPLETE" },
+      { done: false },
       { new: true }
     ).lean();
+
+    return successResponseHandler(res, "UPDATED", { task });
+  } catch (error) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const changeTaskStatus = async (req: Request, res: Response) => {
+  try {
+    const { sectionId, taskId } = req.params;
+
+    const section = await Section.findById(sectionId)
+      .select("_id title")
+      .lean();
+
+    const task = await Task.findByIdAndUpdate(
+      taskId,
+      {
+        section: section?._id,
+        status: { title: section?.title, sectionId: section?._id },
+      },
+    ).lean();
+
+    await Section.findByIdAndUpdate(task?.section, {
+      $pull: { tasks: task?._id },
+    });
+
+    await Section.findByIdAndUpdate(sectionId, {
+      $addToSet: { tasks: task?._id },
+    });
 
     return successResponseHandler(res, "UPDATED", { task });
   } catch (error) {
@@ -422,14 +465,13 @@ export const deleteCommentFromTask = async (req: Request, res: Response) => {
   try {
     const { commentId } = req.params;
     const comment = await Comment.findByIdAndDelete(commentId).lean();
-    if(!comment) return errorResponseHandler(res, "NOT_FOUND");
+    if (!comment) return errorResponseHandler(res, "NOT_FOUND");
 
     const task = await Task.findByIdAndUpdate(
       comment?.task,
       { $pull: { comments: commentId } },
       { new: true }
     ).lean();
-
 
     return successResponseHandler(res, "DELETED", { comment, task });
   } catch (error) {
@@ -441,11 +483,11 @@ export const deleteCommentFromTask = async (req: Request, res: Response) => {
 
 export const updateComment = async (req: Request, res: Response) => {
   try {
-    const { commentId,comment } = req.body;
+    const { commentId, comment } = req.body;
 
     const updatedComment = await Comment.findByIdAndUpdate(
       commentId,
-      { comment, edited: true},
+      { comment, edited: true },
       { new: true }
     ).lean();
 
@@ -454,8 +496,6 @@ export const updateComment = async (req: Request, res: Response) => {
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
-
-
 
 // get a complete task by id
 
@@ -468,7 +508,7 @@ export const getTask = async (req: Request, res: Response) => {
     if (!task) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
-    console.log("task:", task)
+    console.log("task:", task);
 
     return successResponseHandler(res, "SUCCESS", { task });
   } catch (error) {
@@ -496,7 +536,11 @@ export const getCommentsOfTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
 
-    const comments = await Comment.find({ task: taskId }).populate("user", "name profileImage _id").select("-task -__v").sort({ createdAt: -1 }).lean();
+    const comments = await Comment.find({ task: taskId })
+      .populate("user", "name profileImage _id")
+      .select("-task -__v")
+      .sort({ createdAt: -1 })
+      .lean();
 
     return successResponseHandler(res, "SUCCESS", { comments });
   } catch (error) {

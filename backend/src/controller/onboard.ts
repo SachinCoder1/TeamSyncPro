@@ -89,20 +89,47 @@ export const onboardUser = async (req: Request, res: Response) => {
     }));
 
     // Add tasks to the project
-    const createdTasks = await Task.insertMany(refractoredTask);
+    const createdTasks = tasks.map((task: string, index: number) => new Task({
+      title: task,
+      project: project._id,
+      order: index,
+      taskCreator: user._id,
+      section: null,  // Placeholder for now
+    }));
 
     const refractoredSections = sections.map(
       (section: string, index: number) => ({
         title: section,
         project: project._id,
         order: index,
-        tasks: index === 0 ? createdTasks.map((item) => item._id) : [],
+        tasks: index === 0 ? createdTasks.map((item: any) => item._id) : [],
       })
     );
 
     // Organize tasks into sections (simplified)
     // Note: Real implementation would need to associate tasks with sections more explicitly
-    const createdSections = await Section.insertMany(refractoredSections);
+    const createdSections = sections.map((section: string, index: number) => new Section({
+      title: section,
+      project: project._id,
+      order: index,
+      tasks: [],
+    }));
+
+
+    createdTasks.forEach((task: any) => {
+      task.section = createdSections[0]._id;
+      task.status = {
+        sectionId: createdSections[0]._id,
+        title: createdSections[0].title,
+      }
+    });
+
+    // Set tasks for the first section
+    createdSections[0].tasks = createdTasks.map((task:any) => task._id);
+
+    // Save sections and tasks
+    await Promise.all([...createdSections.map((section:any) => section.save()), ...createdTasks.map((task: any)=> task.save())]);
+
 
     if (user.onboarding) {
       user.onboarding.step = "COMPLETED";
@@ -110,7 +137,7 @@ export const onboardUser = async (req: Request, res: Response) => {
     }
 
     workspace.projects.push(project._id);
-    const sectionIds = createdSections.map((item) => item._id);
+    const sectionIds = createdSections.map((item: any) => item._id);
     project.sections.push(...sectionIds);
 
     /** @dev We should use promise here */
