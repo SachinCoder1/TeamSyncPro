@@ -2,6 +2,7 @@
 
 import revalidateTagServer from "@/app/actions/actions";
 import { likeOrUnlikeTask } from "@/app/actions/task";
+import { buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { ThumbsUp, ThumbsUpIcon } from "lucide-react";
@@ -32,12 +33,12 @@ const LikeHandler = ({ isLiked, likesCount = 0, taskId }: Props) => {
   }, [isLiked]);
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div onClick={onClickHandler}  className={cn("flex items-center gap-x-2 cursor-pointer", buttonVariants({variant: "ghost"}))}>
       <ThumbsUp
-        onClick={onClickHandler}
         className={cn(
           "h-5 w-5 fill-none cursor-pointer",
-          toggle && "text-[#3f6ac4]"
+          toggle && "text-[#3f6ac4]",
+          
         )}
         // fill={toggle ? "bg-primary" : "transparent"}
         // color={"bg-transparent"}
