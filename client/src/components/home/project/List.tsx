@@ -38,6 +38,7 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
       sectionStatus:project.title,
       title: task.title || "NA",
       done: task.done || false,
+      order: task.order,
       status: task.status || "NA",
       label: task.workflow || "NA", // Assuming workflow corresponds to label
       priority: task.priority || "NA",
@@ -47,6 +48,9 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
       },
     }))
   );
+
+  transformedData?.sort((a, b) => a.order - b.order);
+
 
   return (
     <>

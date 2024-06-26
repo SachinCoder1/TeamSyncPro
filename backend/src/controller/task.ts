@@ -249,7 +249,7 @@ export const copyTask = async (req: Request, res: Response) => {
       likedBy: [],
       comments: [],
       activity: {},
-      status: "INCOMPLETE",
+      done: false,
       parentTask: null,
       _id: new Types.ObjectId(),
       createdAt: new Date(),
