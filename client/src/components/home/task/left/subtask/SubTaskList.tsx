@@ -52,7 +52,7 @@ const SubTaskList = ({ subtasks }: Props) => {
             )}
           >
             <div className="flex gap-x-2 items-center">
-              {item.status === "COMPLETE" ||
+              {item.done === true ||
               (item._id === markComplete.id && markComplete.mark) ? (
                 <CircleCheckIcon
                   onClick={() => handleCompleteSubTask("INCOMPLETE", item._id)}

@@ -37,7 +37,7 @@ export default async function Page({ params }: Props) {
         <div className="ml-4 mt-4">
           <MarkCompleteIncomplete
             tag="task"
-            isCompleted={tasks.task?.status === "COMPLETE"}
+            isCompleted={tasks.task?.done as boolean}
           />
         </div>
         <ResizableMain
