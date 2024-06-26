@@ -17,24 +17,33 @@ import { StatusType, TaskType } from "@/types/project";
 import useSWR from "swr";
 import { getAllStatus } from "@/app/actions/project";
 import { useParams } from "next/navigation";
+import { changeTaskStatus } from "@/app/actions/task";
+import revalidateTagServer from "@/app/actions/actions";
 
-interface Props {
+type Props = {
   status?: {
     sectionId: string;
     title: string;
   };
   label: string;
-}
+};
 export default function StatusBarDropdown({ status, label }: Props) {
   const params = useParams();
   const { data, error, isLoading } = useSWR<{
     success: boolean;
     data?: StatusType[];
-  }>(params.project ? `/status/${params.project}` : null, () =>
-    getAllStatus(params.project as string), {revalidateOnFocus: false, revalidateOnMount: false}
+  }>(
+    params.project ? `/status/${params.project}` : null,
+    () => getAllStatus(params.project as string),
+    // { revalidateOnFocus: false, revalidateOnMount: false }
   );
-  const onValueChange = (val: string) => {
+  const onValueChange = async (val: string) => {
     console.log("value changed..", val);
+    const changeStatus = await changeTaskStatus(params.task as string, val);
+    if (changeStatus.success) {
+      revalidateTagServer("task");
+      revalidateTagServer("project")
+    }
   };
 
   return (

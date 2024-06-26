@@ -84,7 +84,6 @@ export const columns: ColumnDef<Task>[] = [
       const label = labels.find((label) => label.value === row.original.label);
 
       const params = useParams();
-      console.log("params:", params);
 
       return (
         <Link
@@ -134,21 +133,21 @@ export const columns: ColumnDef<Task>[] = [
         (status) => status.value === row.original?.sectionStatus
       );
 
-      if (!status) {
-        return null;
-      }
+      // if (!status) {
+      //   return null;
+      // }
 
       return (
         <div className="flex w-[100px] items-center">
-          {status.icon && (
+          {/* {status.icon && (
             <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{status.label}</span>
+          )} */}
+          <span>{row.original.status.title}</span>
         </div>
       );
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+      return value.includes((row.getValue(id) as any)?.sectionId);
     },
   },
   {

@@ -7,9 +7,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 // import { DataTableViewOptions } from "@/app/(app)/examples/tasks/components/data-table-view-options"
 
-import { priorities, statuses } from "../data/data"
+import { priorities } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { DataTableViewOptions } from "./data-table-view-options"
+import { useParams } from "next/navigation"
+import useSWR from "swr"
+import { StatusType } from "@/types/project"
+import { getAllStatus } from "@/app/actions/project"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -19,6 +23,24 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
+
+  const params = useParams();
+  const { data, error, isLoading } = useSWR<{
+    success: boolean;
+    data?: StatusType[];
+  }>(
+    params.project ? `/status/${params.project}` : null,
+    () => getAllStatus(params.project as string),
+    // { revalidateOnFocus: false, revalidateOnMount: false }
+  );
+
+  const statuses = data?.data?.map((item) => (
+    {
+      label: item.title,
+      value: item._id,
+    }
+  ))
+
 
   return (
     <div className="flex items-center justify-between">
@@ -31,7 +53,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("status") && (
+        {table.getColumn("status") && statuses && statuses.length > 0 && (
           <DataTableFacetedFilter
             column={table.getColumn("status")}
             title="Status"
