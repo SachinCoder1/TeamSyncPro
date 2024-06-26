@@ -25,9 +25,28 @@ export const getProjectDetails = async (req: Request, res: Response) => {
       return errorResponseHandler(res, "NOT_FOUND");
     }
 
-    console.log("project:", project.sections[0])
+    console.log("project:", project.sections[0]);
 
     return successResponseHandler(res, "SUCCESS", project);
+  } catch (error) {
+    console.log("Error getting project details: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const getAllStatuses = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const { projectId } = req.params;
+
+    const sections = await Section.find({
+      project: projectId,
+    })
+      .sort({ order: 1 })
+      .select("_id title order");
+    console.log("sectionst that we got: ", sections);
+
+    return successResponseHandler(res, "SUCCESS", { status: sections });
   } catch (error) {
     console.log("Error getting project details: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
@@ -123,7 +142,7 @@ export const updateProject = async (req: Request, res: Response) => {
       _id: projectId,
       members: { $in: [userId] },
     });
-    console.log("project:", project)
+    console.log("project:", project);
     if (!project) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
@@ -134,7 +153,7 @@ export const updateProject = async (req: Request, res: Response) => {
     if (color) updateData.color = color;
     if (icon) updateData.icon = icon;
     if (description) updateData.description = description;
-    console.log("updateData object:", updateData)
+    console.log("updateData object:", updateData);
 
     // Update the project with provided fields
     const updatedProject = await Project.findByIdAndUpdate(
@@ -142,7 +161,7 @@ export const updateProject = async (req: Request, res: Response) => {
       { $set: updateData },
       { new: true }
     );
-    console.log("updateProject db:", updateProject)
+    console.log("updateProject db:", updateProject);
 
     if (!updatedProject) {
       return errorResponseHandler(res, "NOT_FOUND");

@@ -33,7 +33,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const completedRows = ["1", "4"];
       const [isSelected, setIsSelected] = useState(
-        row.original.status === "COMPLETE"
+        row.original.done === true
       );
       useEffect(() => {
         row.toggleSelected(isSelected);

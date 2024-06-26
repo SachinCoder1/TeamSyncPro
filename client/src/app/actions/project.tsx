@@ -4,7 +4,7 @@ import { BACKEND_URL } from "@/config";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
-import { ProjectType } from "@/types/project";
+import { ProjectType, StatusType } from "@/types/project";
 
 export const getProject = async (projectid?: string) => {
   const session = await getServerSession(authOptions);
@@ -25,6 +25,29 @@ export const getProject = async (projectid?: string) => {
     return { success: false };
   }
   return { success: true, project: project.data as ProjectType };
+};
+
+export const getAllStatus = async (projectid?: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  const res = await fetch(`${BACKEND_URL}/project/all-status/${projectid}`, {
+    method: "GET",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    cache: "force-cache",
+    next: {tags: ['status']}
+  });
+  if (!res.ok) {
+    console.log("res not ok..", res)
+    return { success: false };
+  }
+  const project = await res.json();
+  console.log("project: ", project)
+  if (project.message !== "SUCCESS") {
+    return { success: false };
+  }
+  return { success: true, data: project.data?.status as StatusType[] };
 };
 
 type UpdateProjectType = {

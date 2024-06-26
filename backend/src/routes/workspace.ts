@@ -15,6 +15,17 @@ router.get(
   authMiddleware,
   getWorkspaceById
 );
+router.get(
+  "/tags/:workspaceId",
+  authMiddleware,
+  getWorkspaceById
+);
+router.post(
+  "/add-tags/:workspaceId",
+  authMiddleware,
+  getWorkspaceById
+);
+
 
 router.post(
   "/create-workspace",

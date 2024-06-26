@@ -1,7 +1,11 @@
 import { InvitedMembersType, MembersType } from ".";
 
-type Workflow = "DEFAULT" | "DO_TODAY" | "DO_LATER" | "DO_THIS_WEEK"  | "DO_THIS_MONTH";
-
+type Workflow =
+  | "DEFAULT"
+  | "DO_TODAY"
+  | "DO_LATER"
+  | "DO_THIS_WEEK"
+  | "DO_THIS_MONTH";
 
 export type CommentType = {
   _id: string;
@@ -14,12 +18,11 @@ export type CommentType = {
   createdAt: string;
   updatedAt?: string;
   edited?: boolean;
-
-}
+};
 export type TaskType = {
   _id: string;
   title: string;
-  description? : string;
+  description?: string;
   order: number;
   tags: string[];
   likedBy: string[];
@@ -27,12 +30,24 @@ export type TaskType = {
   comments: string[];
   taskCreator: string;
   priority: "LOW" | "MEDIUM" | "HIGH" | "HIGHEST";
-  status: "INCOMPLETE" | "COMPLETE";
+  status: {
+    title: string;
+    sectionId: string;
+  };
+  done: boolean;
+  section: string;
   workflow: Workflow;
   createdAt: string;
   updatedAt: string;
 };
-  
+
+
+export type StatusType = {
+  _id: string;
+  title: string;
+  order: number;
+}
+
 type SectionType = {
   _id: string;
   title: string;

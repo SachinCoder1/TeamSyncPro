@@ -13,22 +13,36 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { StatusType, TaskType } from "@/types/project";
+import useSWR from "swr";
+import { getAllStatus } from "@/app/actions/project";
+import { useParams } from "next/navigation";
 
-type Props = {
-  status: string;
+interface Props {
+  status?: {
+    sectionId: string;
+    title: string;
+  };
   label: string;
-};
+}
 export default function StatusBarDropdown({ status, label }: Props) {
-  const onValueChange = (val:string) => {
-    console.log("value changed..", val)
-  }
+  const params = useParams();
+  const { data, error, isLoading } = useSWR<{
+    success: boolean;
+    data?: StatusType[];
+  }>(params.project ? `/status/${params.project}` : null, () =>
+    getAllStatus(params.project as string), {revalidateOnFocus: false, revalidateOnMount: false}
+  );
+  const onValueChange = (val: string) => {
+    console.log("value changed..", val);
+  };
 
   return (
-    <Select defaultValue={status} onValueChange={onValueChange}>
+    <Select defaultValue={status?.sectionId} onValueChange={onValueChange}>
       <SelectTrigger
         className={cn(
           "min-w-[100px] w-max ",
-          status === "todo" && "bg-secondary"
+          status?.title === "todo" && "bg-secondary"
         )}
       >
         <SelectValue />
@@ -36,10 +50,11 @@ export default function StatusBarDropdown({ status, label }: Props) {
       <SelectContent>
         <SelectGroup onChange={(e) => console.log()}>
           {/* <SelectLabel>{label}</SelectLabel> */}
-          <SelectItem className="bg-secondary" value={status}>{status}</SelectItem>
-          <SelectItem className="bg-blue-500 hover:!bg-blue-600" value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
+          {data?.data?.map((item) => (
+            <SelectItem className="text-left" key={item._id} value={item._id}>
+              {item.title}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>

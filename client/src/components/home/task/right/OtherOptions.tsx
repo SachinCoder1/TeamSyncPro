@@ -157,8 +157,8 @@ export default function OtherOptions({ taskTitle }: Props) {
               className="z-[99999999]"
             />
           </div>
-          <div className="flex items-start justify-end">
-            <Button disabled={loading} type="submit">
+          <div className="flex items-start justify-end w-full">
+            <Button className="w-full md:w-fit" disabled={loading} type="submit">
               {loading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}

@@ -43,7 +43,7 @@ const RightTaskContainer = ({ task }: Props) => {
   return (
     <div className="p-2">
       <div className="flex justify-between w-full">
-        <StatusBarDropdown status="todo" label="status" />
+        <StatusBarDropdown status={task?.status} label="status" />
         <div className="flex items-center">
           <LikeHandler likesCount={task?.likedBy.length} taskId={task?._id as string} isLiked={!!task?.likedBy?.includes(user?.user.id as string)} />
           <AttachFiles />

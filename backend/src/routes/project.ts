@@ -3,6 +3,7 @@ import { ROLES } from "~/constants";
 import {
   createProject,
   deleteProject,
+  getAllStatuses,
   getProjectDetails,
   updateProject,
 } from "~/controller/project";
@@ -19,6 +20,7 @@ const router = express.Router();
 
 router.get("/:projectId", authMiddleware, restrictsToProjectWorkspace("MEMBER"), getProjectDetails);
 
+router.get("/all-status/:projectId", authMiddleware, getAllStatuses);
 router.post(
   "/create",
   validateCreateProjectBody,

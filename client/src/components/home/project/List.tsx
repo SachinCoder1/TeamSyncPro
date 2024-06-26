@@ -37,6 +37,7 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
       id: task._id || "NA",
       sectionStatus:project.title,
       title: task.title || "NA",
+      done: task.done || false,
       status: task.status || "NA",
       label: task.workflow || "NA", // Assuming workflow corresponds to label
       priority: task.priority || "NA",
