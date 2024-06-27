@@ -188,6 +188,52 @@ export const cloneTask = async (taskId: string, title: string) => {
   return { success: true, data: data.data?.task as TaskType };
 };
 
+export const assignTask = async (taskId: string, userId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/assign/${taskId}/${userId}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
+export const unAssignTask = async (taskId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/unassign/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
 export const changeTaskStatus = async (taskId: string, sectionId: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");

@@ -10,11 +10,13 @@ type Props = {};
 const SubTaskIcon = (props: Props) => {
   const { setIsEditing } = useSubTaskOpenerStore();
   return (
-    <Button variant={"ghost"} size={"icon"} className="!m-0 !p-0">
-      <NetworkIcon
-        onClick={() => setIsEditing(true)}
-        className="h-5 w-5 cursor-pointer"
-      />
+    <Button
+      onClick={() => setIsEditing(true)}
+      variant={"ghost"}
+      size={"icon"}
+      className="!m-0 !p-0"
+    >
+      <NetworkIcon className="h-5 w-5 cursor-pointer" />
     </Button>
   );
 };

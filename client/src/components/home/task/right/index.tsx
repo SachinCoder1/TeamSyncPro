@@ -75,6 +75,14 @@ const RightTaskContainer = ({ task }: Props) => {
           <LabelValue label="Reporter">
             <TeamSwitcher />
           </LabelValue>
+          <LabelValue label="Due date">
+            {/* <TeamSwitcher /> */}
+            date
+          </LabelValue>
+          <LabelValue label="Priority">
+            {/* <TeamSwitcher /> */}
+            priority
+          </LabelValue>
         </div>
       </div>
     </div>

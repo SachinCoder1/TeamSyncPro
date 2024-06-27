@@ -59,8 +59,8 @@ router.get("/get-comments/:taskId", validateTaskIdParam, authMiddleware, getComm
 
 
 router.patch("/update/:taskId",validateTaskIdParam, validateUpdateTaskBody, authMiddleware, updateTask);
-router.patch( "/assign/:projectId/:taskId/:userId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), assignTask);
-router.patch( "/unassign/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), unassignTask);
+router.patch( "/assign/:taskId/:userId", validateTaskIdParam, authMiddleware, assignTask);
+router.patch( "/unassign/:taskId", validateTaskIdParam, authMiddleware, unassignTask);
 router.patch( "/add-dependency/:projectId/:taskId/:dependencyId/:dependencyType", validateAddDependencyParam, authMiddleware,restrictsToProject(ROLES.MEMBER), addDependencyToTask);
 router.patch( "/remove-dependency/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), removeDependencyFromTask);
 router.patch( "/due/:projectId/:taskId", validateTaskIdParam, validateDueDateBody, authMiddleware,restrictsToProject(ROLES.MEMBER), addDueDateToTask );

@@ -57,7 +57,7 @@ export default function StatusBarDropdown({ status, label }: Props) {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup onChange={(e) => console.log()}>
+        <SelectGroup>
           {/* <SelectLabel>{label}</SelectLabel> */}
           {data?.data?.map((item) => (
             <SelectItem className="text-left" key={item._id} value={item._id}>
