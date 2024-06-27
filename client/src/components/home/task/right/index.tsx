@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import DueDate from "./DueDate";
 import { cn } from "@/lib/utils";
 import StoryPoints from "./StoryPoints";
+import Priority from "./Priority";
 
 type Props = {
   task?: TaskType;
@@ -102,9 +103,9 @@ const RightTaskContainer = ({ task }: Props) => {
           <LabelValue label="Due date" isOtherClasses={false} className="!items-center">
             <DueDate taskId={task._id} dueDate={task.due} />
           </LabelValue>
-          <LabelValue label="Priority">
+          <LabelValue label="Priority" isOtherClasses={false}>
             {/* <TeamSwitcher /> */}
-            priority
+            <Priority taskId={task._id} priority={task.priority} />
           </LabelValue>
           <LabelValue label="Story Points" isOtherClasses={false}>
             {/* <TeamSwitcher /> */}
@@ -112,7 +113,7 @@ const RightTaskContainer = ({ task }: Props) => {
           </LabelValue>
           <LabelValue label="Dependency">
             {/* <TeamSwitcher /> */}
-            Number
+            dependency
           </LabelValue>
         </div>
       </div>

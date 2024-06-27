@@ -3,8 +3,12 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   CheckCircleIcon,
+  ChevronUpIcon,
+  ChevronsDownIcon,
+  ChevronsUpIcon,
   CircleIcon,
   CrossIcon,
+  Equal,
   // CrossCircledIcon,
   FileQuestion,
   FileQuestionIcon,
@@ -59,21 +63,26 @@ export const priorities = [
   {
     label: "Low",
     value: "LOW",
-    icon: ArrowDownIcon,
+    icon: ChevronsDownIcon,
+    color: "#85C1E9" // Light Blue for Low priority
   },
   {
     label: "Medium",
     value: "MEDIUM",
-    icon: ArrowRightIcon,
+    icon: Equal,
+    color: "#F7DC6F" // Yellow for Medium priority
   },
   {
     label: "High",
     value: "HIGH",
-    icon: ArrowUpIcon,
+    icon: ChevronUpIcon,
+    color: "#E74C3C" // Red for High priority
   },
   {
     label: "Highest",
     value: "HIGHEST",
-    icon: ArrowUpIcon,
+    icon: ChevronsUpIcon,
+    color: "#C0392B" // Dark Red for Highest priority
   },
 ]
+
