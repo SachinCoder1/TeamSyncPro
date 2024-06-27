@@ -1,3 +1,4 @@
+import { addTag } from "@/app/actions/task";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -30,7 +31,12 @@ const suggestions = countries.map((name, index) => ({
   label: name,
 }));
 
-export default function TagsSelector() {
+type Props = {
+  taskId: string;
+  workspaceId: string;
+};
+export default function TagsSelector({ taskId, workspaceId }: Props) {
+  console.log("workspaceId: ", workspaceId)
   const [toggleEditor, setToggleEditor] = useState(false);
   const [selected, setSelected] = useState<any>([
     suggestions[0],
@@ -44,9 +50,14 @@ export default function TagsSelector() {
   }, [api]);
 
   const onAdd = useCallback(
-    (newTag: any) => {
+    async (newTag:any) => {
       setSelected([...selected, newTag]);
-      console.log("added tag:", newTag);
+      console.log("added tag:", newTag, "workspaceId: ", workspaceId);
+      await addTag({
+        name: newTag?.value || newTag?.label,
+        taskId: taskId,
+        workspaceId: workspaceId,
+      });
     },
     [selected]
   );

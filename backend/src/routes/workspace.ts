@@ -2,6 +2,7 @@ import express from "express";
 import { ROLES } from "~/constants";
 import {
   createWorkspace, deleteWorkspace, getWorkspaceById,
+  getWorkspaceTags,
 } from "~/controller/workspace";
 import { authMiddleware } from "~/middleware";
 import { restrictsToWorkspace } from "~/middleware/roles/restrictsToWorkspace";
@@ -18,14 +19,8 @@ router.get(
 router.get(
   "/tags/:workspaceId",
   authMiddleware,
-  getWorkspaceById
+  getWorkspaceTags
 );
-router.post(
-  "/add-tags/:workspaceId",
-  authMiddleware,
-  getWorkspaceById
-);
-
 
 router.post(
   "/create-workspace",

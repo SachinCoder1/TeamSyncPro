@@ -5,7 +5,7 @@
 
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { Comment, Section, Task } from "~/model";
+import { Comment, Section, Tag, Task } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 import { calculateNewOrder } from "~/utils/calculateOrder";
 import { UpdateTaskBody } from "~/types";
@@ -156,7 +156,7 @@ export const addDueDateToTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
     const { dueDate } = req.body;
 
-    console.log("due date:", req.body)
+    console.log("due date:", req.body);
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -175,7 +175,7 @@ export const addDueDateToTask = async (req: Request, res: Response) => {
 export const removeDueDateFromTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    console.log("remove due date..", taskId)
+    console.log("remove due date..", taskId);
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -379,13 +379,10 @@ export const changeTaskStatus = async (req: Request, res: Response) => {
       .select("_id title")
       .lean();
 
-    const task = await Task.findByIdAndUpdate(
-      taskId,
-      {
-        section: section?._id,
-        status: { title: section?.title, sectionId: section?._id },
-      },
-    ).lean();
+    const task = await Task.findByIdAndUpdate(taskId, {
+      section: section?._id,
+      status: { title: section?.title, sectionId: section?._id },
+    }).lean();
 
     await Section.findByIdAndUpdate(task?.section, {
       $pull: { tasks: task?._id },
@@ -495,6 +492,30 @@ export const updateComment = async (req: Request, res: Response) => {
     ).lean();
 
     return successResponseHandler(res, "UPDATED", { comment: updatedComment });
+  } catch (error) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const addTags = async (req: Request, res: Response) => {
+  try {
+    const { name, color, workspaceId, taskId } = req.body;
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    console.log("req.body: ", req.body)
+
+    const tag = new Tag({
+      name,
+      color: color || randomColor,
+      workspace: workspaceId,
+    });
+    console.log("tag: ", tag)
+
+    await tag.save();
+    await Task.findByIdAndUpdate(taskId, {
+      $addToSet: { tags: tag._id },
+    });
+
+    return successResponseHandler(res, "CREATED", { tag: tag });
   } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
   }

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Project, Section, Task, User, Workspace } from "~/model";
+import { Project, Section, Tag, Task, User, Workspace } from "~/model";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 import { v4 as uuidv4 } from "uuid";
 import { Invitation } from "~/model/invitation";
@@ -255,6 +255,27 @@ export const getWorkspaceById = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "SUCCESS", {
       workspace,
+    });
+  } catch (error) {
+    console.log("error: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+export const getWorkspaceTags = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId } = req.params;
+    const tags = await Tag.find({
+      workspace: workspaceId,
+    })
+      .select("-updatedAt -workspace")
+      .lean();
+
+    if (!tags) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    return successResponseHandler(res, "SUCCESS", {
+      tags,
     });
   } catch (error) {
     console.log("error: ", error);

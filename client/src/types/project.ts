@@ -43,12 +43,17 @@ export type TaskType = {
   updatedAt: string;
 };
 
+export type TagType = {
+  _id: string;
+  name: string;
+  color: string;
+};
 
 export type StatusType = {
   _id: string;
   title: string;
   order: number;
-}
+};
 
 type SectionType = {
   _id: string;

@@ -29,7 +29,7 @@ const LabelValue = ({
   label,
   children,
   className,
-  isOtherClasses=true,
+  isOtherClasses = true,
 }: {
   label: string;
   className?: string;
@@ -37,13 +37,17 @@ const LabelValue = ({
   isOtherClasses?: boolean;
 }) => {
   return (
-    <div className={cn(" grid grid-cols-3 justify-between w-full items-center",           className
-    )}>
+    <div
+      className={cn(
+        " grid grid-cols-3 justify-between w-full items-center",
+        className
+      )}
+    >
       <Label>{label}</Label>
       <div
         className={cn(
           `col-span-2`,
-          isOtherClasses && "cursor-pointer hover:bg-secondary px-2 py-0.5",
+          isOtherClasses && "cursor-pointer hover:bg-secondary px-2 py-0.5"
         )}
       >
         {children}
@@ -89,7 +93,12 @@ const RightTaskContainer = ({ task }: Props) => {
             <TeamSwitcher />
           </LabelValue>
           <LabelValue label="Tags">
-            <TagsSelector />
+            {user?.user.workspace && (
+              <TagsSelector
+                taskId={task._id}
+                workspaceId={user?.user.workspace as string}
+              />
+            )}
           </LabelValue>
           <LabelValue label="Reporter">
             <TeamSwitcher />
@@ -100,7 +109,11 @@ const RightTaskContainer = ({ task }: Props) => {
               <DueDate taskId={task._id} dueDate={task.due} />
             </div>
           </div> */}
-          <LabelValue label="Due date" isOtherClasses={false} className="!items-center">
+          <LabelValue
+            label="Due date"
+            isOtherClasses={false}
+            className="!items-center"
+          >
             <DueDate taskId={task._id} dueDate={task.due} />
           </LabelValue>
           <LabelValue label="Priority" isOtherClasses={false}>

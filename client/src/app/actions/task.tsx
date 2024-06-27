@@ -4,7 +4,7 @@ import { BACKEND_URL } from "@/config";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
-import { CommentType, ProjectType, TaskType } from "@/types/project";
+import { CommentType, ProjectType, TagType, TaskType } from "@/types/project";
 
 export const markCompleteIncomplete = async (
   taskId?: string,
@@ -85,6 +85,36 @@ export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
     return { success: false };
   }
   return { success: true, data: data.data?.comment as CommentType };
+};
+type AddTagType = {
+  name: string;
+  color?: string;
+  workspaceId: string;
+  taskId: string;
+};
+
+export const addTag = async (payload: AddTagType) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/add-tag`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "CREATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.tag as TagType };
 };
 
 export const getSubTasks = async (parentTaskId: string) => {
