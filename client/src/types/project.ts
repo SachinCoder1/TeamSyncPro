@@ -36,6 +36,7 @@ export type TaskType = {
   };
   done: boolean;
   section: string;
+  due: Date;
   workflow: Workflow;
   createdAt: string;
   updatedAt: string;

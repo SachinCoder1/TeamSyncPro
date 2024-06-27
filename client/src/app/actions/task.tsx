@@ -188,7 +188,7 @@ export const cloneTask = async (taskId: string, title: string) => {
   return { success: true, data: data.data?.task as TaskType };
 };
 
-export const addDueDate = async (taskId: string, dueDate: string) => {
+export const addDueDate = async (taskId: string, dueDate: Date) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   console.log("calling api");

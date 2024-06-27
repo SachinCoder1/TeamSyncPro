@@ -139,7 +139,7 @@ export const validateDueDateBody = (
   try {
     const data = req.body;
     const schema = Joi.object({
-      dueDate: Joi.date().iso().required().greater("now"),
+      dueDate: Joi.date().iso().required(),
     });
     const error = schema.validate(data).error;
     if (error) {

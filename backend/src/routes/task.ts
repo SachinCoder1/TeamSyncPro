@@ -63,8 +63,8 @@ router.patch( "/assign/:taskId/:userId", validateTaskIdParam, authMiddleware, as
 router.patch( "/unassign/:taskId", validateTaskIdParam, authMiddleware, unassignTask);
 router.patch( "/add-dependency/:taskId/:dependencyId/:dependencyType", validateAddDependencyParam, authMiddleware, addDependencyToTask);
 router.patch( "/remove-dependency/:taskId", validateTaskIdParam, authMiddleware, removeDependencyFromTask);
-router.patch( "/due/:taskId", validateTaskIdParam, validateDueDateBody, authMiddleware,restrictsToProject(ROLES.MEMBER), addDueDateToTask );
-router.patch("/remove-due/:taskId", validateTaskIdParam, authMiddleware, restrictsToProject(ROLES.MEMBER), removeDueDateFromTask);
+router.patch( "/due/:taskId", validateTaskIdParam, validateDueDateBody, authMiddleware, addDueDateToTask );
+router.patch("/remove-due/:taskId", validateTaskIdParam, authMiddleware, removeDueDateFromTask);
 router.patch("/reorder/:projectId", validateReOrderTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), reorderTask);
 router.patch("/mark-complete/:taskId", validateTaskIdParam, authMiddleware, markTaskAsComplete);
 router.patch("/change-status/:sectionId/:taskId", validateTaskIdParam, authMiddleware, changeTaskStatus);

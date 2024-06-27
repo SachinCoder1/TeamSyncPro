@@ -156,6 +156,8 @@ export const addDueDateToTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
     const { dueDate } = req.body;
 
+    console.log("due date:", req.body)
+
     const task = await Task.findByIdAndUpdate(
       taskId,
       { due: dueDate },
@@ -173,6 +175,7 @@ export const addDueDateToTask = async (req: Request, res: Response) => {
 export const removeDueDateFromTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
+    console.log("remove due date..", taskId)
 
     const task = await Task.findByIdAndUpdate(
       taskId,
