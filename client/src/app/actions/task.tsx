@@ -215,6 +215,52 @@ export const addDueDate = async (taskId: string, dueDate: string) => {
   return { success: true, data: data.data?.task as TaskType };
 };
 
+export const addDependency = async (taskId: string, dependencyId: string, dependencyType: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/add-dependency/${taskId}/${dependencyId}/${dependencyType}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
+export const removeDependency = async (taskId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/remove-dependency/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  console.log("res:", res);
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("delete task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
 export const removeDueDate = async (taskId: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
