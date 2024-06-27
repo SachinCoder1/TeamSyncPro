@@ -37,6 +37,7 @@ export type TaskType = {
   done: boolean;
   section: string;
   due: Date;
+  storyPoints: number;
   workflow: Workflow;
   createdAt: string;
   updatedAt: string;

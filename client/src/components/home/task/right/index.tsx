@@ -18,6 +18,7 @@ import OtherOptions from "./OtherOptions";
 import { useSession } from "next-auth/react";
 import DueDate from "./DueDate";
 import { cn } from "@/lib/utils";
+import StoryPoints from "./StoryPoints";
 
 type Props = {
   task?: TaskType;
@@ -27,18 +28,21 @@ const LabelValue = ({
   label,
   children,
   className,
+  isOtherClasses=true,
 }: {
   label: string;
   className?: string;
   children: React.ReactNode;
+  isOtherClasses?: boolean;
 }) => {
   return (
-    <div className=" grid grid-cols-3 justify-between w-full items-center">
+    <div className={cn(" grid grid-cols-3 justify-between w-full items-center",           className
+    )}>
       <Label>{label}</Label>
       <div
         className={cn(
-          `col-span-2 cursor-pointer hover:bg-secondary px-2 py-0.5`,
-          className
+          `col-span-2`,
+          isOtherClasses && "cursor-pointer hover:bg-secondary px-2 py-0.5",
         )}
       >
         {children}
@@ -89,22 +93,22 @@ const RightTaskContainer = ({ task }: Props) => {
           <LabelValue label="Reporter">
             <TeamSwitcher />
           </LabelValue>
-          <div className=" grid grid-cols-3 justify-between w-full items-center">
+          {/* <div className=" grid grid-cols-3 justify-between w-full items-center">
             <Label>{"Due date"}</Label>
             <div className={cn(`col-span-2`)}>
               <DueDate taskId={task._id} dueDate={task.due} />
             </div>
-          </div>
-          {/* <LabelValue label="Due date" className="!px-0 !py-0 rounded-md hover:!bg-none">
+          </div> */}
+          <LabelValue label="Due date" isOtherClasses={false} className="!items-center">
             <DueDate taskId={task._id} dueDate={task.due} />
-          </LabelValue> */}
+          </LabelValue>
           <LabelValue label="Priority">
             {/* <TeamSwitcher /> */}
             priority
           </LabelValue>
-          <LabelValue label="Story Points">
+          <LabelValue label="Story Points" isOtherClasses={false}>
             {/* <TeamSwitcher /> */}
-            Number
+            <StoryPoints taskId={task._id} point={task.storyPoints} />
           </LabelValue>
           <LabelValue label="Dependency">
             {/* <TeamSwitcher /> */}
