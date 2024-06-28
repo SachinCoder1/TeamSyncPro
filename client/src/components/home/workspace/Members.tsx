@@ -11,14 +11,15 @@ type Props = {
 type UserCardProps = {
   name: string;
   src?: string;
+  id: string;
 };
-const UserCard = ({ name, src }: UserCardProps) => (
+const UserCard = ({ name, src,id }: UserCardProps) => (
   <div className="flex items-center space-x-4 cursor-pointer hover:bg-secondary rounded-md px-2 py-2">
     <Avatar>
       <AvatarImage src="/avatars/01.png" />
       <AvatarFallback
         style={{
-          backgroundColor: getColorForName(name),
+          backgroundColor: getColorForName(id),
         }}
       >
         {" "}
@@ -41,7 +42,7 @@ const Members = ({ members }: Props) => {
           <span className="text-muted-foreground font-semibold">Add Member</span>
         </div>
         {members?.map((item, index) => (
-          <UserCard key={item._id} name={item.name} />
+          <UserCard key={item._id} name={item.name} id={item._id} />
         ))}
       </div>
     </div>
