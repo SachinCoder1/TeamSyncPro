@@ -10,12 +10,12 @@ type Props = {
 
 const HeadingCard = ({heading,className,children}: Props) => {
   return (
-    <div className='border rounded-md py-3 px-2'>
+    <div className='border rounded-md py-4 px-4'>
         <Heading variant='h4'>
             {heading}
         </Heading>
 
-        <div>
+        <div className='mt-4'>
             {children}
         </div>
     </div>

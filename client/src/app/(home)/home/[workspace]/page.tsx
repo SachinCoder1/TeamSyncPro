@@ -1,5 +1,6 @@
 import { getWorkspace } from "@/app/actions/workspace";
 import HeadingCard from "@/components/home/HeadingCard";
+import Members from "@/components/home/workspace/Members";
 import StarWorkspace from "@/components/home/workspace/StarWorkspace";
 import StarButton from "@/components/ui/StarButton";
 import { Badge } from "@/components/ui/badge";
@@ -47,9 +48,9 @@ export default async function page({ params }: Props) {
         <StarWorkspace />
       </div>
       {/* <div className="mx-auto w-full"> */}
-        <div className="w-4/6 flex justify-center gap-y-6 flex-col mx-auto">
+        <div className="w-3/6 flex justify-center gap-y-6 flex-col mx-auto">
           <HeadingCard heading={`Members (${workspace?.members.length})`}>
-            child
+            <Members members={workspace?.members} />
           </HeadingCard>
           <HeadingCard heading="Projects">child</HeadingCard>
         </div>
