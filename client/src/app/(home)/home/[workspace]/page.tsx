@@ -1,4 +1,8 @@
 import { getWorkspace } from "@/app/actions/workspace";
+import StarWorkspace from "@/components/home/workspace/StarWorkspace";
+import StarButton from "@/components/ui/StarButton";
+import { Badge } from "@/components/ui/badge";
+import { Heading } from "@/components/ui/typography";
 import { getServerAuth } from "@/lib/auth";
 import { isValidObjectId } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
@@ -17,7 +21,7 @@ export default async function page({ params }: Props) {
     return redirect(`/home/${session.user.workspace}`);
   }
 
-  const {success,workspace} = await getWorkspace(params.workspace);
+  const { success, workspace } = await getWorkspace(params.workspace);
   if (success === false) {
     return notFound();
   }
@@ -29,6 +33,18 @@ export default async function page({ params }: Props) {
       <Suspense fallback={<div>Loading...</div>}>
         {JSON.stringify(workspace, null, 2)}
       </Suspense>
+      <div className="flex gap-x-2 items-center">
+        <Heading variant="h4">{workspace?.name}
+        {workspace?.personal === true && (
+          <Badge className="ml-2" variant={"outline"}>
+            Personal
+          </Badge>
+        )}
+
+        </Heading>
+       
+        <StarWorkspace />
+      </div>
     </div>
   );
 }

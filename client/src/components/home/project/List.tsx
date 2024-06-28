@@ -70,7 +70,7 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
           className="hidden dark:block"
         />
       </div>
-      {JSON.stringify(transformedData, null, 2)}
+      {/* {JSON.stringify(transformedData, null, 2)} */}
 
       <div className="hidden h-full flex-1 flex-col space-y-8 mt-4 md:flex">
         {/* <div className="flex items-center justify-between space-y-2">
