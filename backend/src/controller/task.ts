@@ -497,7 +497,7 @@ export const updateComment = async (req: Request, res: Response) => {
   }
 };
 
-export const addTags = async (req: Request, res: Response) => {
+export const addTag = async (req: Request, res: Response) => {
   try {
     const { name, color, workspaceId, taskId, tagId } = req.body;
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
@@ -532,16 +532,16 @@ export const addTags = async (req: Request, res: Response) => {
   }
 };
 
-export const addTagsToTask = async (req: Request, res: Response) => {
+export const removeTag = async (req: Request, res: Response) => {
   try {
     const { taskId, tagId } = req.params;
-    console.log("req.params: ", req.params);
+    console.log("req.params remove tag: ", req.params);
 
-    const tag = await Tag.findById(tagId);
     await Task.findByIdAndUpdate(taskId, {
-      $addToSet: { tags: tag?._id },
+      $pull: { tags: tagId },
     });
-    return successResponseHandler(res, "UPDATED", { tag: { _id: tagId } });
+
+    return successResponseHandler(res, "UPDATED", { tag: tagId });
   } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
   }

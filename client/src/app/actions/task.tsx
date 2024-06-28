@@ -116,6 +116,28 @@ export const addTag = async (payload: AddTagType) => {
   }
   return { success: true, data: data.data?.tag as TagType };
 };
+export const removeTag = async (tagId: string, taskId: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/remove-tag/${tagId}/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.tag as { _id: string } };
+};
 
 export const getSubTasks = async (parentTaskId: string) => {
   const session = await getServerSession(authOptions);
@@ -245,17 +267,24 @@ export const addDueDate = async (taskId: string, dueDate: Date) => {
   return { success: true, data: data.data?.task as TaskType };
 };
 
-export const addDependency = async (taskId: string, dependencyId: string, dependencyType: string) => {
+export const addDependency = async (
+  taskId: string,
+  dependencyId: string,
+  dependencyType: string
+) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   console.log("calling api");
-  const res = await fetch(`${BACKEND_URL}/task/add-dependency/${taskId}/${dependencyId}/${dependencyType}`, {
-    method: "PATCH",
-    headers: {
-      authorization: `Bearer ${session.accessToken.token}`,
-    },
-    // next: {tags: ['project']}
-  });
+  const res = await fetch(
+    `${BACKEND_URL}/task/add-dependency/${taskId}/${dependencyId}/${dependencyType}`,
+    {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${session.accessToken.token}`,
+      },
+      // next: {tags: ['project']}
+    }
+  );
   console.log("res:", res);
   if (!res.ok) {
     return { success: false };
@@ -364,13 +393,16 @@ export const changeTaskStatus = async (taskId: string, sectionId: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   console.log("calling api");
-  const res = await fetch(`${BACKEND_URL}/task/change-status/${sectionId}/${taskId}`, {
-    method: "PATCH",
-    headers: {
-      authorization: `Bearer ${session.accessToken.token}`,
-    },
-    // next: {tags: ['project']}
-  });
+  const res = await fetch(
+    `${BACKEND_URL}/task/change-status/${sectionId}/${taskId}`,
+    {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${session.accessToken.token}`,
+      },
+      // next: {tags: ['project']}
+    }
+  );
   console.log("res:", res);
   if (!res.ok) {
     return { success: false };

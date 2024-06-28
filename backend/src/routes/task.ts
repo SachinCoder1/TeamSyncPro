@@ -4,8 +4,8 @@ import {
     addCommentToTask,
   addDependencyToTask,
   addDueDateToTask,
-  addTags,
-  addTagsToTask,
+  addTag,
+  removeTag,
   assignTask,
   changeTaskStatus,
   copyTask,
@@ -53,9 +53,7 @@ router.post("/create", validateCreateTaskBody, authMiddleware, restrictsToProjec
 router.post("/add-comment", validateAddCommentBody, authMiddleware, addCommentToTask);
 router.post("/copy/:taskId", validateTaskIdParam, authMiddleware, copyTask);
 router.post( "/createSubTask", validateCreateSubTaskBody, authMiddleware, createSubTask);
-router.post("/add-tag", authMiddleware, addTags)
-router.post("/add-tag/:tagId/:taskId", authMiddleware, addTagsToTask)
-
+router.post("/add-tag", authMiddleware, addTag)
 
 router.get("/get/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getTask);
 router.get("/get-subtask/:taskId", validateTaskIdParam, authMiddleware, getSubTasks);
@@ -75,6 +73,7 @@ router.patch("/change-status/:sectionId/:taskId", validateTaskIdParam, authMiddl
 router.patch("/mark-incomplete/:taskId", validateTaskIdParam, authMiddleware,  markTaskAsIncomplete);
 router.patch("/like/:taskId", validateTaskIdParam, authMiddleware, likeTask);
 router.patch("/unlike/:taskId", validateTaskIdParam, authMiddleware, unlikeTask);
+router.patch("/remove-tag/:tagId/:taskId", authMiddleware, removeTag);
 
 router.put("/update-comment", validateUpdateCommentBody, authMiddleware, updateComment)
 

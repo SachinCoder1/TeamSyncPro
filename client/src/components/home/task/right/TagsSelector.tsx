@@ -1,6 +1,6 @@
 "use client";
 
-import { addTag } from "@/app/actions/task";
+import { addTag, removeTag } from "@/app/actions/task";
 import { getTags } from "@/app/actions/workspace";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -95,8 +95,12 @@ export default function TagsSelector({
   );
 
   const onDelete = useCallback(
-    (tagIndex: any) => {
+    async (tagIndex: any) => {
+      const tagToRemove = selected[tagIndex];
       setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
+      console.log("tag to remove: ", tagToRemove)
+      await removeTag(tagToRemove.value, taskId);
+
       console.log("removing:", tagIndex);
     },
     [selected]
