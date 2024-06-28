@@ -34,8 +34,8 @@ export default async function Page({ params }: Props) {
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
-        {JSON.stringify(tasks.task, null, 2)}
-        <BreadcrumbMain />
+        {/* {JSON.stringify(tasks.task, null, 2)} */}
+        <BreadcrumbMain params={params} />
         <div className="ml-4 mt-4">
           <MarkCompleteIncomplete
             tag="task"
@@ -44,7 +44,7 @@ export default async function Page({ params }: Props) {
         </div>
         <ResizableMain
           left={
-            <LeftTaskContainer task={tasks.task} subtasks={subtasks?.data} />
+            <LeftTaskContainer workspaceId={params.workspace} projectId={params.project} task={tasks.task} subtasks={subtasks?.data} />
           }
           right={<RightTaskContainer task={tasks.task} />}
         />

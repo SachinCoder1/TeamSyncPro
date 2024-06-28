@@ -25,9 +25,10 @@ type Props = {
     sectionId: string;
     title: string;
   };
-  label: string;
+  taskId: string;
+  label?: string;
 };
-export default function StatusBarDropdown({ status, label }: Props) {
+export default function StatusBarDropdown({ status,taskId }: Props) {
   const params = useParams();
   const { data, error, isLoading } = useSWR<{
     success: boolean;
@@ -39,7 +40,7 @@ export default function StatusBarDropdown({ status, label }: Props) {
   );
   const onValueChange = async (val: string) => {
     console.log("value changed..", val);
-    const changeStatus = await changeTaskStatus(params.task as string, val);
+    const changeStatus = await changeTaskStatus(taskId as string, val);
     if (changeStatus.success) {
       revalidateTagServer("task");
       revalidateTagServer("project")

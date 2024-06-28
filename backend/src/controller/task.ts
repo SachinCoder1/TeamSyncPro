@@ -553,7 +553,13 @@ export const getTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
 
-    const task = await Task.findById(taskId).select("-comments").lean();
+    const task = await Task.findById(taskId)
+      .select("-comments")
+      .populate({
+        path: "dependency.task",
+        select: "_id title status priority",
+      })
+      .lean();
 
     if (!task) {
       return errorResponseHandler(res, "NOT_FOUND");

@@ -10,14 +10,31 @@ import { PlusIcon } from "lucide-react";
 import DynamicInputHandler from "@/components/DynamicInputHandler";
 import { cn } from "@/lib/utils";
 import SubTasks from "./subtask";
+import { LabelValue } from "../right";
+import Dependency from "./Dependency";
+import { getProject } from "@/app/actions/project";
 
 type Props = {
   task?: TaskType;
   subtasks?: TaskType[];
+  projectId?: string;
+  workspaceId: string;
 };
 
-const LeftTaskContainer = async ({ task,subtasks }: Props) => {
-  return (
+const LeftTaskContainer = async ({projectId ,task, subtasks,workspaceId }: Props) => {
+  const data = await getProject(projectId);
+  const suggestions = data?.project?.sections.flatMap((project) =>
+    project.tasks
+      .filter((localTask) => localTask.done === false && localTask._id !== task?._id)
+      .map((task) => ({
+        label: task.title || "NA",
+        value: task._id || "NA",
+      }))
+  );
+    
+  // suggestions?.sort((a, b) => a.order - b.order); 
+
+   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="">
@@ -31,7 +48,7 @@ const LeftTaskContainer = async ({ task,subtasks }: Props) => {
           />
         </div>
         <div>
-        <p className="text-sm mb-1 px-2">Description</p>
+          <p className="text-sm mb-1 px-2">Description</p>
 
           {/* <Label className="px-2 my-1">Description</Label> */}
           <DescriptionHandler
@@ -46,7 +63,24 @@ const LeftTaskContainer = async ({ task,subtasks }: Props) => {
       </div>
 
       <div>
-        <SubTasks taskId={task?._id as string} subtasks={subtasks as TaskType[]} />
+        <SubTasks
+          taskId={task?._id as string}
+          subtasks={subtasks as TaskType[]}
+        />
+      </div>
+
+      <div
+        className={cn(" grid grid-cols-4 justify-between w-full items-baseline")}
+      >
+        <Label>Dependency</Label>
+        <div
+          className={cn(
+            `col-span-3`,
+            "" // cursor-pointer hover:bg-secondary px-2 py-0.5
+          )}
+        >
+          <Dependency workspaceId={workspaceId} dependency={task?.dependency} taskId={task?._id as string} projectId={projectId as string} suggestions={suggestions} />
+        </div>
       </div>
 
       <div className="space-y-4">

@@ -26,7 +26,7 @@ type Props = {
   task?: TaskType;
 };
 
-const LabelValue = ({
+export const LabelValue = ({
   label,
   children,
   className,
@@ -69,7 +69,7 @@ const RightTaskContainer = async ({ task }: Props) => {
   return (
     <div className="p-2">
       <div className="flex justify-between w-full">
-        <StatusBarDropdown status={task?.status} label="status" />
+        <StatusBarDropdown status={task?.status} taskId={task._id} label="status" />
         <div className="flex items-center">
           <LikeHandler
             likesCount={task?.likedBy.length}
@@ -133,10 +133,9 @@ const RightTaskContainer = async ({ task }: Props) => {
             {/* <TeamSwitcher /> */}
             <StoryPoints taskId={task._id} point={task.storyPoints} />
           </LabelValue>
-          <LabelValue label="Dependency">
-            {/* <TeamSwitcher /> */}
+          {/* <LabelValue label="Dependency">
             dependency
-          </LabelValue>
+          </LabelValue> */}
         </div>
       </div>
     </div>

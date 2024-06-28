@@ -270,7 +270,7 @@ export const addDueDate = async (taskId: string, dueDate: Date) => {
 export const addDependency = async (
   taskId: string,
   dependencyId: string,
-  dependencyType: string
+  dependencyType: "BLOCKS" | "IS_BLOCKED_BY"
 ) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");

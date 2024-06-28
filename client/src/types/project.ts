@@ -19,6 +19,20 @@ export type CommentType = {
   updatedAt?: string;
   edited?: boolean;
 };
+
+
+export type DependencyType = {
+  by: "IS_BLOCKED_BY" | "BLOCKS";
+  task: {
+    title: string;
+    _id: string;
+    status: {
+      title: string;
+      sectionId: string;
+    };
+    priority: "LOW" | "MEDIUM" | "HIGH" | "HIGHEST";
+  };
+};
 export type TaskType = {
   _id: string;
   title: string;
@@ -41,6 +55,7 @@ export type TaskType = {
   workflow: Workflow;
   createdAt: string;
   updatedAt: string;
+  dependency?: DependencyType
 };
 
 export type TagType = {
