@@ -1,5 +1,4 @@
 import { type ClassValue, clsx } from "clsx";
-import { cache } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -43,8 +42,7 @@ const hashToColor = (hash: number): string => {
 };
 
 // Generate a consistent color for a given name
-export const getColorForName = cache((name: string): string => {
+export const getColorForName = (name: string): string => {
   const hash = stringToHash(name);
-  console.log("hashtoColor:", hashToColor(hash))
   return hashToColor(hash);
-});
+};

@@ -55,7 +55,7 @@ export default async function page({ params }: Props) {
           className="px-4"
           heading={`Members (${workspace?.members.length})`}
         >
-          <Members members={workspace?.members} />
+          <Members workspaceId={workspace?._id as string} workspaceName={workspace?.name} members={workspace?.members} />
         </HeadingCard>
         <HeadingCard heading="Projects">
           <Projects

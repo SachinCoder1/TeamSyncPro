@@ -2,48 +2,19 @@
 
 import { Icons } from "@/components/Icon/Icons";
 import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { getColorForName } from "@/lib/utils";
-import { MembersType } from "@/types";
 import { PlusCircleIcon } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { ReactTags } from "react-tag-autocomplete";
-import AddMemberModal from "./AddMemberModal";
 
 type Props = {
-  members?: MembersType[];
   workspaceName?: string;
   workspaceId: string;
+  buttonTrigger?: React.ReactNode;
 };
 
-type UserCardProps = {
-  name: string;
-  src?: string;
-  id: string;
-};
-const UserCard = ({ name, src, id }: UserCardProps) => (
-  <div className="flex items-center space-x-4 cursor-pointer hover:bg-secondary rounded-md px-2 py-2">
-    <Avatar>
-      <AvatarImage src="/avatars/01.png" />
-      <AvatarFallback
-        style={{
-          backgroundColor: getColorForName(id),
-        }}
-      >
-        {" "}
-        {name[0].toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
-    <div>
-      <p className="text-sm font-medium leading-none">{name}</p>
-      {/* <p className="text-xs text-muted-foreground">{label}</p> */}
-    </div>
-  </div>
-);
-
-const Members = ({ workspaceId, members, workspaceName }: Props) => {
+const AddMemberModal = ({ workspaceId, workspaceName,buttonTrigger }: Props) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<{ label: string; value: string }[]>(
     []
@@ -86,25 +57,50 @@ const Members = ({ workspaceId, members, workspaceName }: Props) => {
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-x-4 gap-y-3 items-center ">
-        <AddMemberModal
-          workspaceId={workspaceId}
-          workspaceName={workspaceName}
-          buttonTrigger={
-            <>
-              <PlusCircleIcon className="h-7 w-7 text-muted-foreground" />
-              <span className="text-muted-foreground font-semibold">
-                Add Member
-              </span>
-            </>
-          }
+      <ResponsiveModal
+        open={open}
+        setOpen={setOpen}
+        title={`Invite people to ${workspaceName}`}
+        description=""
+      >
+        <Label>Email addresses</Label>
+        <ReactTags
+          labelText="e.g. john@company.com"
+          placeholderText="e.g. john@company.com"
+          selected={selected || []}
+          suggestions={[]}
+          // ref={api}
+          onAdd={onAdd}
+          onDelete={onDelete}
+          noOptionsText="No emails found"
+          allowNew
+          ariaDescribedBy="custom-tags-description"
+          // collapseOnSelect
+          id="custom-tags-demo"
+          onValidate={onValidate}
+          activateFirstOption={true}
+          allowBackspace={true}
+          // onCollapse={() => setToggleEditor(false)}
         />
-        {members?.map((item) => (
-          <UserCard key={item._id} name={item.name} id={item._id} />
-        ))}
+        <div className="flex items-start justify-end w-full">
+          <Button
+            onClick={handleMembersAdd}
+            className="w-full md:w-fit"
+            disabled={loading}
+          >
+            {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            Send
+          </Button>
+        </div>
+      </ResponsiveModal>
+      <div
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-x-2 ml-1 cursor-pointer hover:bg-secondary rounded-md px-2 py-2"
+      >
+        {buttonTrigger}
       </div>
     </div>
   );
 };
 
-export default Members;
+export default AddMemberModal;
