@@ -37,10 +37,9 @@ export default async function page({ params }: Props) {
 
   return (
     <div>
-      page and the id is: {params.workspace}
+      {/* page and the id is: {params.workspace} */}
       <Suspense fallback={<div>Loading...</div>}>
-        {JSON.stringify(workspace, null, 2)}
-      </Suspense>
+        {/* {JSON.stringify(workspace, null, 2)} */}
       <div className="flex gap-x-2 items-center">
         <Heading variant="h4">
           {workspace?.name}
@@ -54,7 +53,7 @@ export default async function page({ params }: Props) {
         <StarWorkspace />
       </div>
       {/* <div className="mx-auto w-full"> */}
-      <div className="w-3/6 flex justify-center gap-y-6 flex-col mx-auto">
+      <div className="w-3/6 flex justify-center gap-y-6 flex-col mx-auto mt-6">
         <HeadingCard
           className="px-4"
           heading={`Members (${workspace?.members.length})`}
@@ -72,6 +71,8 @@ export default async function page({ params }: Props) {
         </HeadingCard>
       </div>
       {/* </div> */}
+      </Suspense>
+
     </div>
   );
 }

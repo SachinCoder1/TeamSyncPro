@@ -80,7 +80,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
            ${email} Invited You to join ${workspace.name}     
         </h1>
         <p>You can join It in just 2 mins using the below link</p>
-         <a href=http://localhost:3000/invitation/${invitationToken} />
+         <a href=http://localhost:3000/invitation/${invitationToken}> join </a>
          <p> if the above link do not work please use this ${invitationToken} </p>
         `
       );
