@@ -1,5 +1,7 @@
+import { getInvites } from "@/app/actions/invite";
 import { getWorkspace } from "@/app/actions/workspace";
 import HeadingCard from "@/components/home/HeadingCard";
+import InvitedMembers from "@/components/home/workspace/InvitedMembers";
 import Members from "@/components/home/workspace/Members";
 import Projects from "@/components/home/workspace/Projects";
 import StarWorkspace from "@/components/home/workspace/StarWorkspace";
@@ -29,6 +31,8 @@ export default async function page({ params }: Props) {
   if (success === false) {
     return notFound();
   }
+
+  const invitations = await getInvites(params.workspace)
   console.log("workspace: ", workspace);
 
   return (
@@ -62,6 +66,9 @@ export default async function page({ params }: Props) {
             workspaceId={params.workspace}
             projects={workspace?.projects as ProjectType[] | undefined}
           />
+        </HeadingCard>
+        <HeadingCard heading="Invited people">
+          <InvitedMembers  invitedMembers={invitations?.data} />
         </HeadingCard>
       </div>
       {/* </div> */}

@@ -1,5 +1,6 @@
 "use client";
 
+import { inviteToWorkspace } from "@/app/actions/invite";
 import { Icons } from "@/components/Icon/Icons";
 import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { PlusCircleIcon } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { ReactTags } from "react-tag-autocomplete";
+import { toast } from "sonner";
 
 type Props = {
   workspaceName?: string;
@@ -14,15 +16,28 @@ type Props = {
   buttonTrigger?: React.ReactNode;
 };
 
-const AddMemberModal = ({ workspaceId, workspaceName,buttonTrigger }: Props) => {
+const AddMemberModal = ({
+  workspaceId,
+  workspaceName,
+  buttonTrigger,
+}: Props) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<{ label: string; value: string }[]>(
     []
   );
   const [loading, setLoading] = useState(false);
-  const handleMembersAdd = () => {
+  const handleMembersAdd = async () => {
+    setLoading(true);
     console.log("added emails: ", selected);
-    handleReset();
+    const emails = selected.map((item) => item.value);
+    console.log("emails: ", emails);
+    const isAdded = await inviteToWorkspace(workspaceId, emails);
+    if (isAdded.success) {
+      handleReset();
+      return;
+    }
+
+    toast("Something went wrong")
   };
 
   const handleReset = () => {

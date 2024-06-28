@@ -133,9 +133,9 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
                 <p className="font-semibold text-[#44546F] dark:text-gray-100">{m.user.name}</p>
                 <p
                   className="text-sm text-[#626F86]"
-                  title={formatFullDate(m.createdAt)}
+                  title={formatFullDate(m?.createdAt)}
                 >
-                  {formatRelativeDate(m.createdAt || "")}
+                  {formatRelativeDate(m?.createdAt)}
                 </p>
                 {m?.edited && m?.updatedAt && (
                   <p

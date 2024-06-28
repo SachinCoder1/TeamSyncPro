@@ -233,3 +233,20 @@ export const acceptWorkspaceInvitation = async (
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
+
+export const getInvites = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    console.log("id: ", id)
+    const invitations = await Invitation.find({
+      $or: [{ workspace: id }, { project: id }],
+    })
+      .populate("invited_from", "name _id profileImage")
+      .select("-invitation_token -project -workspace");
+      console.log("invitations: ", invitations)
+    return successResponseHandler(res, "SUCCESS", invitations);
+  } catch (error) {
+    console.error("error: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};

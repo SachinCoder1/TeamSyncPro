@@ -26,7 +26,7 @@ export type WorkspaceType = {
   personal: boolean;
   members: [MembersType];
   projects: [ProjectType];
-  invitedMembers: [InvitedMembersType];
+  invitedMembers: InvitedMembersType;
   tags: string[];
   createdAt: string;
 };

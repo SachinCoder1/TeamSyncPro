@@ -1,6 +1,7 @@
 import express from "express";
 import { ROLES } from "~/constants";
 import {
+  getInvites,
   inviteMembersToProject,
   inviteUsersToWorkspace,
 } from "~/controller/invite";
@@ -20,6 +21,11 @@ router.post(
   authMiddleware,
   restrictsToWorkspace(ROLES.MEMBER),
   inviteUsersToWorkspace
+);
+router.get(
+  "/:id",
+  authMiddleware,
+  getInvites
 );
 
 // router.patch("/update-workspace", authMiddleware,)
