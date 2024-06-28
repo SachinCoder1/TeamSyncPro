@@ -15,6 +15,7 @@ import { markCompleteIncomplete } from "@/app/actions/task";
 import revalidateTagServer from "@/app/actions/actions";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import Priority from "@/components/home/task/right/Priority";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -165,12 +166,13 @@ export const columns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className="flex items-center">
-          {priority.icon && (
-            <priority.icon color={priority.color} className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{priority.label}</span>
-        </div>
+        <Priority priority={priority.value} taskId={row.original.id} />
+        // <div className="flex items-center">
+        //   {priority.icon && (
+        //     <priority.icon color={priority.color} className="mr-2 h-4 w-4 text-muted-foreground" />
+        //   )}
+        //   <span>{priority.label}</span>
+        // </div>
       );
     },
     filterFn: (row, id, value) => {

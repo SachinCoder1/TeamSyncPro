@@ -112,9 +112,13 @@ export default function OtherOptions({ taskTitle }: Props) {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost">
-            <EllipsisIcon className="h-5 w-5" />
-          </Button>
+        <Button
+          variant="ghost"
+          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+        >
+          <EllipsisIcon className="h-4 w-4" />
+          <span className="sr-only">Open menu</span>
+        </Button>
         </PopoverTrigger>
         <PopoverContent className="mr-10 !-mt-1 !w-max !p-0 !px-0 !py-0">
           <Button
