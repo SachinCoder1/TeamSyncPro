@@ -1,6 +1,7 @@
 import express from "express";
 import { ROLES } from "~/constants";
 import {
+  acceptWorkspaceInvitation,
   getInvites,
   inviteMembersToProject,
   inviteUsersToWorkspace,
@@ -36,4 +37,10 @@ router.post(
   restrictsToProjectWorkspace(ROLES.MEMBER),
   inviteMembersToProject
 );
+router.post(
+  "/accept/:invitation_token",
+  authMiddleware,
+  acceptWorkspaceInvitation
+);
+
 export default router;

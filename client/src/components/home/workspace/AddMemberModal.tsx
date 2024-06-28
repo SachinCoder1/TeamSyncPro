@@ -99,7 +99,7 @@ const AddMemberModal = ({
           allowBackspace={true}
           // onCollapse={() => setToggleEditor(false)}
         />
-        <div className="flex items-start justify-end w-full">
+        <div className="flex items-start justify-end w-full mt-2">
           <Button
             onClick={handleMembersAdd}
             className="w-full md:w-fit"

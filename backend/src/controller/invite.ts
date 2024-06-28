@@ -207,6 +207,7 @@ export const acceptWorkspaceInvitation = async (
     // Add the workspace to the user's workspaces if not already present
     if (!user.workspaces.includes(invitation?.workspace as Types.ObjectId)) {
       user.workspaces.push(invitation?.workspace as Types.ObjectId);
+      user.selectedWorkspace = invitation?.workspace;
     }
 
     // Add the user to the workspace's members
