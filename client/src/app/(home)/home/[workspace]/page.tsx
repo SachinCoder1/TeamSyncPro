@@ -1,12 +1,14 @@
 import { getWorkspace } from "@/app/actions/workspace";
 import HeadingCard from "@/components/home/HeadingCard";
 import Members from "@/components/home/workspace/Members";
+import Projects from "@/components/home/workspace/Projects";
 import StarWorkspace from "@/components/home/workspace/StarWorkspace";
 import StarButton from "@/components/ui/StarButton";
 import { Badge } from "@/components/ui/badge";
 import { Heading } from "@/components/ui/typography";
 import { getServerAuth } from "@/lib/auth";
 import { isValidObjectId } from "@/lib/utils";
+import { ProjectType } from "@/types/project";
 import { notFound, redirect } from "next/navigation";
 import React, { Suspense } from "react";
 
@@ -48,12 +50,20 @@ export default async function page({ params }: Props) {
         <StarWorkspace />
       </div>
       {/* <div className="mx-auto w-full"> */}
-        <div className="w-3/6 flex justify-center gap-y-6 flex-col mx-auto">
-          <HeadingCard heading={`Members (${workspace?.members.length})`}>
-            <Members members={workspace?.members} />
-          </HeadingCard>
-          <HeadingCard heading="Projects">child</HeadingCard>
-        </div>
+      <div className="w-3/6 flex justify-center gap-y-6 flex-col mx-auto">
+        <HeadingCard
+          className="px-4"
+          heading={`Members (${workspace?.members.length})`}
+        >
+          <Members members={workspace?.members} />
+        </HeadingCard>
+        <HeadingCard heading="Projects">
+          <Projects
+            workspaceId={params.workspace}
+            projects={workspace?.projects as ProjectType[] | undefined}
+          />
+        </HeadingCard>
+      </div>
       {/* </div> */}
     </div>
   );

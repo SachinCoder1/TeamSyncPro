@@ -41,7 +41,7 @@ const Members = ({ members }: Props) => {
           <span className="text-muted-foreground font-semibold">Add Member</span>
         </div>
         {members?.map((item, index) => (
-          <UserCard name={item.name} />
+          <UserCard key={item._id} name={item.name} />
         ))}
       </div>
     </div>

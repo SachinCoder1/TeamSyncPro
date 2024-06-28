@@ -1,25 +1,23 @@
-import React from 'react'
-import { Heading } from '../ui/typography';
+import React from "react";
+import { Heading } from "../ui/typography";
+import { cn } from "@/lib/utils";
 
 type Props = {
-    children: React.ReactNode;
-    heading?: string;
-    className?: string;
+  children: React.ReactNode;
+  heading?: string;
+  className?: string;
+};
 
-}
-
-const HeadingCard = ({heading,className,children}: Props) => {
+const HeadingCard = ({ heading, className, children }: Props) => {
   return (
-    <div className='border rounded-md py-4 px-4'>
-        <Heading variant='h4'>
-            {heading}
-        </Heading>
+    <div className="border rounded-md py-4">
+      <Heading variant="h4" className="px-4">
+        {heading}
+      </Heading>
 
-        <div className='mt-4'>
-            {children}
-        </div>
+      <div className={cn("mt-4", className)}>{children}</div>
     </div>
-  )
-}
+  );
+};
 
-export default HeadingCard
+export default HeadingCard;

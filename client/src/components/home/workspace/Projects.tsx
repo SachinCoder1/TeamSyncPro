@@ -1,0 +1,39 @@
+import { SquareFilledIcon } from "@/components/Sidebar/menu/ProjectMenu";
+import { ProjectType } from "@/types/project";
+import { PlusSquareIcon } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+
+type Props = {
+  projects?: ProjectType[];
+  workspaceId: string;
+};
+
+type ProjectCardProps = {
+    color: string;
+    name: string;
+    id: string;
+    workspaceId: string;
+};
+const ProjectCard = ({ color, name,id,workspaceId }: ProjectCardProps) => (
+  <div className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer">
+    <SquareFilledIcon className="w-10 h-10" color={color} />
+    <Link href={`/home/${workspaceId}/${id}`} className="font-semibold">{name}</Link>
+  </div>
+);
+const Projects = ({ projects,workspaceId }: Props) => {
+  return (
+    <div>
+      <div className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer">
+        <PlusSquareIcon strokeWidth={"1px"} className="w-10 h-10 text-muted-foreground !font-normal" />
+        <p className="font-semibold">New project</p>
+      </div>
+
+      {projects?.map((item, index) => (
+        <ProjectCard workspaceId={workspaceId} id={item._id} key={item._id} color={item.color} name={item.name} />
+      ))}
+    </div>
+  );
+};
+
+export default Projects;
