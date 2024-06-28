@@ -34,16 +34,31 @@ const InvitedMembers = ({ invitedMembers }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invitedMembers?.map((item, index) => (
-            <TableRow key={`${item.invited_to}:${index}`}>
-              <TableCell className="font-medium">{item.invited_to}</TableCell>
-              <TableCell><Badge variant={"outline"}>{item.status.toLocaleLowerCase()}</Badge></TableCell>
-              <TableCell>{item.invited_from.name}</TableCell>
-              <TableCell className="text-right">
-                {format(new Date(item?.createdAt || ""), "MMMM d")}
-              </TableCell>
-            </TableRow>
-          ))}
+          {invitedMembers && invitedMembers.length > 0 ? (
+            invitedMembers.map((item, index) => (
+              <TableRow key={`${item.invited_to}:${index}`}>
+                <TableCell className="font-medium">{item.invited_to}</TableCell>
+                <TableCell>
+                  <Badge variant={"outline"}>
+                    {item.status.toLocaleLowerCase()}
+                  </Badge>
+                </TableCell>
+                <TableCell>{item.invited_from.name}</TableCell>
+                <TableCell className="text-right">
+                  {format(new Date(item?.createdAt || ""), "MMMM d")}
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

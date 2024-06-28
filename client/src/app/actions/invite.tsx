@@ -51,6 +51,7 @@ export const getInvites = async (
       headers: {
         authorization: `Bearer ${session.accessToken.token}`,
       },
+      next: {tags: ["invitations"]}
     });
 
     if (!res.ok) {

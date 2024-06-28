@@ -18,7 +18,8 @@ export const getWorkspace = async(workspaceId?: string) => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    cache: 'force-cache'
+    cache: 'force-cache',
+    next: {tags: ["workspace"]}
   });
   if (!res.ok) {
     return {success:false};

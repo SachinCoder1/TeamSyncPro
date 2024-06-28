@@ -1,5 +1,6 @@
 "use client";
 
+import revalidateTagServer from "@/app/actions/actions";
 import { inviteToWorkspace } from "@/app/actions/invite";
 import { Icons } from "@/components/Icon/Icons";
 import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
@@ -34,6 +35,7 @@ const AddMemberModal = ({
     const isAdded = await inviteToWorkspace(workspaceId, emails);
     if (isAdded.success) {
       handleReset();
+      revalidateTagServer("invitations")
       return;
     }
 
