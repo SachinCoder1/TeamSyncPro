@@ -269,6 +269,7 @@ export const getWorkspaceTags = async (req: Request, res: Response) => {
     })
       .select("-updatedAt -workspace")
       .lean();
+    console.log("tags: ", tags);
 
     if (!tags) {
       return errorResponseHandler(res, "NOT_FOUND");

@@ -31,6 +31,7 @@ export const getWorkspace = async(workspaceId?: string) => {
 };
 
 export const getTags = async(workspaceId?: string) => {
+  console.log("workspaceId", workspaceId)
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   const res = await fetch(`${BACKEND_URL}/workspace/tags/${workspaceId || session.user.workspace}`, {
@@ -47,5 +48,5 @@ export const getTags = async(workspaceId?: string) => {
   if (parsedWorkspace.message !== "SUCCESS") {
     return {success:false}
   }
-  return {success:true,workspace: (parsedWorkspace.data.tags as TagType[])};
+  return {success:true,data: (parsedWorkspace.data.tags as TagType[])};
 };

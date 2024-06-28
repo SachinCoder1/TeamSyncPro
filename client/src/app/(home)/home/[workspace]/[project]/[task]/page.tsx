@@ -1,4 +1,5 @@
 import { getPerticularTask, getSubTasks } from "@/app/actions/task";
+import { getTags } from "@/app/actions/workspace";
 import ResizableMain from "@/components/home/task";
 import BreadcrumbMain from "@/components/home/task/BreadcrumbMain";
 import MarkCompleteIncomplete from "@/components/home/task/MarkCompleteIncomplete";
@@ -24,7 +25,8 @@ type Props = {
 export default async function Page({ params }: Props) {
   const taskData = getPerticularTask(params.task, params.project);
   const subTaskData = getSubTasks(params.task);
-  const [tasks, subtasks] = await Promise.all([taskData, subTaskData]);
+  const tags = getTags()
+  const [tasks, subtasks] = await Promise.all([taskData, subTaskData, tags]);
   console.log("subtasks: ", subtasks);
   if (tasks.success === false) {
     return <>not found</>;

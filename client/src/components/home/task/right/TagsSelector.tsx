@@ -1,8 +1,14 @@
+"use client";
+
 import { addTag } from "@/app/actions/task";
+import { getTags } from "@/app/actions/workspace";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { TagType } from "@/types/project";
 import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ReactTags } from "react-tag-autocomplete";
+import useSWR from "swr";
 
 const countries = [
   "Afghanistan",
@@ -34,14 +40,40 @@ const suggestions = countries.map((name, index) => ({
 type Props = {
   taskId: string;
   workspaceId: string;
+  tags: string[] | undefined;
+  suggestions: any;
 };
-export default function TagsSelector({ taskId, workspaceId }: Props) {
-  console.log("workspaceId: ", workspaceId)
+export default function TagsSelector({
+  taskId,
+  workspaceId,
+  tags,
+  suggestions,
+}: Props) {
+  // const { data, isLoading } = useSWR(
+  //   workspaceId ? `/status/${workspaceId}` : null,
+  //   () => getTags()
+  // );
+  // const suggestions = data?.data?.map((item) => ({
+  //   label: item.name,
+  //   value: item._id,
+  // }));
+  // console.log("suggestions: ", suggestions);
+  // const suggestions = data?.data?.map((item) => ({
+  //   label: item.name,
+  //   value: item._id,
+  // }));
+  // const preSelected = suggestions?.filter((suggestion) =>
+  //   tags?.includes(suggestion.value)
+  // );
+  console.log("suggestions: ", suggestions);
+  // console.log("preSelected: ", preSelected);
   const [toggleEditor, setToggleEditor] = useState(false);
-  const [selected, setSelected] = useState<any>([
-    suggestions[0],
-    suggestions[10],
-  ]);
+  const [selected, setSelected] = useState<any>(
+    suggestions?.filter((suggestion: any) => tags?.includes(suggestion.value))
+  );
+  console.log("selected: ", selected);
+  // console.log("data:", data);
+
   const api = useRef<any>(null);
   const focus = useCallback(() => {
     // if (!api || !api.current) return;
@@ -50,11 +82,11 @@ export default function TagsSelector({ taskId, workspaceId }: Props) {
   }, [api]);
 
   const onAdd = useCallback(
-    async (newTag:any) => {
+    async (newTag: any) => {
       setSelected([...selected, newTag]);
       console.log("added tag:", newTag, "workspaceId: ", workspaceId);
       await addTag({
-        name: newTag?.value || newTag?.label,
+        name: newTag?.label || newTag?.value,
         taskId: taskId,
         workspaceId: workspaceId,
       });
@@ -78,6 +110,22 @@ export default function TagsSelector({ taskId, workspaceId }: Props) {
     }
   }, [toggleEditor, api]);
 
+  // useEffect(() => {
+  //   if (data?.success) {
+  //     console.log("data got successed..")
+  //     const preSelected = data?.data?.filter((suggestion) =>
+  //       tags?.includes(suggestion._id)
+  //     );
+  //     if (preSelected) {
+  //       console.log("tags: ", tags)
+  //       console.log("pre selected are there...", preSelected)
+  //       setSelected([...preSelected]);
+  //     }
+  //   }
+  // }, [data, isLoading]);
+
+  // if (isLoading) return <>loading...</>;
+
   return (
     <div>
       {toggleEditor === false && (
@@ -87,27 +135,31 @@ export default function TagsSelector({ taskId, workspaceId }: Props) {
           }}
           className="flex flex-wrap gap-2"
         >
-          {selected.map((item: any, index: any) => (
-            <Card
-              key={`${item.value}:${index}`}
-              className="cursor-pointer px-2 py-1 text-xs"
-            >
-              <Link
-                onClick={(e) => e.stopPropagation()}
-                href={`/tags/${item.value}`}
-                className="hover:text-primary"
+          {selected?.length > 0 ? (
+            selected.map((item: any, index: any) => (
+              <Card
+                key={`${item.value}:${index}`}
+                className="cursor-pointer px-2 py-1 text-xs"
               >
-                {item.label}
-              </Link>
-            </Card>
-          ))}
+                <Link
+                  onClick={(e) => e.stopPropagation()}
+                  href={`/tags/${item.value}`}
+                  className="hover:text-primary"
+                >
+                  {item.label}
+                </Link>
+              </Card>
+            ))
+          ) : (
+            <Badge variant={"secondary"}>None</Badge>
+          )}
         </div>
       )}
 
       {toggleEditor === true && (
         <ReactTags
           labelText="Select countries"
-          selected={selected}
+          selected={selected || []}
           suggestions={suggestions}
           ref={api}
           onAdd={onAdd}

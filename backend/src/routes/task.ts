@@ -5,6 +5,7 @@ import {
   addDependencyToTask,
   addDueDateToTask,
   addTags,
+  addTagsToTask,
   assignTask,
   changeTaskStatus,
   copyTask,
@@ -53,6 +54,7 @@ router.post("/add-comment", validateAddCommentBody, authMiddleware, addCommentTo
 router.post("/copy/:taskId", validateTaskIdParam, authMiddleware, copyTask);
 router.post( "/createSubTask", validateCreateSubTaskBody, authMiddleware, createSubTask);
 router.post("/add-tag", authMiddleware, addTags)
+router.post("/add-tag/:tagId/:taskId", authMiddleware, addTagsToTask)
 
 
 router.get("/get/:projectId/:taskId", validateTaskIdParam, authMiddleware,restrictsToProject(ROLES.MEMBER), getTask);

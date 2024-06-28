@@ -1,5 +1,3 @@
-"use client";
-
 import { TaskType } from "@/types/project";
 import React from "react";
 import StatusBarDropdown from "./StatusPopup";
@@ -20,6 +18,9 @@ import DueDate from "./DueDate";
 import { cn } from "@/lib/utils";
 import StoryPoints from "./StoryPoints";
 import Priority from "./Priority";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
+import { getTags } from "@/app/actions/workspace";
 
 type Props = {
   task?: TaskType;
@@ -55,9 +56,15 @@ const LabelValue = ({
     </div>
   );
 };
-const RightTaskContainer = ({ task }: Props) => {
-  const { data: user } = useSession();
-  console.log("user.", user?.user.id);
+const RightTaskContainer = async ({ task }: Props) => {
+  // const { data: user } = useSession();
+  const user = await getServerSession(authOptions);
+  const tags = await getTags();
+  const suggestions = tags.data?.map((item, index) => ({
+    label: item.name,
+    value: item._id,
+  }));
+
   if (!task) return <>Loading...</>;
   return (
     <div className="p-2">
@@ -95,6 +102,8 @@ const RightTaskContainer = ({ task }: Props) => {
           <LabelValue label="Tags">
             {user?.user.workspace && (
               <TagsSelector
+                tags={task.tags}
+                suggestions={suggestions}
                 taskId={task._id}
                 workspaceId={user?.user.workspace as string}
               />

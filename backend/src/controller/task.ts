@@ -499,23 +499,49 @@ export const updateComment = async (req: Request, res: Response) => {
 
 export const addTags = async (req: Request, res: Response) => {
   try {
-    const { name, color, workspaceId, taskId } = req.body;
+    const { name, color, workspaceId, taskId, tagId } = req.body;
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    console.log("req.body: ", req.body)
+    console.log("req.body: ", req.body);
 
-    const tag = new Tag({
+    const tag = await Tag.findOne({ workspace: workspaceId, name });
+    if (tag) {
+      console.log("tag is already there..", tag);
+      await Task.findByIdAndUpdate(taskId, {
+        $addToSet: { tags: tag._id },
+      });
+      return successResponseHandler(res, "CREATED", { tag: tag });
+    }
+
+    console.log("no tag found.. creating");
+
+    const newTag = new Tag({
       name,
       color: color || randomColor,
       workspace: workspaceId,
     });
-    console.log("tag: ", tag)
+    console.log("tag: ", tag);
 
-    await tag.save();
+    await newTag.save();
     await Task.findByIdAndUpdate(taskId, {
-      $addToSet: { tags: tag._id },
+      $addToSet: { tags: newTag._id },
     });
 
-    return successResponseHandler(res, "CREATED", { tag: tag });
+    return successResponseHandler(res, "CREATED", { tag: newTag });
+  } catch (error) {
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const addTagsToTask = async (req: Request, res: Response) => {
+  try {
+    const { taskId, tagId } = req.params;
+    console.log("req.params: ", req.params);
+
+    const tag = await Tag.findById(tagId);
+    await Task.findByIdAndUpdate(taskId, {
+      $addToSet: { tags: tag?._id },
+    });
+    return successResponseHandler(res, "UPDATED", { tag: { _id: tagId } });
   } catch (error) {
     return errorResponseHandler(res, "SERVER_ERROR");
   }
