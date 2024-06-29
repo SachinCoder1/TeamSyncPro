@@ -196,13 +196,16 @@ export const acceptWorkspaceInvitation = async (
 
     // Find or create the user
     let user = await User.findOne({ email: invitation.invited_to });
-    if (!user) {
-      // Create a new user if one doesn't exist
-      user = new User({
-        email: invitation.invited_to,
-        signupType: "INVITED",
-      });
+    if (!user || user._id !== req.user?.id) {
+      return errorResponseHandler(res, "CONFLICT");
     }
+    // if (!user) {
+    //   // Create a new user if one doesn't exist
+    //   user = new User({
+    //     email: invitation.invited_to,
+    //     signupType: "INVITED",
+    //   });
+    // }
 
     // Add the workspace to the user's workspaces if not already present
     if (!user.workspaces.includes(invitation?.workspace as Types.ObjectId)) {
@@ -238,13 +241,13 @@ export const acceptWorkspaceInvitation = async (
 export const getInvites = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    console.log("id: ", id)
+    console.log("id: ", id);
     const invitations = await Invitation.find({
       $or: [{ workspace: id }, { project: id }],
     })
       .populate("invited_from", "name _id profileImage")
       .select("-invitation_token -project -workspace");
-      console.log("invitations: ", invitations)
+    console.log("invitations: ", invitations);
     return successResponseHandler(res, "SUCCESS", invitations);
   } catch (error) {
     console.error("error: ", error);

@@ -38,7 +38,7 @@ router.post(
   inviteMembersToProject
 );
 router.post(
-  "/accept/:invitation_token",
+  "/accept/:invitationToken",
   authMiddleware,
   acceptWorkspaceInvitation
 );
