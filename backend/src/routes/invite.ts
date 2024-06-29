@@ -2,6 +2,7 @@ import express from "express";
 import { ROLES } from "~/constants";
 import {
   acceptWorkspaceInvitation,
+  checkInvitation,
   getInvites,
   inviteMembersToProject,
   inviteUsersToWorkspace,
@@ -38,9 +39,14 @@ router.post(
   inviteMembersToProject
 );
 router.post(
-  "/accept/:invitationToken",
+  "/accept",
   authMiddleware,
   acceptWorkspaceInvitation
+);
+router.get(
+  "/check-invite/:invitationToken",
+  authMiddleware,
+  checkInvitation
 );
 
 export default router;

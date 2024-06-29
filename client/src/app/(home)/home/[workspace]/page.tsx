@@ -29,7 +29,7 @@ export default async function page({ params }: Props) {
 
   const { success, workspace } = await getWorkspace(params.workspace);
   if (success === false) {
-    return notFound();
+    // return notFound();
   }
 
   const invitations = await getInvites(params.workspace)

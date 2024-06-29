@@ -175,16 +175,61 @@ export const inviteMembersToProject = async (req: Request, res: Response) => {
   }
 };
 
+export const checkInvitation = async (req: Request, res: Response) => {
+  try {
+    const { invitationToken } = req.params;
+    console.log("invitation token:", invitationToken)
+    const invitation = await Invitation.findOne({
+      invitation_token: invitationToken,
+    })
+      .populate({
+        path: "invited_from",
+        select: "name _id profileImage",
+      })
+      .populate({
+        path: "workspace",
+        select: "name _id",
+      })
+      .lean();
+
+    const user = await User.findOne({
+      email: invitation?.invited_to,
+    });
+
+    console.log("invitation...................: ", invitation);
+
+    if (!invitation) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+    if (invitation.status === "ACCEPTED" || user?._id != req.user?.id) {
+      return errorResponseHandler(res, "CONFLICT");
+    }
+
+    return successResponseHandler(res, "SUCCESS", {
+      status: invitation.status,
+      invitedFrom: invitation.invited_from,
+      workspace: invitation.workspace,
+    });
+  } catch (error) {
+    console.error("error: ", error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
 export const acceptWorkspaceInvitation = async (
   req: Request,
   res: Response
 ) => {
   try {
-    const { invitationToken } = req.params;
+    const { invitationToken } = req.body;
+    console.log("invitation token:", req.body);
+    if (!invitationToken) return errorResponseHandler(res, "NOT_FOUND");
+
     // Find the invitation by token
     const invitation = await Invitation.findOne({
       invitation_token: invitationToken,
     });
+
+    console.log("invitation...................: ", invitation);
 
     if (!invitation) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -196,7 +241,11 @@ export const acceptWorkspaceInvitation = async (
 
     // Find or create the user
     let user = await User.findOne({ email: invitation.invited_to });
-    if (!user || user._id !== req.user?.id) {
+    console.log("user:", user);
+    console.log("type of user.id:", typeof user?._id);
+    console.log("type of req.user.id:", typeof req.user?.id);
+    if (!user || user._id != req.user?.id) {
+      console.log("matched...", user, "req.user:", req.user);
       return errorResponseHandler(res, "CONFLICT");
     }
     // if (!user) {
@@ -215,6 +264,7 @@ export const acceptWorkspaceInvitation = async (
 
     // Add the user to the workspace's members
     const workspace = await Workspace.findById(invitation.workspace);
+    console.log("workspace: ", workspace);
     if (!workspace) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
@@ -224,6 +274,10 @@ export const acceptWorkspaceInvitation = async (
 
     // Mark the invitation as accepted
     invitation.status = "ACCEPTED";
+    if (user && user.onboarding) {
+      user.onboarding.step = "COMPLETED";
+      user.onboarding.done = true;
+    }
     await invitation.save();
     await workspace.save();
     await user.save();

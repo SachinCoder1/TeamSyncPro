@@ -23,7 +23,7 @@ export const signInUser = async (invitation_token: string|null) => {
   }
 
   if (invitation_token) {
-    redirect(`/invite/accept?${invitation_token}`);
+    redirect(`/invite/accept?invitation_token=${invitation_token}`);
   }
 
   console.log("user.data.user.onboarding", user.data.user.onboarding);

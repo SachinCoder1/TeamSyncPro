@@ -70,6 +70,7 @@ const userSchema = new mongoose.Schema(
           "TASK_CREATED",
           "INVITED_PEOPLE_OPTIONAL",
           "COMPLETED",
+          "INVITATION_ACCEPTED"
         ],
         required: true,
         default: "SIGNED_UP",

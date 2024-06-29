@@ -30,11 +30,15 @@ interface SettingsLayoutProps {
     workspace: string;
     project: string;
   };
+  searchParams?: {
+    invitation_token?: string;
+  }
 }
 
 export default async function SettingsLayout({
   children,
   params,
+  searchParams
 }: SettingsLayoutProps) {
     const url = `/home/${params.workspace}/${params.project}`
     const sidebarNavItems = [
@@ -73,8 +77,9 @@ export default async function SettingsLayout({
   }
 
   const { success, project } = await getProject(params.project);
-  if (success === false) {
-    return notFound();
+  console.log("arrived here...", searchParams)
+  if (success === false && !searchParams?.invitation_token) {
+    // return notFound();
   }
   console.log("project: ", project);
 

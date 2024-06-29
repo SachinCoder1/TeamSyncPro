@@ -39,7 +39,7 @@ const InvitedMembers = ({ invitedMembers }: Props) => {
               <TableRow key={`${item.invited_to}:${index}`}>
                 <TableCell className="font-medium">{item.invited_to}</TableCell>
                 <TableCell>
-                  <Badge variant={"outline"}>
+                  <Badge variant={item.status === "ACCEPTED" ? "success" : "outline"}>
                     {item.status.toLocaleLowerCase()}
                   </Badge>
                 </TableCell>

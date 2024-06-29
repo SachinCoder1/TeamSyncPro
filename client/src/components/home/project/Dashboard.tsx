@@ -21,7 +21,7 @@ const ProjectDashboard = async ({ projectId }: Props) => {
    console.log("session.user...........", session?.user)
   const { success, project } = await getProject(projectId);
   if (success === false) {
-    return notFound();
+    // return notFound();
   }
 
   return (

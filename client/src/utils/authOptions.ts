@@ -85,7 +85,13 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger == "update") {
+        console.log("jwt...", trigger, "session:", session);
+        if (session?.info) {
+          token.user.workspace = session.info;
+        }
+      }
       if (user) return { ...token, ...user };
       if (new Date().getTime() < token.secret_tokens.accessToken.expiresIn)
         return token;
@@ -93,16 +99,28 @@ export const authOptions: NextAuthOptions = {
       return await refreshToken(token);
     },
 
-    async session({ token, session }) {
-      session.user = token.user;
-      session.accessToken = token.secret_tokens.accessToken;
-      // console.log(
-      //   "token: ",
-      //   token,
-      //   "invitation token: ",
-      //   token?.user?.invitationToken
-      // );
-      // session.invitationToken = token?.invitationToken || "";
+    async session({ token, session, trigger, newSession }) {
+      // console.log("updating... here...", newSession, trigger);
+      if (trigger === "update") {
+        console.log("updataing....", newSession);
+        if (newSession.info) {
+          session.user.workspace = newSession.info;
+        }
+        if (newSession.onboarding === "COMPLETED") {
+          session.user.onboarding.step = "COMPLETED";
+          session.user.onboarding.done = true;
+        }
+      } else {
+        session.user = token.user;
+        session.accessToken = token.secret_tokens.accessToken;
+        // console.log(
+        //   "token: ",
+        //   token,
+        //   "invitation token: ",
+        //   token?.user?.invitationToken
+        // );
+        // session.invitationToken = token?.invitationToken || "";
+      }
 
       return session;
     },
