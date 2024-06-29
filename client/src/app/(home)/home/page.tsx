@@ -8,6 +8,8 @@ export default async function Page() {
       <h1>Home</h1>
       <p>Welcome {session.user.name}</p>
       your workspace is {session.user.workspace}
+      invitation token is: {session?.invitationToken || ""}
+
     </div>
   );
 }

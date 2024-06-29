@@ -14,14 +14,20 @@ import { signInUser } from "@/app/actions/user";
 import { signIn } from "next-auth/react";
 import { PasswordInput } from "../ui/password-input";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  invitationToken: string | null;
+}
 
 type FormData = {
   email: string;
   password: string;
 };
 
-export function SigninForm({ className, ...props }: UserAuthFormProps) {
+export function SigninForm({
+  className,
+  invitationToken,
+  ...props
+}: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [showPassword, setshowPassword] = React.useState(false);
   const {
@@ -34,6 +40,8 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
     resolver: zodResolver(LoginFormDataSchema),
   });
 
+  console.log("invitation token: ", invitationToken);
+
   const onSubmit = handleSubmit(async (data) => {
     const res = await signIn("credentials", {
       username: data.email,
@@ -42,7 +50,7 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
     });
     if (res?.ok) {
       reset();
-      signInUser();
+      signInUser(sessionStorage.getItem("invitationToken"));
     }
     if (res?.error) {
       console.log("error: ", res.error);
@@ -51,6 +59,14 @@ export function SigninForm({ className, ...props }: UserAuthFormProps) {
       });
     }
   });
+
+  React.useEffect(() => {
+    if (window) {
+      if(invitationToken){
+        sessionStorage.setItem("invitationToken", invitationToken);
+      }
+    }
+  }, [invitationToken]);
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>

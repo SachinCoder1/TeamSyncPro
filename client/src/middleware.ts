@@ -17,4 +17,4 @@ export default withAuth(
 );
 
 // onboarding with any query params and dashboard will be
-export const config = { matcher: ["/dashboard", "/onboarding/:path*", "/"] };
+export const config = { matcher: ["/dashboard", "/onboarding/:path*", "/", "/invite/accept"] };

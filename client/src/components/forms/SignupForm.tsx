@@ -69,7 +69,7 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
       });
       if (res?.ok) {
         reset();
-        signInUser();
+        signInUser(sessionStorage.getItem("invitationToken"));
       }
       if (res?.error) {
         console.log("error: ", res.error);

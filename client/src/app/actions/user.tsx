@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { SignupFormData } from "@/components/forms/SignupForm";
 import { authOptions } from "@/utils/authOptions";
 
-export const signInUser = async () => {
+export const signInUser = async (invitation_token: string|null) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   const res = await fetch(BACKEND_URL + "/user", {
@@ -20,6 +20,10 @@ export const signInUser = async () => {
   console.log("this is the user we got in signInUser ......", user);
   if (!user || user.message !== "SUCCESS") {
     redirect("/auth/signin?error=invalid-credentials");
+  }
+
+  if (invitation_token) {
+    redirect(`/invite/accept?${invitation_token}`);
   }
 
   console.log("user.data.user.onboarding", user.data.user.onboarding);
