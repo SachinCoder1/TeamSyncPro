@@ -88,3 +88,37 @@ export const updateProject = async (
     return { success: false };
   }
 };
+
+export const createProject = async (
+  name: string,
+  workspaceId: string
+) => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) redirect("/auth/signin");
+    const res = await fetch(`${BACKEND_URL}/project/create`, {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        workspaceId
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${session.accessToken.token}`,
+      },
+    });
+
+    if (!res.ok) {
+      return { success: false };
+    }
+    const project = await res.json();
+    console.log("project parsed json:", project);
+    if (project.message !== "SUCCESS") {
+      return { success: false };
+    }
+    return { success: true, project: project.data?.project as ProjectType };
+  } catch (error) {
+    console.log("error in updating projectsssss:", error);
+    return { success: false };
+  }
+};
