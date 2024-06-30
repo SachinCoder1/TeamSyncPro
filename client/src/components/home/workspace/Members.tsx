@@ -11,6 +11,11 @@ import { CircleUserRoundIcon, PlusCircleIcon } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { ReactTags } from "react-tag-autocomplete";
 import AddMemberModal from "./AddMemberModal";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 type Props = {
   members?: MembersType[];
@@ -33,36 +38,62 @@ export const UserCard = ({
   avatarClassName,
   nameFallback,
   className,
-}: UserCardProps) => (
-  <div
-    className={cn(
-      "flex items-center  space-x-4 cursor-pointer hover:bg-secondary rounded-md px-2 py-2",
-      className
-    )}
-  >
-    {!name ? (
-      <CircleUserRoundIcon className={cn("text-muted-foreground",avatarClassName)} />
-    ) : (
-      <Avatar className={cn(avatarClassName)}>
-        <AvatarImage src={src ? src : ""} />
-        <AvatarFallback
-          style={{
-            backgroundColor: getColorForName(id),
-          }}
-        >
-          {name[0].toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-    )}
+}: UserCardProps) => {
+  const handleHover = async (isOpen: boolean) => {
+    if (isOpen === true && name) {
+      console.log("open");
+    }
 
+    if (isOpen === false) {
+      console.log("close");
+    }
+  };
+  return (
     <div>
-      {
-        name ?  <p className="text-sm font-medium leading-none">{name}</p> :  <p className="text-sm text-muted-foreground font-medium leading-none">{nameFallback || "None"}</p>
-      }
-      {/* <p className="text-xs text-muted-foreground">{label}</p> */}
+      <HoverCard onOpenChange={handleHover}>
+        <HoverCardTrigger asChild>
+          <div
+            className={cn(
+              "flex items-center  space-x-4 cursor-pointer hover:bg-secondary rounded-md px-2 py-2",
+              className
+            )}
+          >
+            {!name ? (
+              <CircleUserRoundIcon
+                className={cn("text-muted-foreground", avatarClassName)}
+              />
+            ) : (
+              <Avatar className={cn(avatarClassName)}>
+                <AvatarImage src={src ? src : ""} />
+                <AvatarFallback
+                  style={{
+                    backgroundColor: getColorForName(id),
+                  }}
+                >
+                  {name[0].toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            )}
+
+            <div>
+              {name ? (
+                <p className="text-sm font-medium leading-none">{name}</p>
+              ) : (
+                <p className="text-sm text-muted-foreground font-medium leading-none">
+                  {nameFallback || "None"}
+                </p>
+              )}
+            </div>
+          </div>
+        </HoverCardTrigger>
+        {
+          name &&
+        <HoverCardContent>hello</HoverCardContent>
+        }
+      </HoverCard>
     </div>
-  </div>
-);
+  );
+};
 
 const Members = ({ workspaceId, members, workspaceName }: Props) => {
   const [open, setOpen] = useState(false);
