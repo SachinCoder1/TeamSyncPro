@@ -135,7 +135,7 @@ export const getStarredItems = async () => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    // next: {tags: ['project']}
+    next: {tags: ['starred-items', "isStarred"]}
   });
   if (!res.ok) {
     return { success: false };

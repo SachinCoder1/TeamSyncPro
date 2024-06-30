@@ -52,6 +52,8 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
 
   transformedData?.sort((a, b) => a.order - b.order);
 
+  console.log("transformedData...........", transformedData)
+
 
   return (
     <>
@@ -85,7 +87,10 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
             <UserNav />
           </div>
         </div> */}
+        {
+          transformedData && transformedData?.length > 0 && 
         <DataTable data={transformedData as any} columns={columns} />
+        }
       </div>
     </>
   );
