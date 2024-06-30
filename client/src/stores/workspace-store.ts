@@ -13,7 +13,7 @@ type InvitedMembersType = {
   users: string[];
 };
 
-type ProjectType = {
+export type ProjectType = {
   _id: string;
   name: string;
   color: string;
