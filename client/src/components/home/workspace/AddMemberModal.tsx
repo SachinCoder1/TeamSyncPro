@@ -46,6 +46,7 @@ const AddMemberModal = ({
     const isAdded = await inviteToWorkspace(workspaceId, emails);
     if (isAdded.success) {
       revalidateTagServer("invitations");
+      toast.success("Invitations sent to join")
       handleReset();
       return;
     }
