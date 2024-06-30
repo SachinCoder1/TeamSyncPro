@@ -6,6 +6,12 @@ import { notFound } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = { children?: React.ReactNode };
 
@@ -51,18 +57,27 @@ const ProjectMenu = async () => {
           <p>{"Projects"}</p>
         </div>
         <div>
-          <Link
-            href={`/projects/new`}
-            className={cn(
-              buttonVariants({
-                variant: "ghost",
-                size: "icon",
-              }),
-              "h-6 w-6"
-            )}
-          >
-            <PlusIcon className="w-4 h-4" />
-          </Link>
+          <TooltipProvider delayDuration={250}>
+            <Tooltip>
+              <TooltipTrigger>
+                <Link
+                  href={`/projects/new`}
+                  className={cn(
+                    buttonVariants({
+                      variant: "ghost",
+                      size: "icon",
+                    }),
+                    "h-6 w-6"
+                  )}
+                >
+                  <PlusIcon className="w-4 h-4" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>New project</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
 

@@ -2,7 +2,7 @@ import { MyTasksType } from "@/types";
 import React from "react";
 import TasksList from "./TaskList";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,8 +14,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircleIcon } from "lucide-react";
+import { CircleArrowRightIcon, PlusCircleIcon } from "lucide-react";
 import { isAfter, isBefore, parseISO } from "date-fns";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 type Props = {
   tasks?: MyTasksType[];
@@ -38,10 +40,19 @@ const MyTasks = ({ tasks, workspaceId }: Props) => {
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
           <div className="ml-auto">
-            {/* <Button variant={"outline"} size={"sm"}>
-              <PlusCircleIcon className="mr-2 h-4 w-4" />
-              Create task
-            </Button> */}
+            <Link
+              href={"/tasks"}
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                  size: "sm",
+                }),
+                "items-center"
+              )}
+            >
+              <span>View all tasks</span>
+              <CircleArrowRightIcon className="ml-2 mt-0.5 h-4 w-4" />
+            </Link>
           </div>
         </div>
         <TabsContent value="upcoming">

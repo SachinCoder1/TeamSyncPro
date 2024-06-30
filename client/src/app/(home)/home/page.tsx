@@ -51,7 +51,7 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 w-full gap-x-6 gapy-6 grid-cols-1 my-6">
+      <div className="grid md:grid-cols-2 w-full gap-x-6 gap-y-6 grid-cols-1 my-6">
         <Card title="My Tasks">
           <MyTasks tasks={myTasks?.data} workspaceId={session.user.workspace} />
         </Card>
@@ -62,6 +62,13 @@ export default async function Page() {
                className="grid md:grid-cols-2 grid-cols-1 gap-4"
             />
           </Card>
+          {/* <Card title="Starred projects" className="px-6">
+            <Projects
+              workspaceId={session.user.workspace}
+              projects={projects.workspace?.projects}
+               className="grid md:grid-cols-2 grid-cols-1 gap-4"
+            />
+          </Card> */}
       </div>
     </div>
   );

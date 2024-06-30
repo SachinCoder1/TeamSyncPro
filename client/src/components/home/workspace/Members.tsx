@@ -31,6 +31,19 @@ type UserCardProps = {
   className?: string;
   nameFallback?: string;
 };
+
+export const UserAvatarCard = ({ avatarClassName, src, id, name }: UserCardProps) => (
+  <Avatar className={cn(avatarClassName)}>
+    <AvatarImage src={src ? src : ""} />
+    <AvatarFallback
+      style={{
+        backgroundColor: getColorForName(id),
+      }}
+    >
+      {name[0].toUpperCase()}
+    </AvatarFallback>
+  </Avatar>
+);
 export const UserCard = ({
   name,
   src,
@@ -86,10 +99,7 @@ export const UserCard = ({
             </div>
           </div>
         </HoverCardTrigger>
-        {
-          name &&
-        <HoverCardContent>hello</HoverCardContent>
-        }
+        {name && <HoverCardContent>hello</HoverCardContent>}
       </HoverCard>
     </div>
   );
