@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { LoginFormDataSchema } from "@/lib/zod-validation/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInUser } from "@/app/actions/user";
+import { signInUser } from "@/app/actions/auth";
 import { signIn } from "next-auth/react";
 import { PasswordInput } from "../ui/password-input";
 
