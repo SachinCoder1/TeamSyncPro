@@ -24,10 +24,10 @@ const ProjectCard = ({ color, name,id,workspaceId }: ProjectCardProps) => (
 const Projects = ({ projects,workspaceId }: Props) => {
   return (
     <div>
-      <div className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer">
+      <Link href={`/projects/new`} className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer">
         <PlusSquareIcon strokeWidth={"1px"} className="w-10 h-10 text-muted-foreground !font-normal" />
         <p className="font-semibold">New project</p>
-      </div>
+      </Link>
 
       {projects?.map((item, index) => (
         <ProjectCard workspaceId={workspaceId} id={item._id} key={item._id} color={item.color} name={item.name} />

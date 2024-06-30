@@ -15,7 +15,11 @@ type SquareFilledIconProps = {
   children?: React.ReactNode;
 };
 
-export const SquareFilledIcon = ({ color,className,children }: SquareFilledIconProps) => {
+export const SquareFilledIcon = ({
+  color,
+  className,
+  children,
+}: SquareFilledIconProps) => {
   return (
     <div
       className={cn("w-4 h-4 rounded-[4px] opacity-70", className)}
@@ -47,9 +51,18 @@ const ProjectMenu = async () => {
           <p>{"Projects"}</p>
         </div>
         <div>
-          <Button className="h-6 w-6" size={"icon"} variant={"ghost"}>
+          <Link
+            href={`/projects/new`}
+            className={cn(
+              buttonVariants({
+                variant: "ghost",
+                size: "icon",
+              }),
+              "h-6 w-6"
+            )}
+          >
             <PlusIcon className="w-4 h-4" />
-          </Button>
+          </Link>
         </div>
       </div>
 
