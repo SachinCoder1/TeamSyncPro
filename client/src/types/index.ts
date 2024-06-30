@@ -68,3 +68,32 @@ export type MyTasksType = {
   due?: Date;
   order: number;
 };
+
+
+
+export type StarredProjectType = {
+  _id: string;
+  user: string;
+  workspace: string;
+  project: {
+    _id: string;
+    name: string;
+    color: string;
+  };
+  __v: number;
+};
+
+export type StarredWorkspaceType = {
+  _id: string;
+  user: string;
+  workspace: {
+    _id: string;
+    name: string;
+  };
+  __v: number;
+};
+
+export type StarredDataType = {
+  starredProjects: StarredProjectType[];
+  starredWorkspaces: StarredWorkspaceType[];
+};

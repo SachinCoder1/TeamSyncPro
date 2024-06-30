@@ -1,4 +1,4 @@
-import { getMyTasks } from "@/app/actions/user";
+import { getMyTasks, getStarredItems } from "@/app/actions/user";
 import { getWorkspace } from "@/app/actions/workspace";
 import MyTasks from "@/components/home/personal/MyTasks";
 import Projects from "@/components/home/workspace/Projects";
@@ -23,11 +23,13 @@ export default async function Page() {
   const session = await getServerAuth();
   const projects = await getWorkspace();
   const myTasks = await getMyTasks();
+  const starredItems = await getStarredItems();
   return (
     <div className="mt-6 px-4">
       {/* <h1>Home</h1> */}
       {/* <p>Welcome {session.user.name}</p> */}
       {/* your workspace is {session.user.workspace} */}
+      {JSON.stringify(starredItems, null, 2)}
       <div className="space-y-2 my-4">
         <Heading className="font-semibold">Home</Heading>
       </div>

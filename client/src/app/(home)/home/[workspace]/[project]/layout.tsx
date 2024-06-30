@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import ProjectOptions from "@/components/home/project/ProjectOptions";
 import { headingClasses } from "@/components/ui/typography";
 import { ProjectNav } from "@/components/home/project/ProjectNav";
+import { isStarred } from "@/app/actions/user";
 // import { SidebarNav } from "@/app/(app)/examples/forms/components/sidebar-nav"
 
 export const metadata: Metadata = {
@@ -83,6 +84,8 @@ export default async function SettingsLayout({
   }
   console.log("project: ", project);
 
+  const isProjectStarred = await isStarred(params?.project, "project")
+
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
@@ -104,6 +107,7 @@ export default async function SettingsLayout({
         </div> */}
         <div className="p-2 pb-4">
           <div className="flex flex-col">
+            {JSON.stringify(isProjectStarred, null,2)}
            
             <div className="flex justify-between items-center w-full gap-x-2">
               <div className="flex items-center gap-x-4 flex-1">
@@ -126,6 +130,7 @@ export default async function SettingsLayout({
                 <ProjectOptions
                   projectId={project?._id}
                   color={project?.color}
+                  isStarred={isProjectStarred.data}
                 />
               </div>
               <div className="flex gap-x-2">

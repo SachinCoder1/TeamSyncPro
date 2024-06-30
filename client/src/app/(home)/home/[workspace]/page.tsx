@@ -1,4 +1,5 @@
 import { getInvites } from "@/app/actions/invite";
+import { isStarred } from "@/app/actions/user";
 import { getWorkspace } from "@/app/actions/workspace";
 import HeadingCard from "@/components/home/HeadingCard";
 import InvitedMembers from "@/components/home/workspace/InvitedMembers";
@@ -33,13 +34,14 @@ export default async function page({ params }: Props) {
   }
 
   const invitations = await getInvites(params.workspace)
+  const isWorkspaceStarred = await isStarred(params.workspace, "workspace")
   console.log("workspace: ", workspace);
 
   return (
     <div>
       {/* page and the id is: {params.workspace} */}
       <Suspense fallback={<div>Loading...</div>}>
-        {/* {JSON.stringify(workspace, null, 2)} */}
+        {JSON.stringify(isWorkspaceStarred, null, 2)}
       <div className="flex gap-x-2 items-center">
         <Heading variant="h4">
           {workspace?.name}
@@ -50,7 +52,7 @@ export default async function page({ params }: Props) {
           )}
         </Heading>
 
-        <StarWorkspace />
+        <StarWorkspace isStarred={isWorkspaceStarred.data} workspaceId={workspace?._id as string} />
       </div>
       {/* <div className="mx-auto w-full"> */}
       <div className="w-3/6 flex justify-center gap-y-6 flex-col mx-auto mt-6">

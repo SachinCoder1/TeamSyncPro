@@ -433,6 +433,7 @@ export const starProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const projectId = req.params.projectId;
+    console.log("project id in the star project: ", projectId)
     const user = await User.findById(userId);
 
     const starred = new StarredItem({
@@ -452,6 +453,7 @@ export const isStarred = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id, type } = req.params;
+    console.log("req.params..................", req.params)
     // const user = await User.findById(userId);
 
     if (!["project", "workspace"].includes(type)) {
@@ -460,6 +462,9 @@ export const isStarred = async (req: Request, res: Response) => {
 
     let isStarred = false;
     let payload: any = { user: userId, [type]: id };
+    if(type == "workspace") {
+      payload["project"] = {$exists: false}
+    }
     const item = await StarredItem.findOne(payload);
     if (item) {
       isStarred = true;
@@ -478,6 +483,8 @@ export const unstarProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { projectId } = req.params;
+    console.log("project id in the un star project: ", projectId)
+
 
     const user = await User.findById(userId);
 
