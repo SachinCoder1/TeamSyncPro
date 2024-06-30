@@ -49,3 +49,21 @@ export type InvitationType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type MyTasksType = {
+  _id: string;
+  title: string;
+  project: {
+    _id: string;
+    name: string;
+    color: string;
+  };
+  done: boolean;
+  priority: "LOW" | "MEDIUM";
+  status: {
+    title: string;
+    sectionId: string;
+  };
+  workflow: "DEFAULT";
+  due?: Date;
+};

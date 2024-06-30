@@ -1,3 +1,4 @@
+import { getMyTasks } from "@/app/actions/user";
 import { getWorkspace } from "@/app/actions/workspace";
 import Projects from "@/components/home/workspace/Projects";
 import { Badge } from "@/components/ui/badge";
@@ -20,8 +21,10 @@ const Card = ({ title, children,className }: any) => (
 export default async function Page() {
   const session = await getServerAuth();
   const projects = await getWorkspace();
+  const myTasks = await getMyTasks();
   return (
     <div className="mt-6 px-4">
+     {JSON.stringify(myTasks.data, null, 2)}
       {/* <h1>Home</h1> */}
       {/* <p>Welcome {session.user.name}</p> */}
       {/* your workspace is {session.user.workspace} */}
