@@ -1,5 +1,5 @@
 import express from "express";
-import { MyDetails, getAssignedTasksInSelectedWorkspace, getLikedTasks, getMemberProfile, getStarredProjects, getStarredWorkspaces, getWorkspaces, starProject, starWorkspace, unstarProject, unstarWorkspace } from "~/controller/user";
+import { MyDetails, getAssignedTasksInSelectedWorkspace, getLikedTasks, getMemberProfile, getStarredItems, getStarredProjects, getStarredWorkspaces, getWorkspaces, isStarred, starProject, starWorkspace, unstarProject, unstarWorkspace } from "~/controller/user";
 import { authMiddleware } from "~/middleware";
 
 const router = express.Router();
@@ -15,4 +15,8 @@ router.patch("/starProject/:projectId", authMiddleware, starProject);
 router.patch("/unstarProject/:projectId", authMiddleware, unstarProject);
 router.patch("/starWorkspace/:workspaceId", authMiddleware, starWorkspace);
 router.patch("/unstarWorkspace/:workspaceId", authMiddleware, unstarWorkspace);
+router.get("/getStarredItems", authMiddleware, getStarredItems)
+
+router.get("/isStarred/:type/:id", authMiddleware, isStarred) // for specific workspace/project
+
 export default router;

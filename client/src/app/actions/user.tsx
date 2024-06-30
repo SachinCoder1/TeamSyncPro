@@ -127,10 +127,13 @@ export const getStarredWorkspaces = async () => {
   return { success: true, data: data.data?.workspaces };
 };
 
-export const starUnstarProject = async (projectId:string, type: "STAR" | "UNSTAR") => {
+export const starUnstarProject = async (
+  projectId: string,
+  type: "STAR" | "UNSTAR"
+) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
-  let link = type === "STAR" ? "starProject" : "unstarProject"
+  let link = type === "STAR" ? "starProject" : "unstarProject";
   const res = await fetch(`${BACKEND_URL}/user/${link}/${projectId}`, {
     method: "PATCH",
     headers: {
@@ -148,10 +151,13 @@ export const starUnstarProject = async (projectId:string, type: "STAR" | "UNSTAR
   return { success: true, data: data.data };
 };
 
-export const starUnstarWorkspace = async (workspaceId:string, type: "STAR" | "UNSTAR") => {
+export const starUnstarWorkspace = async (
+  workspaceId: string,
+  type: "STAR" | "UNSTAR"
+) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
-  let link = type === "STAR" ? "starWorkspace" : "unstarWorkspace"
+  let link = type === "STAR" ? "starWorkspace" : "unstarWorkspace";
   const res = await fetch(`${BACKEND_URL}/user/${link}/${workspaceId}`, {
     method: "PATCH",
     headers: {
@@ -167,4 +173,24 @@ export const starUnstarWorkspace = async (workspaceId:string, type: "STAR" | "UN
     return { success: false };
   }
   return { success: true, data: data.data };
+};
+
+export const isStarred = async (id: string, type: "project" | "workspace") => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  const res = await fetch(`${BACKEND_URL}/user/${type}/${id}`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  if (data.message !== "SUCCESS") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.starred as boolean };
 };

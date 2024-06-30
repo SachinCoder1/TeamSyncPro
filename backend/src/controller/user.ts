@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { User, Workspace, Project, Task } from "~/model"; // Make sure to import Workspace and Project
+import { StarredItem } from "~/model/star";
 import { errorResponseHandler, successResponseHandler } from "~/utils";
 
 export const MyDetails = async (req: Request, res: Response) => {
@@ -120,8 +121,10 @@ export const getAssignedTasks = async (req: Request, res: Response) => {
   }
 };
 
-
-export const getAssignedTasksInSelectedWorkspace = async (req: Request, res: Response) => {
+export const getAssignedTasksInSelectedWorkspace = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const userId = req.user?.id;
 
@@ -149,7 +152,7 @@ export const getAssignedTasksInSelectedWorkspace = async (req: Request, res: Res
     const tasks = await Task.find({
       assignee: userId,
       project: { $in: projectIds },
-      parentTask: { $exists: false }
+      parentTask: { $exists: false },
     })
       .populate("project", "name color")
       .select("title due status priority workflow done order")
@@ -161,7 +164,6 @@ export const getAssignedTasksInSelectedWorkspace = async (req: Request, res: Res
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
-
 
 // get all liked tasks of a user
 
@@ -361,6 +363,35 @@ export const getStarredWorkspaces = async (req: Request, res: Response) => {
   }
 };
 
+export const getStarredItems = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+    const starredProjects = await StarredItem.find({
+      user: userId,
+      workspace: user.selectedWorkspace,
+      project: { $exists: true },
+    }).populate("project", "name _id color");
+    const starredWorkspaces = await StarredItem.find({
+      user: userId,
+      project: { $exists: false },
+    }).populate("workspace", "name _id ");
+
+    return successResponseHandler(res, "SUCCESS", {
+      starredProjects,
+      starredWorkspaces,
+    });
+  } catch (error) {
+    console.error(error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
 // get all the tasks of a user
 
 export const getTasks = async (req: Request, res: Response) => {
@@ -401,21 +432,40 @@ export const getUserProjects = async (req: Request, res: Response) => {
 export const starProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    const { projectId } = req.params;
+    const projectId = req.params.projectId;
+    const user = await User.findById(userId);
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { starredProjects: projectId } },
-      { new: true }
-    )
-      .select("starredProjects")
-      .lean();
+    const starred = new StarredItem({
+      user: userId,
+      workspace: user?.selectedWorkspace,
+      project: projectId,
+    });
+    await starred.save();
+    return successResponseHandler(res, "SUCCESS", { starred: true });
+  } catch (error) {
+    console.error(error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
 
-    if (!updatedUser) {
+export const isStarred = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const { id, type } = req.params;
+    // const user = await User.findById(userId);
+
+    if (!["project", "workspace"].includes(type)) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
 
-    return successResponseHandler(res, "SUCCESS", { user: updatedUser });
+    let isStarred = false;
+    let payload: any = { user: userId, [type]: id };
+    const item = await StarredItem.findOne(payload);
+    if (item) {
+      isStarred = true;
+    }
+
+    return successResponseHandler(res, "SUCCESS", { starred: isStarred });
   } catch (error) {
     console.error(error);
     return errorResponseHandler(res, "SERVER_ERROR");
@@ -429,19 +479,15 @@ export const unstarProject = async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const { projectId } = req.params;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $pull: { starredProjects: projectId } },
-      { new: true }
-    )
-      .select("starredProjects")
-      .lean();
+    const user = await User.findById(userId);
 
-    if (!updatedUser) {
-      return errorResponseHandler(res, "NOT_FOUND");
-    }
+    await StarredItem.findOneAndDelete({
+      workspace: user?.selectedWorkspace,
+      user: userId,
+      project: projectId,
+    });
 
-    return successResponseHandler(res, "SUCCESS", { user: updatedUser });
+    return successResponseHandler(res, "SUCCESS", { starred: false });
   } catch (error) {
     console.error(error);
     return errorResponseHandler(res, "SERVER_ERROR");
@@ -450,24 +496,40 @@ export const unstarProject = async (req: Request, res: Response) => {
 
 // star a workspace
 
+// export const starWorkspace = async (req: Request, res: Response) => {
+//   try {
+//     const userId = req.user?.id;
+//     const { workspaceId } = req.params;
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       { $addToSet: { starredWorkspaces: workspaceId } },
+//       { new: true }
+//     )
+//       .select("starredWorkspaces")
+//       .lean();
+
+//     if (!updatedUser) {
+//       return errorResponseHandler(res, "NOT_FOUND");
+//     }
+
+//     return successResponseHandler(res, "SUCCESS", { user: updatedUser });
+//   } catch (error) {
+//     console.error(error);
+//     return errorResponseHandler(res, "SERVER_ERROR");
+//   }
+// };
 export const starWorkspace = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    const { workspaceId } = req.params;
+    const user = await User.findById(userId);
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { starredWorkspaces: workspaceId } },
-      { new: true }
-    )
-      .select("starredWorkspaces")
-      .lean();
-
-    if (!updatedUser) {
-      return errorResponseHandler(res, "NOT_FOUND");
-    }
-
-    return successResponseHandler(res, "SUCCESS", { user: updatedUser });
+    const starred = new StarredItem({
+      user: userId,
+      workspace: user?.selectedWorkspace,
+    });
+    await starred.save();
+    return successResponseHandler(res, "SUCCESS", { starred: true });
   } catch (error) {
     console.error(error);
     return errorResponseHandler(res, "SERVER_ERROR");
@@ -481,19 +543,12 @@ export const unstarWorkspace = async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const { workspaceId } = req.params;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $pull: { starredWorkspaces: workspaceId } },
-      { new: true }
-    )
-      .select("starredWorkspaces")
-      .lean();
+    await StarredItem.findOneAndDelete({
+      workspace: workspaceId,
+      user: userId,
+    });
 
-    if (!updatedUser) {
-      return errorResponseHandler(res, "NOT_FOUND");
-    }
-
-    return successResponseHandler(res, "SUCCESS", { user: updatedUser });
+    return successResponseHandler(res, "SUCCESS", { starred: false });
   } catch (error) {
     console.error(error);
     return errorResponseHandler(res, "SERVER_ERROR");
