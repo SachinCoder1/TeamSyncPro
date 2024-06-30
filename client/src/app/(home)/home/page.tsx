@@ -1,5 +1,6 @@
 import { getMyTasks } from "@/app/actions/user";
 import { getWorkspace } from "@/app/actions/workspace";
+import MyTasks from "@/components/home/personal/MyTasks";
 import Projects from "@/components/home/workspace/Projects";
 import { Badge } from "@/components/ui/badge";
 import { Heading } from "@/components/ui/typography";
@@ -24,7 +25,6 @@ export default async function Page() {
   const myTasks = await getMyTasks();
   return (
     <div className="mt-6 px-4">
-     {JSON.stringify(myTasks.data, null, 2)}
       {/* <h1>Home</h1> */}
       {/* <p>Welcome {session.user.name}</p> */}
       {/* your workspace is {session.user.workspace} */}
@@ -52,7 +52,9 @@ export default async function Page() {
       </div>
 
       <div className="grid md:grid-cols-2 w-full gap-x-6 gapy-6 grid-cols-1 my-6">
-        <Card title="My Tasks">tasks</Card>
+        <Card title="My Tasks">
+          <MyTasks tasks={myTasks?.data} workspaceId={session.user.workspace} />
+        </Card>
           <Card title="Projects" className="px-6">
             <Projects
               workspaceId={session.user.workspace}

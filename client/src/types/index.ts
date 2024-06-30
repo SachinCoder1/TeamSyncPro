@@ -66,4 +66,5 @@ export type MyTasksType = {
   };
   workflow: "DEFAULT";
   due?: Date;
+  order: number;
 };

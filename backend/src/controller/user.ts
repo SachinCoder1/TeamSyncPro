@@ -152,7 +152,7 @@ export const getAssignedTasksInSelectedWorkspace = async (req: Request, res: Res
       parentTask: { $exists: false }
     })
       .populate("project", "name color")
-      .select("title due status priority workflow done")
+      .select("title due status priority workflow done order")
       .lean();
 
     return successResponseHandler(res, "SUCCESS", { tasks });
