@@ -1,4 +1,5 @@
 import { getWorkspace } from "@/app/actions/workspace";
+import NewProjectHandler from "@/components/projects/NewProjectHandler";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -44,8 +45,12 @@ const Page = async (props: Props) => {
       <div className="space-y-2 my-4">
         <Heading className="font-normal">New Project</Heading>
         <p className="text-sm text-muted-foreground">
-          This will create project in {workspace?.workspace?.name || ""}
+          This will create project in <b>{workspace?.workspace?.name || ""}</b>
         </p>
+      </div>
+
+      <div>
+        <NewProjectHandler workspaceId={workspace.workspace?._id as string} />
       </div>
     </div>
   );

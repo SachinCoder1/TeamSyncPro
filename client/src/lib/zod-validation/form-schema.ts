@@ -7,11 +7,17 @@ export const LoginFormDataSchema = z.object({
 export const SubTaskFormSchema = z.object({
   title: z.string().min(1, "Sub task cannot be empty"),
 });
+export const CreateProjectSchema = z.object({
+  title: z.string().min(1, "Project name is required"),
+});
 
 export const FirstTimeSignupSchema = z
   .object({
     name: z.string().nonempty("Name cannot be empty"),
-    email: z.string().email("Email Not Valid").nonempty("Email cannot be empty"),
+    email: z
+      .string()
+      .email("Email Not Valid")
+      .nonempty("Email cannot be empty"),
     password: z
       .string()
       .nonempty("Password cannot be empty")
@@ -26,8 +32,9 @@ export const FirstTimeSignupSchema = z
     confirmPassword: z
       .string()
       .nonempty("Confirm Password cannot be empty")
-      .min(8, "Password Length must be greater than 8")
-  }).refine((data) => data.password === data.confirmPassword, {
+      .min(8, "Password Length must be greater than 8"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Password doesn't match",
-    path: ["confirmPassword"]
+    path: ["confirmPassword"],
   });

@@ -59,7 +59,7 @@ export const getAllStatuses = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id as Types.ObjectId; // Assuming you have middleware that sets `req.user`
+    const userId = req.user?.id as Types.ObjectId;
     const { name, workspaceId } = req.body;
 
     // Check if the workspace exists and the user is part of it
@@ -117,6 +117,11 @@ export const createProject = async (req: Request, res: Response) => {
     workspace.projects.push(project._id);
     const sectionIds = createdSections.map((item) => item._id);
     demoTask.section = sectionIds[0];
+    demoTask.status = {
+      title: createdSections[0].title,
+      sectionId: sectionIds[0]
+    };
+
     project.sections.push(...sectionIds);
 
     await demoTask.save();

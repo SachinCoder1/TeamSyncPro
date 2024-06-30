@@ -98,8 +98,8 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
               placeholder="m@example.com"
               {...register("name")}
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors?.email.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors?.name.message}</p>
             )}
           </div>
           <div className="grid gap-2">
