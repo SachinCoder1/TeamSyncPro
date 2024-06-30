@@ -1,4 +1,4 @@
-import { TaskType } from "@/types/project";
+import { TagType, TaskType } from "@/types/project";
 import React from "react";
 import StatusBarDropdown from "./StatusPopup";
 import { Heading } from "@/components/ui/typography";
@@ -20,10 +20,15 @@ import StoryPoints from "./StoryPoints";
 import Priority from "./Priority";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
-import { getTags } from "@/app/actions/workspace";
+import { getTags, getWorkspace } from "@/app/actions/workspace";
+import { MembersType } from "@/types";
 
 type Props = {
   task?: TaskType;
+  tags?:TagType[];
+  members?: MembersType[];
+  workspaceId?: string;
+  workspaceName?: string;
 };
 
 export const LabelValue = ({
@@ -56,11 +61,12 @@ export const LabelValue = ({
     </div>
   );
 };
-const RightTaskContainer = async ({ task }: Props) => {
+const RightTaskContainer = async ({ task,tags,members,workspaceId,workspaceName }: Props) => {
   // const { data: user } = useSession();
   const user = await getServerSession(authOptions);
-  const tags = await getTags();
-  const suggestions = tags.data?.map((item, index) => ({
+  // const tags = await getTags();
+  // const members = await getWorkspace(params.workspace);
+  const suggestions = tags?.map((item, index) => ({
     label: item.name,
     value: item._id,
   }));
@@ -97,7 +103,7 @@ const RightTaskContainer = async ({ task }: Props) => {
         </div>
         <div className="px-4 py-2 space-y-6">
           <LabelValue label="Assignee">
-            <TeamSwitcher />
+            <TeamSwitcher workspaceId={workspaceId as string} workspaceName={workspaceName as string} user={user?.user} />
           </LabelValue>
           <LabelValue label="Tags">
             {user?.user.workspace && (
@@ -110,7 +116,7 @@ const RightTaskContainer = async ({ task }: Props) => {
             )}
           </LabelValue>
           <LabelValue label="Reporter">
-            <TeamSwitcher />
+          <TeamSwitcher workspaceId={workspaceId as string} workspaceName={workspaceName as string} user={user?.user} />
           </LabelValue>
           {/* <div className=" grid grid-cols-3 justify-between w-full items-center">
             <Label>{"Due date"}</Label>

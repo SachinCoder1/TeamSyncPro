@@ -4,6 +4,28 @@ export type User = {
   email: string;
 };
 
+type stepType =
+  | "SIGNED_UP"
+  | "PROFILE_SETUP"
+  | "WORKSPACE_CREATED"
+  | "PROJECT_CREATED"
+  | "SECTION_CREATED"
+  | "TASK_CREATED"
+  | "INVITED_PEOPLE_OPTIONAL"
+  | "COMPLETED";
+
+export type SessionUser = {
+  id: string;
+  email: string;
+  name: string;
+  emailVerified: "VERIFIED" | "NOT_VERIFIED";
+  onboarding: {
+    done: boolean;
+    step: stepType;
+  };
+  workspace: string;
+};
+
 export type MembersType = {
   _id: string;
   name: string;

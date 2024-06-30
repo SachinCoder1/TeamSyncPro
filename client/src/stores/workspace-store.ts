@@ -5,6 +5,7 @@ type MembersType = {
   _id: string;
   name: string;
   email: string;
+  profileImage?: string;
 };
 
 type InvitedMembersType = {

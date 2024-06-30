@@ -1,5 +1,5 @@
 import { getPerticularTask, getSubTasks } from "@/app/actions/task";
-import { getTags } from "@/app/actions/workspace";
+import { getTags, getWorkspace } from "@/app/actions/workspace";
 import ResizableMain from "@/components/home/task";
 import BreadcrumbMain from "@/components/home/task/BreadcrumbMain";
 import MarkCompleteIncomplete from "@/components/home/task/MarkCompleteIncomplete";
@@ -25,8 +25,9 @@ type Props = {
 export default async function Page({ params }: Props) {
   const taskData = getPerticularTask(params.task, params.project);
   const subTaskData = getSubTasks(params.task);
-  const tags = getTags()
-  const [tasks, subtasks] = await Promise.all([taskData, subTaskData, tags]);
+  const tagsData = getTags()
+  const workspaceData = getWorkspace(params.workspace);
+  const [tasks, subtasks,tags, workspace] = await Promise.all([taskData, subTaskData, tagsData,workspaceData]);
   console.log("subtasks: ", subtasks);
   if (tasks.success === false) {
     return <>not found</>;
@@ -46,7 +47,7 @@ export default async function Page({ params }: Props) {
           left={
             <LeftTaskContainer workspaceId={params.workspace} projectId={params.project} task={tasks.task} subtasks={subtasks?.data} />
           }
-          right={<RightTaskContainer task={tasks.task} />}
+          right={<RightTaskContainer workspaceId={workspace.workspace?._id} workspaceName={workspace.workspace?.name} task={tasks.task} tags={tags.data} members={workspace.workspace?.members} />}
         />
       </Suspense>
     </div>
