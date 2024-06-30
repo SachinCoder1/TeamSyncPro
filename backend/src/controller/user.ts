@@ -120,6 +120,49 @@ export const getAssignedTasks = async (req: Request, res: Response) => {
   }
 };
 
+
+export const getAssignedTasksInSelectedWorkspace = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    // Fetch user details excluding password
+    const user = await User.findById(userId).select("selectedWorkspace").lean();
+
+    // Check if the user exists and has a selected workspace
+    if (!user || !user.selectedWorkspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    // Fetch the selected workspace details
+    const selectedWorkspace = await Workspace.findById(user.selectedWorkspace)
+      .select("projects")
+      .lean();
+
+    if (!selectedWorkspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    // Fetch all projects within the selected workspace
+    const projectIds = selectedWorkspace.projects;
+
+    // Fetch all tasks assigned to the user within those projects
+    const tasks = await Task.find({
+      assignee: userId,
+      project: { $in: projectIds },
+      parentTask: { $exists: false }
+    })
+      .populate("project", "name color")
+      .select("title due status priority workflow done")
+      .lean();
+
+    return successResponseHandler(res, "SUCCESS", { tasks });
+  } catch (error) {
+    console.error(error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+
 // get all liked tasks of a user
 
 export const getLikedTasks = async (req: Request, res: Response) => {
