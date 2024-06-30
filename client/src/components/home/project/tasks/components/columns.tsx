@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import Priority from "@/components/home/task/right/Priority";
 import { UserCard } from "@/components/home/workspace/Members";
+import { CircleCheckIcon } from "lucide-react";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -34,15 +35,35 @@ export const columns: ColumnDef<Task>[] = [
     // ),
     cell: ({ row }) => {
       const completedRows = ["1", "4"];
-      const [isSelected, setIsSelected] = useState(
-        row.original.done === true
-      );
+      const [isSelected, setIsSelected] = useState(row.original.done === true);
       useEffect(() => {
         row.toggleSelected(isSelected);
       }, [isSelected, row]);
 
+      const handleCompleteTask = async (value: "INCOMPLETE" | "COMPLETE") => {
+        const finalBool = value === "INCOMPLETE" ? false : true;
+        setIsSelected(finalBool);
+        const data = await markCompleteIncomplete(row.original.id, finalBool);
+        revalidateTagServer("project");
+      };
+
       return (
-        <Checkbox
+        <>
+          {isSelected ? (
+            <CircleCheckIcon
+              aria-label="Select row"
+              onClick={() => handleCompleteTask("INCOMPLETE")}
+              // fill="#58a182"
+              className="h-6 w-6 -ml-0.5 text-white fill-[#58a182] rounded-full cursor-pointer"
+            />
+          ) : (
+            <CircleCheckIcon
+              onClick={() => handleCompleteTask("COMPLETE")}
+              className="h-5 w-5 hover:text-[#0d7f56] hover:!fill-white rounded-full cursor-pointer"
+            />
+          )}
+
+          {/*  <Checkbox
           // checked={row.getIsSelected()}
           checked={isSelected}
           onCheckedChange={async (value) => {
@@ -62,7 +83,8 @@ export const columns: ColumnDef<Task>[] = [
           }}
           aria-label="Select row"
           className="translate-y-[2px]"
-        />
+        /> */}
+        </>
       );
     },
     enableSorting: false,
@@ -121,8 +143,14 @@ export const columns: ColumnDef<Task>[] = [
             <AvatarFallback>{name[0]?.toUpperCase()}</AvatarFallback>
           </Avatar> */}
           {/* {row.original.assignee.name || "None"} */}
-          <UserCard avatarClassName="h-6 w-6" className="space-x-2" id={row.original.assignee.id} name={row.original.assignee.name} nameFallback="" src={row.original?.assignee?.profileImage} />
-          
+          <UserCard
+            avatarClassName="h-6 w-6"
+            className="space-x-2"
+            id={row.original.assignee.id}
+            name={row.original.assignee.name}
+            nameFallback=""
+            src={row.original?.assignee?.profileImage}
+          />
         </div>
       );
     },
