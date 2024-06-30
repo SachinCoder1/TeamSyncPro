@@ -30,7 +30,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original)
+  // const task = taskSchema.parse(row.original)
 
   return (
     // <DropdownMenu>
@@ -67,6 +67,6 @@ export function DataTableRowActions<TData>({
     //     </DropdownMenuItem>
     //   </DropdownMenuContent>
     // </DropdownMenu>
-    <OtherOptions taskTitle={task.title} />
+    <OtherOptions taskTitle={(row.original as any)?.title} />
   )
 }

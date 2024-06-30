@@ -86,7 +86,7 @@ export default async function SettingsLayout({
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
-        <div className="md:hidden">
+        {/* <div className="md:hidden">
           <Image
             src="/examples/forms-light.png"
             width={1280}
@@ -101,7 +101,7 @@ export default async function SettingsLayout({
             alt="Forms"
             className="hidden dark:block"
           />
-        </div>
+        </div> */}
         <div className="p-2 pb-4">
           <div className="flex flex-col">
            

@@ -16,6 +16,7 @@ export const taskSchema = z.object({
   assignee: z.object({
     name: z.string(),
     id: z.string(),
+    profileImage: z.optional(z.string()),
   }),
 });
 

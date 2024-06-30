@@ -43,8 +43,9 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
       label: task.workflow || "NA", // Assuming workflow corresponds to label
       priority: task.priority || "NA",
       assignee: {
-        name: "Unknown", // Replace with actual assignee if available
-        id: "unknown", // Replace with actual assignee ID if available
+        name: task.assignee?.name,
+        id: task.assignee?._id,
+        profileImage: task.assignee?.profileImage
       },
     }))
   );
@@ -54,7 +55,7 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
 
   return (
     <>
-      <div className="md:hidden">
+      {/* <div className="md:hidden">
         <Image
           src="/examples/tasks-light.png"
           width={1280}
@@ -69,10 +70,10 @@ export default async function ProjectList({ projectId,workspaceId }: Props) {
           alt="Playground"
           className="hidden dark:block"
         />
-      </div>
-      {/* {JSON.stringify(transformedData, null, 2)} */}
+      </div> */}
+      {JSON.stringify(transformedData, null, 2)}
 
-      <div className="hidden h-full flex-1 flex-col space-y-8 mt-4 md:flex">
+      <div className="h-full flex-1 flex-col space-y-8 mt-4 flex">
         {/* <div className="flex items-center justify-between space-y-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>

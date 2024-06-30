@@ -15,7 +15,11 @@ export const getProjectDetails = async (req: Request, res: Response) => {
         options: { sort: { order: 1 } }, // Sorting sections by order
         populate: {
           path: "tasks",
-          options: { sort: { order: 1 } }, // Sorting tasks within each section by order
+          options: { sort: { order: 1 } }, // Sorting tasks within each section by order.
+          populate: {
+            path: "assignee",
+            select: "_id name profileImage",
+          },
         },
       })
       .populate("members", "name profilePicture _id email")

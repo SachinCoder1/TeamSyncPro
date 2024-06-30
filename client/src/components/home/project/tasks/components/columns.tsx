@@ -16,6 +16,7 @@ import revalidateTagServer from "@/app/actions/actions";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Priority from "@/components/home/task/right/Priority";
+import { UserCard } from "@/components/home/workspace/Members";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -79,7 +80,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="Task name" />
     ),
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label);
@@ -112,14 +113,16 @@ export const columns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex items-center gap-x-2">
-          <Avatar className="w-8 h-8">
+          {/* <Avatar className="w-8 h-8">
             <AvatarImage
               src={src || "https://github.com/shadcn.png"}
               alt="@shadcn"
             />
             <AvatarFallback>{name[0]?.toUpperCase()}</AvatarFallback>
-          </Avatar>
-          {name}
+          </Avatar> */}
+          {/* {row.original.assignee.name || "None"} */}
+          <UserCard avatarClassName="h-6 w-6" className="space-x-2" id={row.original.assignee.id} name={row.original.assignee.name} nameFallback="" src={row.original?.assignee?.profileImage} />
+          
         </div>
       );
     },
