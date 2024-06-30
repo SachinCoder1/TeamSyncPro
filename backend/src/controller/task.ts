@@ -313,6 +313,7 @@ export const createSubTask = async (req: Request, res: Response) => {
       project: parentTask.project,
       section: parentTask.section,
       taskCreator: req.user?.id,
+      status: parentTask.status
     });
 
     await subTask.save();
