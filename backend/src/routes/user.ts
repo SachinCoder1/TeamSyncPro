@@ -12,6 +12,7 @@ router.get("/getMemberProfile/:id", authMiddleware, getMemberProfile);
 router.get("/getStarredProjects", authMiddleware, getStarredProjects);
 router.get("/getStarredWorkspaces", authMiddleware, getStarredWorkspaces);
 router.patch("/starProject/:projectId", authMiddleware, starProject);
+router.patch("/unstarProject/:projectId", authMiddleware, unstarProject);
 router.patch("/starWorkspace/:workspaceId", authMiddleware, starWorkspace);
 router.patch("/unstarWorkspace/:workspaceId", authMiddleware, unstarWorkspace);
 export default router;
