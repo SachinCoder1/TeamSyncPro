@@ -559,6 +559,14 @@ export const getTask = async (req: Request, res: Response) => {
         path: "dependency.task",
         select: "_id title status priority",
       })
+      .populate({
+        path: "assignee",
+        select: "_id name profileImage",
+      })
+      .populate({
+        path: "taskCreator",
+        select: "_id name profileImage",
+      })
       .lean();
 
     if (!task) {

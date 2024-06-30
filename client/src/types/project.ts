@@ -20,7 +20,6 @@ export type CommentType = {
   edited?: boolean;
 };
 
-
 export type DependencyType = {
   by: "IS_BLOCKED_BY" | "BLOCKS";
   task: {
@@ -42,7 +41,11 @@ export type TaskType = {
   likedBy: string[];
   project: string;
   comments: string[];
-  taskCreator: string;
+  taskCreator: {
+    _id: string;
+    name: string;
+    profileImage?: string;
+  };
   priority: "LOW" | "MEDIUM" | "HIGH" | "HIGHEST";
   status: {
     title: string;
@@ -51,11 +54,16 @@ export type TaskType = {
   done: boolean;
   section: string;
   due: Date;
+  assignee?: {
+    _id: string;
+    name: string;
+    profileImage?: string;
+  };
   storyPoints: number;
   workflow: Workflow;
   createdAt: string;
   updatedAt: string;
-  dependency?: DependencyType
+  dependency?: DependencyType;
 };
 
 export type TagType = {

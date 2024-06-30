@@ -40,6 +40,9 @@ import {
 } from "@/components/ui/select";
 import { SessionUser } from "@/types";
 import AddMemberModal from "../../workspace/AddMemberModal";
+import { assignTask } from "@/app/actions/task";
+import revalidateTagServer from "@/app/actions/actions";
+import { TaskType } from "@/types/project";
 
 const groups = [
   {
@@ -72,23 +75,48 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
+type finalGroup = {
+  label: string;
+  teams: {
+    label: string | undefined;
+    value: string | undefined;
+  }[];
+}[];
+
 interface TeamSwitcherProps extends PopoverTriggerProps {
-  user?: SessionUser;
   workspaceId: string;
   workspaceName: string;
+  members: finalGroup;
+  taskId: string;
+  assignee?: {
+    label: string;
+    value: string;
+  };
 }
-
 export default function TeamSwitcher({
   className,
-  user,
   workspaceId,
   workspaceName,
+  members,
+  taskId,
+  assignee,
 }: TeamSwitcherProps) {
   const [open, setOpen] = React.useState(false);
-  const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState<Team>(
-    groups[0].teams[0]
-  );
+  const [selectedTeam, setSelectedTeam] = React.useState<Team | undefined>(assignee);
+
+  const changeAssignee = async (member: Team) => {
+    if (selectedTeam?.value === member.value) {
+      setOpen(false);
+      return;
+    }
+    const isAssigned = await assignTask(taskId, member.value);
+    if (isAssigned.success) {
+      revalidateTagServer("task");
+    }
+    console.log("selected member:", member);
+    setSelectedTeam(member);
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -102,15 +130,22 @@ export default function TeamSwitcher({
             aria-label="Select a team"
             className={cn("justify-between w-full !py-0 px-0", className)}
           >
-            <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
-                className="grayscale"
-              />
-              <AvatarFallback>SC</AvatarFallback>
-            </Avatar>
-            {selectedTeam.label}
+            {" "}
+            {selectedTeam ? (
+              <>
+                <Avatar className="mr-2 h-5 w-5">
+                  <AvatarImage
+                    src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
+                    alt={selectedTeam.label}
+                    className="grayscale"
+                  />
+                  <AvatarFallback>SC</AvatarFallback>
+                </Avatar>
+                {selectedTeam.label}
+              </>
+            ) : (
+              <>Select assignee</>
+            )}
             <ChevronsUpDownIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -119,14 +154,13 @@ export default function TeamSwitcher({
             <CommandList>
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
+              {members?.map((group) => (
                 <CommandGroup key={group.label} heading={group.label}>
                   {group.teams.map((team) => (
                     <CommandItem
                       key={team.value}
                       onSelect={() => {
-                        setSelectedTeam(team);
-                        setOpen(false);
+                        changeAssignee(team as Team);
                       }}
                       className="text-sm"
                     >
@@ -142,7 +176,7 @@ export default function TeamSwitcher({
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
+                          selectedTeam?.value === team.value
                             ? "opacity-100"
                             : "opacity-0"
                         )}
@@ -157,11 +191,11 @@ export default function TeamSwitcher({
               <CommandGroup>
                 {/* <DialogTrigger asChild> */}
                 <CommandItem
-                  // onSelect={() => {
-                    
-                  //   // setOpen(false);
-                  //   // setShowNewTeamDialog(true);
-                  // }}
+                // onSelect={() => {
+
+                //   // setOpen(false);
+                //   // setShowNewTeamDialog(true);
+                // }}
                 >
                   <AddMemberModal
                     setPopOverOpen={setOpen}

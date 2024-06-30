@@ -25,7 +25,7 @@ import { MembersType } from "@/types";
 
 type Props = {
   task?: TaskType;
-  tags?:TagType[];
+  tags?: TagType[];
   members?: MembersType[];
   workspaceId?: string;
   workspaceName?: string;
@@ -61,7 +61,23 @@ export const LabelValue = ({
     </div>
   );
 };
-const RightTaskContainer = async ({ task,tags,members,workspaceId,workspaceName }: Props) => {
+
+type GroupType = {
+  label: string;
+  teams: {
+    label: string;
+    value: string;
+    members?: MembersType[]; // Optional members array
+  }[];
+};
+
+const RightTaskContainer = async ({
+  task,
+  tags,
+  members,
+  workspaceId,
+  workspaceName,
+}: Props) => {
   // const { data: user } = useSession();
   const user = await getServerSession(authOptions);
   // const tags = await getTags();
@@ -71,11 +87,36 @@ const RightTaskContainer = async ({ task,tags,members,workspaceId,workspaceName 
     value: item._id,
   }));
 
+  const finalGroup = [
+    {
+      label: "Personal Account",
+      teams: [
+        {
+          label: user?.user.name, // Use the user's name for the personal account label
+          value: user?.user.id,
+        },
+      ],
+    },
+    {
+      label: "Teams",
+      teams: members
+        ?.filter(item => item._id !== user?.user?.id) // Filter out the item with user.id
+        .map(item => ({
+          label: item.name,
+          value: item._id,
+        })) || [], // Ensure it's an empty array if members is undefined
+    },
+  ];
+  
   if (!task) return <>Loading...</>;
   return (
     <div className="p-2">
       <div className="flex justify-between w-full">
-        <StatusBarDropdown status={task?.status} taskId={task._id} label="status" />
+        <StatusBarDropdown
+          status={task?.status}
+          taskId={task._id}
+          label="status"
+        />
         <div className="flex items-center">
           <LikeHandler
             likesCount={task?.likedBy.length}
@@ -103,7 +144,14 @@ const RightTaskContainer = async ({ task,tags,members,workspaceId,workspaceName 
         </div>
         <div className="px-4 py-2 space-y-6">
           <LabelValue label="Assignee">
-            <TeamSwitcher workspaceId={workspaceId as string} workspaceName={workspaceName as string} user={user?.user} />
+            <TeamSwitcher
+              workspaceId={workspaceId as string}
+              workspaceName={workspaceName as string}
+              members={finalGroup}
+              taskId={task._id}
+              assignee={task.assignee ? {label: task.assignee.name, value: task.assignee._id} : undefined}
+
+            />
           </LabelValue>
           <LabelValue label="Tags">
             {user?.user.workspace && (
@@ -116,7 +164,14 @@ const RightTaskContainer = async ({ task,tags,members,workspaceId,workspaceName 
             )}
           </LabelValue>
           <LabelValue label="Reporter">
-          <TeamSwitcher workspaceId={workspaceId as string} workspaceName={workspaceName as string} user={user?.user} />
+            <TeamSwitcher
+              workspaceId={workspaceId as string}
+              workspaceName={workspaceName as string}
+              members={finalGroup}
+              taskId={task._id}
+              assignee={task.taskCreator ? {label: task.taskCreator.name, value: task.taskCreator._id} : undefined}
+
+            />
           </LabelValue>
           {/* <div className=" grid grid-cols-3 justify-between w-full items-center">
             <Label>{"Due date"}</Label>
