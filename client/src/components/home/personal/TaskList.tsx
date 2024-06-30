@@ -2,14 +2,21 @@
 
 import revalidateTagServer from "@/app/actions/actions";
 import { markCompleteIncomplete } from "@/app/actions/task";
-import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MyTasksType } from "@/types";
 import { TaskType } from "@/types/project";
-import { ChevronRight, CircleCheckIcon } from "lucide-react";
+import { ChevronRight, CircleCheckIcon, PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
   tasks?: MyTasksType[];
@@ -43,6 +50,21 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
   };
   return (
     <div>
+      {!tasks ||
+        (tasks.length <= 0 && (
+          <div className="flex flex-col items-center p-6 rounded-lg">
+            <h2 className="mb-2 text-xl font-semibold text-gray-700">
+              No Tasks Found
+            </h2>
+            <p className="text-gray-500">
+              You have no tasks at the moment. Enjoy your free time!
+            </p>
+            {/* <Button variant={"outline"} size={"sm"}>
+              <PlusCircleIcon className="mr-2 h-4 w-4" />
+              Create task
+            </Button> */}
+          </div>
+        ))}
       {tasks
         ?.sort((a, b) => a.order - b.order)
         ?.map((item, index) => (
@@ -74,12 +96,33 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
                 <div>{item.title}</div>
               </Link>
             </div>
-            <Link
-              href={`/home/${workspaceId}/${item.project._id}/${item._id}`}
-              className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </Link>
+            <div className="flex gap-x-4">
+              <TooltipProvider delayDuration={250}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Link href={`/home/${workspaceId}/${item.project._id}`}>
+                      <Badge
+                        style={{
+                          backgroundColor: item.project.color,
+                        }}
+                      >
+                        {item.project.name}
+                      </Badge>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Click to view all tasks in {item.project.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <Link
+                href={`/home/${workspaceId}/${item.project._id}/${item._id}`}
+                className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </Link>
+            </div>
           </div>
         ))}
     </div>

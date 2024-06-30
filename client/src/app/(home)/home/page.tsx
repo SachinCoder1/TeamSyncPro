@@ -45,7 +45,7 @@ export default async function Page() {
           <span className="text-muted-foreground">|</span>
           <div className="flex gap-x-1 items-center">
             <CheckIcon className="h-3 w-3 text-muted-foreground" />
-            <p className="text-lg">0</p>
+            <p className="text-lg">{myTasks.data?.filter(task => task.done).length || 0}</p>
             <p className="text-sm text-muted-foreground">tasks completed</p>
           </div>
         </div>
