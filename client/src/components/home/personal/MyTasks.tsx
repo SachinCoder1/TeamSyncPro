@@ -58,13 +58,13 @@ const MyTasks = ({ tasks, workspaceId }: Props) => {
         <TabsContent value="upcoming">
           <TasksList
             workspaceId={workspaceId}
-            tasks={tasks?.filter((task) => isAfter(task?.due || "", now))}
+            tasks={tasks?.filter((task) => isAfter(task?.due || "", now) && task.done === false)}
           />
         </TabsContent>
         <TabsContent value="overdue">
           <TasksList
             workspaceId={workspaceId}
-            tasks={tasks?.filter((task) => isBefore(task?.due || "", now))}
+            tasks={tasks?.filter((task) => isBefore(task?.due || "", now) && task.done === false)}
           />
         </TabsContent>
         <TabsContent value="completed">

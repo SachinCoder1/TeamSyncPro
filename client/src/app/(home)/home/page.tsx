@@ -29,7 +29,7 @@ export default async function Page() {
       {/* <h1>Home</h1> */}
       {/* <p>Welcome {session.user.name}</p> */}
       {/* your workspace is {session.user.workspace} */}
-      {JSON.stringify(starredItems, null, 2)}
+      {/* {JSON.stringify(starredItems, null, 2)} */}
       <div className="space-y-2 my-4">
         <Heading className="font-semibold">Home</Heading>
       </div>

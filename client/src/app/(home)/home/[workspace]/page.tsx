@@ -41,7 +41,7 @@ export default async function page({ params }: Props) {
     <div>
       {/* page and the id is: {params.workspace} */}
       <Suspense fallback={<div>Loading...</div>}>
-        {JSON.stringify(isWorkspaceStarred, null, 2)}
+        {/* {JSON.stringify(isWorkspaceStarred, null, 2)} */}
       <div className="flex gap-x-2 items-center">
         <Heading variant="h4">
           {workspace?.name}

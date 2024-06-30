@@ -107,7 +107,7 @@ export default async function SettingsLayout({
         </div> */}
         <div className="p-2 pb-4">
           <div className="flex flex-col">
-            {JSON.stringify(isProjectStarred, null,2)}
+            {/* {JSON.stringify(isProjectStarred, null,2)} */}
            
             <div className="flex justify-between items-center w-full gap-x-2">
               <div className="flex items-center gap-x-4 flex-1">
