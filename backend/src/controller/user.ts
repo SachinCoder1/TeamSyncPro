@@ -165,6 +165,70 @@ export const getAssignedTasksInSelectedWorkspace = async (
   }
 };
 
+export const getQueriedTasksOfSelectedWorkspace = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+    const { searchTerm } = req.query;
+    console.log("search term:", searchTerm);
+    if (!searchTerm) {
+      return successResponseHandler(res, "SUCCESS", { tasks: [] });
+    }
+
+    // Fetch user details excluding password
+    const user = await User.findById(userId).select("selectedWorkspace").lean();
+
+    // Check if the user exists and has a selected workspace
+    if (!user || !user.selectedWorkspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    // Fetch the selected workspace details
+    const selectedWorkspace = await Workspace.findById(user.selectedWorkspace)
+      .select("projects")
+      .lean();
+
+    if (!selectedWorkspace) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    // Fetch all projects within the selected workspace
+    const projectIds = selectedWorkspace.projects;
+    let filter: any = {
+      project: { $in: projectIds },
+    };
+
+    if (searchTerm) {
+      const searchRegex = new RegExp(searchTerm as any, "i"); // Case-insensitive regex
+      filter = {
+        ...filter,
+        $or: [
+          { title: searchRegex },
+          { "status.title": searchRegex },
+          { priority: searchRegex },
+          // { description: searchRegex }, // Add more fields as necessary
+        ],
+      };
+    }
+
+    // Fetch all tasks assigned to the user within those projects
+    const tasks = await Task.find(filter)
+      .populate("project", "name color _id")
+      .select("title due status priority workflow done order description _id")
+      .lean();
+
+    console.log("filter: ", filter);
+    console.log("tasks: ", tasks);
+
+    return successResponseHandler(res, "SUCCESS", { tasks });
+  } catch (error) {
+    console.error(error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
 // get all liked tasks of a user
 
 export const getLikedTasks = async (req: Request, res: Response) => {
@@ -433,7 +497,7 @@ export const starProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const projectId = req.params.projectId;
-    console.log("project id in the star project: ", projectId)
+    console.log("project id in the star project: ", projectId);
     const user = await User.findById(userId);
 
     const starred = new StarredItem({
@@ -453,7 +517,7 @@ export const isStarred = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id, type } = req.params;
-    console.log("req.params..................", req.params)
+    console.log("req.params..................", req.params);
     // const user = await User.findById(userId);
 
     if (!["project", "workspace"].includes(type)) {
@@ -462,8 +526,8 @@ export const isStarred = async (req: Request, res: Response) => {
 
     let isStarred = false;
     let payload: any = { user: userId, [type]: id };
-    if(type == "workspace") {
-      payload["project"] = {$exists: false}
+    if (type == "workspace") {
+      payload["project"] = { $exists: false };
     }
     const item = await StarredItem.findOne(payload);
     if (item) {
@@ -483,8 +547,7 @@ export const unstarProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { projectId } = req.params;
-    console.log("project id in the un star project: ", projectId)
-
+    console.log("project id in the un star project: ", projectId);
 
     const user = await User.findById(userId);
 

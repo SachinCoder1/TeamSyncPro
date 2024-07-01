@@ -27,6 +27,29 @@ export const getMyTasks = async () => {
   return { success: true, data: data.data?.tasks as MyTasksType[] };
 };
 
+export const getQueriedTasks = async (query: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  const res = await fetch(
+    `${BACKEND_URL}/user/getQueriedTasks?searchTerm=${query || ""}`,
+    {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${session.accessToken.token}`,
+      },
+      // next: {tags: ['project']}
+    }
+  );
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  if (data.message !== "SUCCESS") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.tasks as MyTasksType[] };
+};
+
 export const getLikedTasks = async () => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
@@ -135,7 +158,7 @@ export const getStarredItems = async () => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    next: {tags: ['starred-items', "isStarred"]}
+    next: { tags: ["starred-items", "isStarred"] },
   });
   if (!res.ok) {
     return { success: false };
@@ -154,7 +177,7 @@ export const starUnstarProject = async (
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
   let link = type === "STAR" ? "starProject" : "unstarProject";
-  console.log("link...............", link, projectId)
+  console.log("link...............", link, projectId);
   const res = await fetch(`${BACKEND_URL}/user/${link}/${projectId}`, {
     method: "PATCH",
     headers: {
@@ -163,7 +186,7 @@ export const starUnstarProject = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    console.log("res.......", res)
+    console.log("res.......", res);
     return { success: false };
   }
   const data = await res.json();
@@ -200,16 +223,16 @@ export const starUnstarWorkspace = async (
 export const isStarred = async (id: string, type: "project" | "workspace") => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
-  console.log("id...................", id, "type: ..........", type)
+  console.log("id...................", id, "type: ..........", type);
   const res = await fetch(`${BACKEND_URL}/user/isStarred/${type}/${id}`, {
     method: "GET",
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    next: {tags: ['isStarred']}
+    next: { tags: ["isStarred"] },
   });
   if (!res.ok) {
-    console.log("failed...........",res)
+    console.log("failed...........", res);
     return { success: false };
   }
   const data = await res.json();

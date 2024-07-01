@@ -1,11 +1,12 @@
 import express from "express";
-import { MyDetails, getAssignedTasksInSelectedWorkspace, getLikedTasks, getMemberProfile, getStarredItems, getStarredProjects, getStarredWorkspaces, getWorkspaces, isStarred, starProject, starWorkspace, unstarProject, unstarWorkspace } from "~/controller/user";
+import { MyDetails, getAssignedTasksInSelectedWorkspace, getLikedTasks, getMemberProfile, getQueriedTasksOfSelectedWorkspace, getStarredItems, getStarredProjects, getStarredWorkspaces, getWorkspaces, isStarred, starProject, starWorkspace, unstarProject, unstarWorkspace } from "~/controller/user";
 import { authMiddleware } from "~/middleware";
 
 const router = express.Router();
 
 router.get("/", authMiddleware, MyDetails);
 router.get("/getMyTasks", authMiddleware, getAssignedTasksInSelectedWorkspace);
+router.get("/getQueriedTasks", authMiddleware, getQueriedTasksOfSelectedWorkspace);
 router.get("/getLikedTasks", authMiddleware, getLikedTasks);
 router.get("/getMyWorkspaces", authMiddleware, getWorkspaces);
 router.get("/getMemberProfile/:id", authMiddleware, getMemberProfile);

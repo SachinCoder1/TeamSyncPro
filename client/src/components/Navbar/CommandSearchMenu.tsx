@@ -29,6 +29,10 @@ import { Button } from "../ui/button";
 import { ProjectType } from "@/stores/workspace-store";
 import { SquareFilledIcon } from "../Sidebar/menu/ProjectMenu";
 import Link from "next/link";
+import { CommandLoading } from "cmdk";
+import { getQueriedTasks } from "@/app/actions/user";
+import { MyTasksType } from "@/types";
+import { Skeleton } from "../ui/skeleton";
 
 type Props = {
   projects?: ProjectType[];
@@ -37,7 +41,7 @@ type Props = {
 export default function CommandSearchMenu({ workspaceId, projects }: Props) {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [items, setItems] = React.useState([]);
+  const [items, setItems] = React.useState<MyTasksType[] | undefined>([]);
   const [projectItems, setProjectItems] = React.useState<ProjectType[] | []>(
     []
   );
@@ -62,25 +66,31 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
     }
   }, [projects]);
 
-  const debouncedSearch = useDebouncedCallback((term) => {
+  const debouncedSearch = useDebouncedCallback(async (term) => {
     setLoading(true);
 
     console.log(`Searching... ${term}`);
-    if (!term && projects) {
-      setProjectItems(projects);
+    const isQueried = await getQueriedTasks(term);
+    if (isQueried.success) {
+      setItems(isQueried.data || []);
     } else {
-      const filteredProjects = projects?.filter((item) =>
-        item.name.toLowerCase().includes(term.toLowerCase())
-      );
-
-      // if (filteredProjects && filteredProjects?.length > 0) {
-      //   setProjectItems(filteredProjects);
-      // } else {
-      // }
+      setItems([]);
     }
+    // if (!term && projects) {
+    //   setProjectItems(projects);
+    // } else {
+    // const filteredProjects = projects?.filter((item) =>
+    //   item.name.toLowerCase().includes(term.toLowerCase())
+    // );
+
+    // if (filteredProjects && filteredProjects?.length > 0) {
+    //   setProjectItems(filteredProjects);
+    // } else {
+    // }
+    // }
 
     setLoading(false);
-  }, 300);
+  }, 200);
 
   const handleSearch = (val: string) => {
     setSearch(val); // Update the search value immediately
@@ -119,8 +129,18 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
               placeholder="Type a command or search..."
             />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup heading="Suggestions">
+              <CommandEmpty>
+                {" "}
+                {loading ? (
+                  <div className="space-y-2">
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-6 w-full" />
+                  </div>
+                ) : (
+                  "No data found"
+                )}
+              </CommandEmpty>
+              {/* <CommandGroup heading="Suggestions">
                 <CommandItem>
                   <Calendar className="mr-2 h-4 w-4" />
                   <span>Calendar</span>
@@ -133,7 +153,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
                   <Calculator className="mr-2 h-4 w-4" />
                   <span>Calculator</span>
                 </CommandItem>
-              </CommandGroup>
+              </CommandGroup> */}
               <CommandSeparator />
               <CommandGroup heading="Projects">
                 {projectItems?.map((item, index) => (
@@ -152,13 +172,30 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
                   </Link>
                 ))}
               </CommandGroup>
-              <CommandGroup heading="Settings">
-                <CommandItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                  <CommandShortcut>⌘P</CommandShortcut>
-                </CommandItem>
-                <CommandItem>
+              {items && items?.length > 0 && (
+                <CommandGroup heading="Tasks">
+                  {loading && (
+                    <CommandLoading>
+                      <div className="space-y-2">
+                        <Skeleton className="h-6 w-full" />
+                        <Skeleton className="h-6 w-full" />
+                      </div>
+                      {/* <Skeleton className="h-6 w-full" /> */}
+                    </CommandLoading>
+                  )}
+
+                  {items?.map((item, index) => (
+                    <CommandItem
+                      key={item._id}
+                      value={`${item.title}:${item.project.name}:${item._id}`}
+                    >
+                      {/* <User className="mr-2 h-4 w-4" /> */}
+                      <span>{item.title}</span>
+                      {/* <CommandShortcut>⌘P</CommandShortcut> */}
+                    </CommandItem>
+                  ))}
+
+                  {/* <CommandItem>
                   <CreditCard className="mr-2 h-4 w-4" />
                   <span>Billing</span>
                   <CommandShortcut>⌘B</CommandShortcut>
@@ -167,8 +204,13 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                   <CommandShortcut>⌘S</CommandShortcut>
-                </CommandItem>
-              </CommandGroup>
+                </CommandItem> */}
+                </CommandGroup>
+              )}
+
+              {/* {loading && <CommandLoading>Checking tasks</CommandLoading>} */}
+
+              {!loading && !items?.length && <div></div>}
             </CommandList>
           </Command>
 
