@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import UserAccountNav from "./UserAccountNav";
 import MobileNav from "./MobileNav";
@@ -12,6 +12,8 @@ import { Logo } from "../Logo";
 import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
+import CreateOptions from "./CreateOptions";
+import { getWorkspace } from "@/app/actions/workspace";
 
 type MyType = {
   name: string;
@@ -21,6 +23,7 @@ type MyType = {
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
   const user = session?.user as MyType | undefined;
+  const workspace = await getWorkspace();
   // let user: null | MyType = null;
 
   // if (!user && 10 % 2 === 2) {
@@ -56,6 +59,7 @@ const Navbar = async () => {
               </>
             ) : (
               <>
+              <CreateOptions workspaceId={workspace.workspace?._id} workspaceName={workspace.workspace?.name} />
                 <NavigationMenuMain navLinks={loggedInNavLinks} />
 
                 <UserAccountNav
