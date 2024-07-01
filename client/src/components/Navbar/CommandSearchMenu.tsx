@@ -33,6 +33,7 @@ import { CommandLoading } from "cmdk";
 import { getQueriedTasks } from "@/app/actions/user";
 import { MyTasksType } from "@/types";
 import { Skeleton } from "../ui/skeleton";
+import { Badge } from "../ui/badge";
 
 type Props = {
   projects?: ProjectType[];
@@ -161,6 +162,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
                     <CommandItem
                       onSelect={(value) => {
                         setOpen(false);
+                        setSearch("");
                       }}
                       // value={item._id}
                       className="gap-x-2"
@@ -186,13 +188,34 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
 
                   {items?.map((item, index) => (
                     <CommandItem
+                      className="flex justify-between items-center gap-x-2"
                       key={item._id}
                       value={`${item.title}:${item.project.name}:${item._id}`}
+                      onSelect={(value) => {
+                        setOpen(false);
+                        setSearch("");
+                      }}
                     >
                       {/* <User className="mr-2 h-4 w-4" /> */}
-                      <span>{item.title}</span>
+                      <Link
+                        className="flex-1 w-full"
+                        href={`/home/${workspaceId}/${item.project._id}/${item._id}`}
+                      >
+                        <span className="flex-1 w-full">{item.title}</span>
+                      </Link>
+                      <Link href={`/home/${workspaceId}/${item.project._id}`}>
+                        <Badge
+                          style={{
+                            backgroundColor: item.project.color,
+                          }}
+                        >
+                          {item.project.name}
+                        </Badge>
+                      </Link>
+
                       {/* <CommandShortcut>⌘P</CommandShortcut> */}
                     </CommandItem>
+                    // </Link>
                   ))}
 
                   {/* <CommandItem>
