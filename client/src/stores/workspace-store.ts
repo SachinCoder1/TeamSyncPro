@@ -26,7 +26,7 @@ export type WorkspaceType = {
   admin: string;
   personal: boolean;
   members: [MembersType];
-  projects: [ProjectType];
+  projects: ProjectType[];
   invitedMembers: InvitedMembersType;
   tags: string[];
   createdAt: string;

@@ -14,6 +14,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import CreateOptions from "./CreateOptions";
 import { getWorkspace } from "@/app/actions/workspace";
+import CommandSearchMenu from "./CommandSearchMenu";
 
 type MyType = {
   name: string;
@@ -41,6 +42,7 @@ const Navbar = async () => {
       {/* <MaxWidthWrapper> */}
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
           <Logo />
+          <CommandSearchMenu workspaceId={workspace.workspace?._id as string} projects={workspace.workspace?.projects} />
 
           <MobileNav isAuth={!!user} />
 
