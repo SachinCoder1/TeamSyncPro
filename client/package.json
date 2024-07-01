@@ -34,6 +34,7 @@
     "@tinymce/tinymce-react": "^5.1.1",
     "@types/canvas-confetti": "^1.6.4",
     "@types/dompurify": "^3.0.5",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "axios": "^1.7.2",
     "canvas-confetti": "^1.9.2",
     "class-variance-authority": "^0.7.0",

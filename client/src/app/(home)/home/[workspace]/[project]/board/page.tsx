@@ -1,3 +1,4 @@
+import Board from "@/components/home/board";
 import { Metadata } from "next";
 import React from "react";
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ type Props = {
 const page = ({ params }: Props) => {
   return (
     <div>
-      board
+      <Board />
     </div>
   );
 };
