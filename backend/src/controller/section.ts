@@ -55,6 +55,7 @@ export const updateSection = async (req: Request, res: Response) => {
     const userId = req.user?.id; // Assuming middleware sets `req.user`
     const { title } = req.body; // Assuming section ID and new name are sent in the request body
     const id = req.params.id;
+    console.log("updating title:", title, "id:", id )
     // if (!sectionId || !newName) {
     //   return errorResponseHandler(res, "MISSING_REQUIRED_FIELDS");
     // }

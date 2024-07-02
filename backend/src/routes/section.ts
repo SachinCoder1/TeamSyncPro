@@ -26,7 +26,7 @@ router.patch(
   validateUpdateSectionBody,
   validateObjectIDParam,
   authMiddleware,
-  restrictsToProject(ROLES.MEMBER),
+  // restrictsToProject(ROLES.MEMBER),
   updateSection
 );
 router.patch(

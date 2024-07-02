@@ -49,7 +49,6 @@ const Board = ({ project,workspaceId,projectId }: Props) => {
     console.log("project.sections:", project?.sections)
   return (
     <div>
-      board
       {/* {JSON.stringify(project, null,2)} */}
       <ListContainer projectId={projectId} initialData={project?.sections || initialData} workspaceId={workspaceId} />
     </div>

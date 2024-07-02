@@ -62,7 +62,7 @@ export function CardItem({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="rounded-md border bg-white px-3 py-3 text-sm shadow-sm hover:border-muted-foreground"
+          className="rounded-md border bg-background px-3 py-3 text-sm shadow-sm hover:border-muted-foreground"
           role="button"
           // onClick={() => onOpen(data.id)}
         >
@@ -74,13 +74,13 @@ export function CardItem({
                   onClick={() => handleCompleteSubTask("INCOMPLETE", data._id)}
                   // fill="#58a182"
                   size={25}
-                  className="-ml-0.5 text-white fill-[#58a182] rounded-full cursor-pointer"
+                  className="-ml-0.5 text-background fill-[#58a182] rounded-full cursor-pointer"
                 />
               ) : (
                 <CircleCheckIcon
                   size={20}
                   onClick={() => handleCompleteSubTask("COMPLETE", data._id)}
-                  className="hover:text-[#0d7f56] hover:!fill-white rounded-full cursor-pointer text-muted-foreground"
+                  className="hover:text-[#0d7f56] hover:!fill-background rounded-full cursor-pointer text-muted-foreground"
                 />
               )}
             </div>

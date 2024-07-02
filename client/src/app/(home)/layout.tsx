@@ -8,8 +8,6 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div>
       <ResizableMain>{children}</ResizableMain>
-    </div>
   );
 }

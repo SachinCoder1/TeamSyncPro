@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ListOptions } from "./list-options";
+import { updateSection } from "@/app/actions/section";
 // import { trpc } from '@/trpc/client'
 // import { ListOptions } from './list-options'
 
@@ -43,7 +44,7 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
   };
 
   const formSchema = z.object({
-    boardId: z.string(),
+    // boardId: z.string(),
     id: z.string(),
     title: z.string().min(3, { message: "Minimum 3 chars required." }),
   });
@@ -52,7 +53,7 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: data._id,
-      boardId: data.boardId,
+      // boardId: data.boardId,
       title: data.title,
     },
   });
@@ -69,16 +70,23 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
   //   },
   // })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const { boardId, id, title } = values;
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("here...")
+    const { id, title } = values;
+    console.log("values:", values);
     if (title === data.title) {
       return disableEditing();
     }
+
+    const isAdded = await updateSection(title, id);
+    console.log("is updated:", isAdded);
 
     // mutate({ boardId, id, title })
   }
 
   const onBlur = () => {
+    console.log("blurred...");
+    console.log("formref.crrent:", formRef.current)
     formRef.current?.requestSubmit();
   };
 
@@ -106,12 +114,13 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
                 <FormItem>
                   <FormControl>
                     <Input
+                      autoFocus
                       placeholder="Enter list title..."
                       {...field}
                       ref={inputRef}
                       onBlur={onBlur}
                       // disabled={isLoading}
-                      className="h-7 truncate border-transparent bg-transparent px-2 py-1 text-sm transition hover:border-input focus:border-input focus:bg-white"
+                      className="h-7 truncate border-transparent bg-transparent px-2 py-1 text-sm transition hover:border-input focus:border-input focus:bg-background"
                     />
                   </FormControl>
                   <FormMessage />

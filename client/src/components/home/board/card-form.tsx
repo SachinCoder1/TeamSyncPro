@@ -116,7 +116,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
                       <Textarea
                         autoFocus
                         placeholder="Enter a title for this card..."
-                        className="resize-none shadow-sm outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        // className="resize-none shadow-sm outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                         {...field}
                         // disabled={isLoading}
                         onKeyDown={onTextareaKeyDown}
