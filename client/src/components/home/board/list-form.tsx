@@ -13,12 +13,15 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import ListWrapper from './list-wrapper'
+import { createSection } from '@/app/actions/section'
+import revalidateTagServer from '@/app/actions/actions'
 
 type ListFormProps = {
   refetchLists: any
 }
 
 export function ListForm({ refetchLists }: ListFormProps) {
+  const [loading, setLoading] = useState(false);
   const params = useParams()
 
   const formRef = useRef<ElementRef<'form'>>(null)
@@ -54,26 +57,35 @@ export function ListForm({ refetchLists }: ListFormProps) {
     },
   })
 
-  // const { mutate, isLoading } = trpc.list.createList.useMutation({
-  //   onSuccess: (list) => {
-  //     toast.success(`List "${list.title}" created`)
-  //     disableEditing()
-  //     form.reset()
-  //     refetchLists()
-  //   },
-  //   onError: (err) => {
-  //     toast.error(err.message)
-  //   },
-  // })
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    console.log(values, params.project);
+    const isCreated = await createSection(
+      values.title,
+      params.project as string,
+    );
+    console.log("is created:", isCreated);
+    if (isCreated.success) {
+      revalidateTagServer("project");
+    }
+    handleReset();
+  };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("on submit values: ", values)
-    // console.log(values)
-    // mutate({ boardId: params.boardId as string, title: values.title })
-  }
+  const handleReset = () => {
+    setLoading(false);
+    disableEditing();
+    form.reset();
+    form.clearErrors();
+  };
 
   useEventListener('keydown', onKeyDown)
-  useOnClickOutside(formRef, disableEditing)
+  useOnClickOutside(formRef, () => {
+    if (!form.getValues("title")) {
+      handleReset();
+      return;
+    }
+    formRef.current?.requestSubmit();
+  });
 
   if (isEditing) {
     return (
@@ -94,7 +106,7 @@ export function ListForm({ refetchLists }: ListFormProps) {
                       placeholder="Enter list title..."
                       {...field}
                       ref={inputRef}
-                      // disabled={isLoading}
+                      disabled={loading}
                       className="h-7 border-transparent px-2 py-1 text-sm font-medium transition hover:border-input focus:border-input"
                     />
                   </FormControl>
@@ -103,11 +115,11 @@ export function ListForm({ refetchLists }: ListFormProps) {
               )}
             />
             <div className="flex items-center gap-x-1">
-              <Button type="submit" variant="default" size="sm">
-                Add list
+              <Button type="submit" variant="default" size="sm" disabled={loading}>
+                Add section
               </Button>
-              <Button onClick={disableEditing} size="sm" variant="ghost">
-                <X className="h-5 w-5" />
+              <Button disabled={loading} onClick={handleReset} size="sm" variant="ghost">
+                cancel
               </Button>
             </div>
           </form>
@@ -123,7 +135,7 @@ export function ListForm({ refetchLists }: ListFormProps) {
         onClick={enableEditing}
       >
         <Plus className="mr-2 h-4 w-4" />
-        Add a button
+        Add section 
       </button>
     </ListWrapper>
   )
