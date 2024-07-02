@@ -19,7 +19,7 @@ const page = async ({ params }: Props) => {
   const project = await getProject(params.project)
   return (
     <div>
-      <Board project={project.project}  />
+      <Board project={project.project} workspaceId={params.workspace} projectId={params.project}  />
     </div>
   );
 };

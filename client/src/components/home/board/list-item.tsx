@@ -14,9 +14,12 @@ type ListItemProps = {
   data: any
   index: number
   refetchLists: any
+  projectId: string;
+  workspaceId: string;
+
 }
 
-export function ListItem({ data, index, refetchLists }: ListItemProps) {
+export function ListItem({ data, index, refetchLists,projectId,workspaceId }: ListItemProps) {
   const textAreaRef = useRef<ElementRef<'textarea'>>(null)
 
   const [isEditing, setIsEditing] = useState(false)
@@ -56,7 +59,7 @@ export function ListItem({ data, index, refetchLists }: ListItemProps) {
                   )}
                 >
                   {data.tasks.map((card:any, index:any) => (
-                    <CardItem data={card} index={index} refetchLists={refetchLists} key={card._id} />
+                    <CardItem projectId={projectId} workspaceId={workspaceId} data={card} index={index} refetchLists={refetchLists} key={card._id}  />
                   ))}
                   {provided.placeholder}
                 </ol>

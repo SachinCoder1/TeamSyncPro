@@ -4,6 +4,8 @@ import { ListContainer } from "./ListContainer";
 
 type Props = {
   project?: ProjectType;
+  workspaceId: string;
+  projectId: string;
 };
 
 const initialData: any = [
@@ -43,13 +45,13 @@ const initialData: any = [
   },
 ];
 
-const Board = ({ project }: Props) => {
+const Board = ({ project,workspaceId,projectId }: Props) => {
     console.log("project.sections:", project?.sections)
   return (
     <div>
       board
       {/* {JSON.stringify(project, null,2)} */}
-      <ListContainer boardId="5432145432" initialData={project?.sections || initialData} />
+      <ListContainer projectId={projectId} initialData={project?.sections || initialData} workspaceId={workspaceId} />
     </div>
   );
 };
