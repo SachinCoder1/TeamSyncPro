@@ -77,9 +77,11 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
     if (title === data.title) {
       return disableEditing();
     }
+    disableEditing();
 
     const isAdded = await updateSection(title, id);
     console.log("is updated:", isAdded);
+
 
     // mutate({ boardId, id, title })
   }
@@ -91,7 +93,7 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
+    if (e.key === "Escape" || e.key === "Enter") {
       formRef.current?.requestSubmit();
     }
   };

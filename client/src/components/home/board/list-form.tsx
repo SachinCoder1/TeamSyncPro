@@ -51,6 +51,10 @@ export function ListForm({ refetchLists }: ListFormProps) {
     if (e.key === "Escape") {
       disableEditing();
     }
+
+    if(e.key === "Enter") {
+      formRef.current?.requestSubmit();
+    }
   };
 
   const formSchema = z.object({
@@ -115,7 +119,7 @@ export function ListForm({ refetchLists }: ListFormProps) {
                       {...field}
                       ref={inputRef}
                       disabled={loading}
-                      className="resize-none shadow-sm outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      // className="resize-none shadow-sm outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                   </FormControl>
                   <FormMessage />
@@ -153,7 +157,7 @@ export function ListForm({ refetchLists }: ListFormProps) {
     <ListWrapper>
       <Button
       variant={"ghost"}
-      className="w-full shadow-md"
+      className="w-full shadow-md bg-secondary"
         // className="flex w-full items-center rounded-md bg-white/80 p-3 text-sm font-medium transition hover:bg-white/50"
         onClick={enableEditing}
       >
