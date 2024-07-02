@@ -164,10 +164,13 @@ export const validateReOrderTaskBody = (
         .required(),
       beforeTaskId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
-        .required(),
+        .required()
+        .allow(null, ""), // Allow null or empty string
+
       afterTaskId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
-        .required(),
+        .required()
+        .allow(null, ""),
     });
     const error = schema.validate(data).error;
     if (error) {
@@ -185,7 +188,7 @@ export const validateAddCommentBody = (
   next: NextFunction
 ) => {
   try {
-    console.log("validating comment body", req.body)
+    console.log("validating comment body", req.body);
     const data = req.body;
     const schema = Joi.object({
       taskId: Joi.string()
@@ -232,7 +235,7 @@ export const validateDeleteCommentParam = (
   next: NextFunction
 ) => {
   try {
-    console.log("delete comment", req.params)
+    console.log("delete comment", req.params);
     const data = req.params;
     const schema = Joi.object({
       commentId: Joi.string()

@@ -1,3 +1,4 @@
+import { getProject } from "@/app/actions/project";
 import Board from "@/components/home/board";
 import { Metadata } from "next";
 import React from "react";
@@ -14,10 +15,11 @@ type Props = {
   };
 };
 
-const page = ({ params }: Props) => {
+const page = async ({ params }: Props) => {
+  const project = await getProject(params.project)
   return (
     <div>
-      <Board />
+      <Board project={project.project}  />
     </div>
   );
 };

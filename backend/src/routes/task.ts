@@ -67,7 +67,7 @@ router.patch( "/add-dependency/:taskId/:dependencyId/:dependencyType", validateA
 router.patch( "/remove-dependency/:taskId", validateTaskIdParam, authMiddleware, removeDependencyFromTask);
 router.patch( "/due/:taskId", validateTaskIdParam, validateDueDateBody, authMiddleware, addDueDateToTask );
 router.patch("/remove-due/:taskId", validateTaskIdParam, authMiddleware, removeDueDateFromTask);
-router.patch("/reorder/:projectId", validateReOrderTaskBody, authMiddleware, restrictsToProject(ROLES.MEMBER), reorderTask);
+router.patch("/reorder", validateReOrderTaskBody, authMiddleware, reorderTask);
 router.patch("/mark-complete/:taskId", validateTaskIdParam, authMiddleware, markTaskAsComplete);
 router.patch("/change-status/:sectionId/:taskId", validateTaskIdParam, authMiddleware, changeTaskStatus);
 router.patch("/mark-incomplete/:taskId", validateTaskIdParam, authMiddleware,  markTaskAsIncomplete);

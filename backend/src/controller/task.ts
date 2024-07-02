@@ -13,6 +13,7 @@ import { UpdateTaskBody } from "~/types";
 export const createTask = async (req: Request, res: Response) => {
   try {
     const { title, projectId, sectionId } = req.body;
+    console.log("req.body:", req.body);
 
     const lastTaskInSection = await Task.findOne({
       project: projectId,
@@ -30,6 +31,10 @@ export const createTask = async (req: Request, res: Response) => {
       section: sectionId,
       order: newOrder,
       taskCreator: req.user?.id,
+    });
+
+    await Section.findByIdAndUpdate(sectionId, {
+      $push: { tasks: task._id },
     });
 
     await task.save();
@@ -202,11 +207,20 @@ export const reorderTask = async (req: Request, res: Response) => {
     const afterTask = afterTaskId
       ? await Task.findById(afterTaskId).lean()
       : null;
+    console.log(
+      "task:",
+      taskId,
+      "beforeTask",
+      beforeTaskId,
+      "afterTaskId",
+      afterTaskId
+    );
 
     const newOrder = calculateNewOrder(
       beforeTask ? beforeTask.order : null,
       afterTask ? afterTask.order : null
     );
+    console.log("new order:", newOrder);
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -220,6 +234,7 @@ export const reorderTask = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "UPDATED", { task });
   } catch (error) {
+    console.log("error occured:", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -313,7 +328,7 @@ export const createSubTask = async (req: Request, res: Response) => {
       project: parentTask.project,
       section: parentTask.section,
       taskCreator: req.user?.id,
-      status: parentTask.status
+      status: parentTask.status,
     });
 
     await subTask.save();

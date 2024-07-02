@@ -495,6 +495,70 @@ export const updateComment = async (commentId: string, comment: string) => {
   return { success: true, data: data.data?.comment as CommentType };
 };
 
+export const reorderTaskInBetween = async (
+  taskId: string,
+  beforeTaskId: string,
+  afterTaskId: string
+) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/reorder`, {
+    method: "PATCH",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      taskId,
+      beforeTaskId,
+      afterTaskId,
+    }),
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "UPDATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
+export const createTask = async (
+  title: string,
+  projectId: string,
+  sectionId: string
+) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  console.log("calling api");
+  const res = await fetch(`${BACKEND_URL}/task/create`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title,
+      projectId,
+      sectionId,
+    }),
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  console.log("update task data:", data);
+  if (data.message !== "CREATED") {
+    return { success: false };
+  }
+  return { success: true, data: data.data?.task as TaskType };
+};
+
 export const deleteComment = async (commentId: string) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
