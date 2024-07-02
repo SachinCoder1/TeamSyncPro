@@ -33,8 +33,9 @@ import { Icons } from "@/components/Icon/Icons";
 type Props = {
   taskId: string;
   dueDate: Date;
+  isClearButton?: boolean;
 };
-export default function DueDate({ taskId, dueDate }: Props) {
+export default function DueDate({ taskId, dueDate,isClearButton }: Props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [date, setDate] = React.useState<Date>();
 
@@ -126,7 +127,7 @@ export default function DueDate({ taskId, dueDate }: Props) {
         </PopoverContent>
       </Popover>
 
-      {(date || dueDate) && (
+      {(date || dueDate) && isClearButton && (
         <Button
           variant={"ghost"}
           disabled={isLoading}

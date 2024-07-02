@@ -46,7 +46,7 @@ export function ListItem({
         <li
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="h-full w-[272px] shrink-0 select-none"
+          className="h-full w-[300px] shrink-0 select-none"
         >
           <div
             {...provided.dragHandleProps}
