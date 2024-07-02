@@ -60,7 +60,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
         params.project as string,
         listId
       );
-      console.log('is created:', isCreated)
+      console.log("is created:", isCreated);
       if (isCreated.success) {
         revalidateTagServer("project");
       }
@@ -69,11 +69,10 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
 
     const handleReset = () => {
       setLoading(false);
-       disableEditing();
-       form.reset();
-       form.clearErrors();
-       
-    }
+      disableEditing();
+      form.reset();
+      form.clearErrors();
+    };
 
     const onKeyDown = (e: any) => {
       if (e.key === "Escape") {
@@ -92,6 +91,10 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
 
     useEventListener("keydown", onKeyDown);
     useOnClickOutside(formRef, () => {
+      if (!form.getValues("title")) {
+        handleReset();
+        return;
+      }
       formRef.current?.requestSubmit();
     });
 
@@ -111,7 +114,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
                   <div className="w-full space-y-1">
                     <FormControl>
                       <Textarea
-                      autoFocus
+                        autoFocus
                         placeholder="Enter a title for this card..."
                         className="resize-none shadow-sm outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                         {...field}
@@ -123,14 +126,13 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
                   <FormMessage />
                 </FormItem>
               )}
-              
             />
             <div className="flex items-center gap-x-1">
               <Button disabled={loading} type="submit" variant="default">
                 Create
               </Button>
               <Button
-              disabled={loading}
+                disabled={loading}
                 type="reset"
                 onClick={handleReset}
                 size="sm"
@@ -139,7 +141,6 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
                 Cancel
               </Button>
             </div>
-            
           </form>
         </Form>
       );
