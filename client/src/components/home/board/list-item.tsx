@@ -57,7 +57,7 @@ export function ListItem({
               onAddCard={enableEditing}
               refetchLists={refetchLists}
             />
-            <div className="!max-h-[calc(100vh-250px)] overflow-y-auto">
+            <div className="!max-h-[calc(100vh-215px)] overflow-y-auto">
               <Droppable droppableId={data._id} type="card">
                 {(provided) => (
                   <ol
