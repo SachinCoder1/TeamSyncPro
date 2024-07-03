@@ -38,13 +38,15 @@ import { Separator } from "@/components/ui/separator";
 
 type Props = {
   taskTitle: string;
+  isRedirect? : boolean;
+  taskId?: string;
 };
 
 type FormValues = {
   title: string;
 };
 
-export default function OtherOptions({ taskTitle }: Props) {
+export default function OtherOptions({ taskTitle,taskId,isRedirect=true }: Props) {
   const params = useParams();
   const router = useRouter();
   const [open, setIsOpen] = React.useState(false);
@@ -66,23 +68,26 @@ export default function OtherOptions({ taskTitle }: Props) {
     setLoading(true);
     console.log("deleting");
 
-    const isDeleted = await deleteTask(params?.task as string);
+    const isDeleted = await deleteTask(taskId || params?.task as string);
+    console.log("deleted....", isDeleted)
     if (isDeleted.success) {
       revalidateTagServer("project");
       setLoading(false);
       setShowDeleteDialog(false);
-      toast("Task Deleted Successfully, Redirecting...", {
-        description: "Please wait while we redirect you",
+      toast("Task Deleted Successfully", {
+        description: isRedirect ? "Please wait while we redirect you" : "",
       });
-      setTimeout(() => {
-        router.push(`/home/${params.workspace}/${params.project}`);
-      }, 500);
+      if(isRedirect){
+        setTimeout(() => {
+          router.push(`/home/${params.workspace}/${params.project}`);
+        }, 500);
+      }
     }
   };
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
-    const res = await cloneTask(params?.task as string, data.title);
+    const res = await cloneTask(taskId || params?.task as string, data.title);
     if (res.success) {
       revalidateTagServer("project");
       console.log("res:", res.data);

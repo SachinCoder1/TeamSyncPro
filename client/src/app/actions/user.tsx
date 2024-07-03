@@ -87,7 +87,7 @@ export const getMyWorkspaces = async () => {
   if (data.message !== "SUCCESS") {
     return { success: false };
   }
-  return { success: true, data: data.data?.workspaces as MyTasksType[] };
+  return { success: true, data: data.data?.workspaces as {_id:string;name:string;}[] };
 };
 
 export const getMemberProfile = async (id: string) => {

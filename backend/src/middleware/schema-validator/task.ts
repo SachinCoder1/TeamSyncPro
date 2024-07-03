@@ -58,6 +58,7 @@ export const validateTaskIdParam = (
 ) => {
   try {
     const data = req.params;
+    console.log("delete task:", req.params)
     const schema = Joi.object({
       taskId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)

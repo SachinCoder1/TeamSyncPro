@@ -67,6 +67,6 @@ export function DataTableRowActions<TData>({
     //     </DropdownMenuItem>
     //   </DropdownMenuContent>
     // </DropdownMenu>
-    <OtherOptions taskTitle={(row.original as any)?.title} />
+    <OtherOptions taskTitle={(row.original as any)?.title} isRedirect={false} taskId={(row.original as any)?.id} />
   )
 }

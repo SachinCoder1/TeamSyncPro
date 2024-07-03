@@ -386,8 +386,10 @@ export const createSubTask = async (req: Request, res: Response) => {
 export const deleteTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
+    console.log("deleting task:", taskId);
 
     const task = await Task.findByIdAndDelete(taskId).lean(); // delete the task
+    console.log("task:", task)
     if (!task) return errorResponseHandler(res, "NOT_FOUND");
 
     return successResponseHandler(res, "DELETED", {
