@@ -150,10 +150,9 @@ export function ListForm({ refetchLists }: ListFormProps) {
     );
   }
 
-  return (
-    // <Card className=""
-// >
+  // <div className="h-[calc(100vh-235px)] overflow-y-auto bg-secondary">
 
+  return (
     <ListWrapper>
       <Button
       variant={"ghost"}
@@ -165,6 +164,5 @@ export function ListForm({ refetchLists }: ListFormProps) {
         Add section
       </Button>
     </ListWrapper>
-    // </Card>
   );
 }
