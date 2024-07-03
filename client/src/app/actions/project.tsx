@@ -91,7 +91,6 @@ export const updateProject = async (
 
 export const createProject = async (
   name: string,
-  workspaceId: string
 ) => {
   try {
     const session = await getServerSession(authOptions);
@@ -100,7 +99,7 @@ export const createProject = async (
       method: "POST",
       body: JSON.stringify({
         name,
-        workspaceId
+        workspaceId: session.user.workspace
       }),
       headers: {
         "Content-Type": "application/json",

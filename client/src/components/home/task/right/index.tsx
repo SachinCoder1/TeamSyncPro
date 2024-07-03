@@ -81,7 +81,7 @@ const RightTaskContainer = async ({
   // const { data: user } = useSession();
   const user = await getServerSession(authOptions);
   // const tags = await getTags();
-  // const members = await getWorkspace(params.workspace);
+  // const members = await getWorkspace(session.user.workspace);
   const suggestions = tags?.map((item, index) => ({
     label: item.name,
     value: item._id,

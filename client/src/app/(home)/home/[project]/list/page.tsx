@@ -1,4 +1,5 @@
 import ProjectList from "@/components/home/project/List";
+import { getServerAuth } from "@/lib/auth";
 import { Metadata } from "next";
 import React from "react";
 
@@ -14,10 +15,11 @@ export const metadata: Metadata = {
   description: "A task and issue tracker build using Tanstack Table.",
 };
 
-export default function Page({params}: Props) {
+export default async function Page({params}: Props) {
+const session = await getServerAuth();
   return (
     <>
-      <ProjectList projectId={params.project} workspaceId={params.workspace} />
+      <ProjectList projectId={params.project} />
       </>
   );
 }

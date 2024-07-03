@@ -46,7 +46,7 @@ const AcceptInvite = ({ invitationToken }: Props) => {
         description: "Please wait while we redirect you"
     })
     sessionStorage.removeItem("invitationToken")
-    router.push(`/home/${isAccepted.data.workspace._id}`)
+    router.push(`/workspace`)
   };
   return (
     <div>

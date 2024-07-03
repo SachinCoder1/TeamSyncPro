@@ -91,7 +91,7 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
               )}
               <Link
                 className={cn("py-2")}
-                href={`/home/${workspaceId}/${item.project._id}/${item._id}`}
+                href={`/home/${item.project._id}/${item._id}`}
               >
                 <div>{item.title}</div>
               </Link>
@@ -100,7 +100,7 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
               <TooltipProvider delayDuration={250}>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Link href={`/home/${workspaceId}/${item.project._id}`}>
+                    <Link href={`/home/${item.project._id}`}>
                       <Badge
                         style={{
                           backgroundColor: item.project.color,
@@ -117,7 +117,7 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
               </TooltipProvider>
 
               <Link
-                href={`/home/${workspaceId}/${item.project._id}/${item._id}`}
+                href={`/home/${item.project._id}/${item._id}`}
                 className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
               >
                 <ChevronRight className="h-5 w-5" />

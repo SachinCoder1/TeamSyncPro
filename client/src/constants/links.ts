@@ -8,7 +8,7 @@ export const links = {
 
 
 export const protectedLinks = {
-    dashboard: "/dashboard",
+    dashboard: "/workspace",
     settings: "/settings",
     logout: "/logout",
 }

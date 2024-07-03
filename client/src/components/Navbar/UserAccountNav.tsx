@@ -74,7 +74,7 @@ const UserAccountNav = async ({
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/workspace">Dashboard</Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>

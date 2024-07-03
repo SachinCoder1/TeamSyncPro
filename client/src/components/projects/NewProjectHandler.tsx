@@ -40,7 +40,7 @@ const NewProjectHandler = ({ workspaceId }: Props) => {
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
-    const isCreated = await createProject(data.title, workspaceId);
+    const isCreated = await createProject(data.title);
     if (isCreated.success) {
       revalidateTagServer("workspace");
       toast.success("project created", {
@@ -50,7 +50,7 @@ const NewProjectHandler = ({ workspaceId }: Props) => {
 
     handleReset();
     console.log("iscreated", isCreated);
-    router.push(`/home/${workspaceId}/${isCreated.project?._id}`);
+    router.push(`/home/${isCreated.project?._id}`);
   });
 
   return (

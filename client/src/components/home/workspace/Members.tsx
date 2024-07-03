@@ -155,13 +155,13 @@ export const UserCard = ({
                       {format(memberProfile?.createdAt || "", "MMMM yyyy")}
                     </span>
                   </div>
-                  <Link
+                  {/* <Link
                   target="_blank"
                     className={cn(buttonVariants({ variant: "outline" , size: "sm"}), "w-full items-center gap-x-2")}
                     href={`/profile/${memberProfile._id}`}
                   >
                     View profile <MoveUpRightIcon className="text-muted-foreground" size={20} />
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             )}

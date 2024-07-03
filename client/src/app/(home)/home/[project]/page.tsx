@@ -42,7 +42,7 @@ export default async function page({ params }: Props) {
   //   return notFound();
   // }
   // console.log("project: ", project);
-  return redirect(`/home/${params.workspace}/${params.project}/list`);
+  return redirect(`/home/${params.project}/list`);
 
   // return (
   //  <div>

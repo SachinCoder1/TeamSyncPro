@@ -31,7 +31,7 @@ const Page = async (props: Props) => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href={`/home/${workspace?.workspace?._id}`}>
+            <Link href={`/workspace`}>
               {workspace.workspace?.name}
             </Link>
           </BreadcrumbItem>

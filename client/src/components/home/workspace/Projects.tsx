@@ -21,7 +21,7 @@ type ProjectCardProps = {
 const ProjectCard = ({ color, name, id, workspaceId }: ProjectCardProps) => (
   <div className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer">
     <SquareFilledIcon className="w-10 h-10" color={color} />
-    <Link href={`/home/${workspaceId}/${id}`} className="font-semibold">
+    <Link href={`/home/${id}`} className="font-semibold">
       {name}
     </Link>
   </div>

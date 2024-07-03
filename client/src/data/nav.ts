@@ -104,7 +104,7 @@ export const navLinks = [
 export const loggedInNavLinks = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/workspace",
   },
   {
     title: "Account",

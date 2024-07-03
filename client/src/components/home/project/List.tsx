@@ -26,10 +26,9 @@ async function getTasks() {
 }
 type Props = {
   projectId: string;
-  workspaceId: string;
 };
 
-export default async function ProjectList({ projectId,workspaceId }: Props) {
+export default async function ProjectList({ projectId }: Props) {
   // const tasks = await getTasks();
   const project = await getProject(projectId);
   const transformedData = project.project?.sections.flatMap((project) =>

@@ -39,7 +39,7 @@ export default async function Sidebar() {
             item={{
               name: item.project?.name,
               icon: () => <SquareFilledIcon color={item.project?.color} />,
-              path: `/home/${session.user.workspace}/${item.project._id}`,
+              path: `/home/${item.project._id}`,
             }}
             className="pl-4"
           />
@@ -52,7 +52,7 @@ export default async function Sidebar() {
             item={{
               name: item.workspace?.name,
               icon: () => <Users className="w-5 h-5" />,
-              path: `/home/${item.workspace._id}`,
+              path: `/workspace`,
             }}
             className="pl-4"
           />
