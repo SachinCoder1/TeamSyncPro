@@ -1,5 +1,5 @@
 import express from "express";
-import { MyDetails, getAssignedTasksInSelectedWorkspace, getLikedTasks, getMemberProfile, getQueriedTasksOfSelectedWorkspace, getStarredItems, getStarredProjects, getStarredWorkspaces, getWorkspaces, isStarred, starProject, starWorkspace, unstarProject, unstarWorkspace } from "~/controller/user";
+import { MyDetails, getAssignedTasksInSelectedWorkspace, getLikedTasks, getMemberProfile, getMemberShortProfile, getQueriedTasksOfSelectedWorkspace, getStarredItems, getStarredProjects, getStarredWorkspaces, getWorkspaces, isStarred, starProject, starWorkspace, unstarProject, unstarWorkspace } from "~/controller/user";
 import { authMiddleware } from "~/middleware";
 
 const router = express.Router();
@@ -10,6 +10,7 @@ router.get("/getQueriedTasks", authMiddleware, getQueriedTasksOfSelectedWorkspac
 router.get("/getLikedTasks", authMiddleware, getLikedTasks);
 router.get("/getMyWorkspaces", authMiddleware, getWorkspaces);
 router.get("/getMemberProfile/:id", authMiddleware, getMemberProfile);
+router.get("/getMemberShortProfile/:id", authMiddleware, getMemberShortProfile);
 router.get("/getStarredProjects", authMiddleware, getStarredProjects);
 router.get("/getStarredWorkspaces", authMiddleware, getStarredWorkspaces);
 router.patch("/starProject/:projectId", authMiddleware, starProject);

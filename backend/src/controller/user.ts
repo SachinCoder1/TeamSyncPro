@@ -378,6 +378,26 @@ export const getMemberProfile = async (req: Request, res: Response) => {
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
+export const getMemberShortProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await User.findById(userId)
+      .select("name email description profileImage createdAt")
+      .lean();
+
+    if (!user) {
+      return errorResponseHandler(res, "NOT_FOUND");
+    }
+
+    return successResponseHandler(res, "SUCCESS", {
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
 
 // get all the starred projects of a user
 

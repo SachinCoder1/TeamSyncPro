@@ -53,8 +53,10 @@ const UserAccountNav = async ({
 
       <DropdownMenuContent className="" align="end">
         <div className="flex gap-x-2">
-        <div className="w-40 py-1">
-            <Heading variant="h6" className="font-normal mb-2 px-1">Workspaces</Heading>
+          <div className="w-40 py-1">
+            <Heading variant="h6" className="font-normal mb-2 px-1">
+              Workspaces
+            </Heading>
             <MyWorkspaces />
           </div>
           <div className="border-l">
@@ -83,13 +85,11 @@ const UserAccountNav = async ({
 
             <DropdownMenuSeparator />
             <Link href={"/auth/signout"}>
-            <DropdownMenuItem className="cursor-pointer">
-             Log out
-            </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                Log out
+              </DropdownMenuItem>
             </Link>
           </div>
-
-         
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

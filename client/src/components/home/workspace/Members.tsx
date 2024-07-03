@@ -3,11 +3,18 @@
 import { Icons } from "@/components/Icon/Icons";
 import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn, getColorForName } from "@/lib/utils";
-import { MembersType } from "@/types";
-import { CircleUserRoundIcon, PlusCircleIcon } from "lucide-react";
+import { MembersType, ShortMemberType } from "@/types";
+import {
+  CalendarDays,
+  CircleUserRoundIcon,
+  MailIcon,
+  MoveRight,
+  MoveUpRightIcon,
+  PlusCircleIcon,
+} from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { ReactTags } from "react-tag-autocomplete";
 import AddMemberModal from "./AddMemberModal";
@@ -16,6 +23,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { getMemberProfile, getMemberShortProfile } from "@/app/actions/user";
+import { format } from "date-fns";
+import Link from "next/link";
 
 type Props = {
   members?: MembersType[];
@@ -32,7 +42,12 @@ type UserCardProps = {
   nameFallback?: string;
 };
 
-export const UserAvatarCard = ({ avatarClassName, src, id, name }: UserCardProps) => (
+export const UserAvatarCard = ({
+  avatarClassName,
+  src,
+  id,
+  name,
+}: UserCardProps) => (
   <Avatar className={cn(avatarClassName)}>
     <AvatarImage src={src ? src : ""} />
     <AvatarFallback
@@ -52,14 +67,23 @@ export const UserCard = ({
   nameFallback,
   className,
 }: UserCardProps) => {
+  const [loading, setLoading] = useState(false);
+  const [memberProfile, setMemberProfile] = useState<ShortMemberType | null>(
+    null
+  );
   const handleHover = async (isOpen: boolean) => {
+    if (memberProfile) return;
+    setLoading(true);
     if (isOpen === true && name) {
       console.log("open");
+      const profile = await getMemberShortProfile(id);
+      setMemberProfile(profile.data || null);
     }
 
     if (isOpen === false) {
       console.log("close");
     }
+    setLoading(false);
   };
   return (
     <div>
@@ -99,7 +123,50 @@ export const UserCard = ({
             </div>
           </div>
         </HoverCardTrigger>
-        {name && <HoverCardContent>hello</HoverCardContent>}
+        {name && (
+          <HoverCardContent className="w-max">
+            {loading && !memberProfile && <div>loading...</div>}
+            {memberProfile && (
+              <div className="flex gap-x-2 w-max h-max">
+                <UserAvatarCard
+                  id={memberProfile._id}
+                  name={memberProfile.name}
+                />
+                <div className="space-y-1 w-max h-max px-2">
+                  <div>
+                    <h4 className="text-sm font-semibold">
+                      @{memberProfile.name}
+                    </h4>
+                    {/* <Link href={`mailto:${memberProfile.email}`} className={cn(buttonVariants({size: "sm", variant: "link"}),"text-muted-foreground -pt-2")}> */}
+
+                    {/* </Link> */}
+                    <div className="flex items-center">
+                    <MailIcon className="mr-2 h-3 w-3 opacity-70" />{" "}
+                    <span className="text-xs text-muted-foreground">
+                      {memberProfile.email}
+
+                    </span>
+                  </div>
+                  </div>
+                  <div className="flex items-center py-2">
+                    <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
+                    <span className="text-xs text-muted-foreground">
+                      Joined{" "}
+                      {format(memberProfile?.createdAt || "", "MMMM yyyy")}
+                    </span>
+                  </div>
+                  <Link
+                  target="_blank"
+                    className={cn(buttonVariants({ variant: "outline" , size: "sm"}), "w-full items-center gap-x-2")}
+                    href={`/profile/${memberProfile._id}`}
+                  >
+                    View profile <MoveUpRightIcon className="text-muted-foreground" size={20} />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </HoverCardContent>
+        )}
       </HoverCard>
     </div>
   );

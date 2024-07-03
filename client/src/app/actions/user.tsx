@@ -4,7 +4,7 @@ import { BACKEND_URL } from "@/config";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
-import { MyTasksType, StarredDataType } from "@/types";
+import { MyTasksType, ShortMemberType, StarredDataType } from "@/types";
 import { ProjectType } from "@/stores/workspace-store";
 
 export const getMyTasks = async () => {
@@ -108,6 +108,26 @@ export const getMemberProfile = async (id: string) => {
     return { success: false };
   }
   return { success: true, data: data.data };
+};
+
+export const getMemberShortProfile = async (id: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/auth/signin");
+  const res = await fetch(`${BACKEND_URL}/user/getMemberShortProfile/${id}`, {
+    method: "GET",
+    headers: {
+      authorization: `Bearer ${session.accessToken.token}`,
+    },
+    // next: {tags: ['project']}
+  });
+  if (!res.ok) {
+    return { success: false };
+  }
+  const data = await res.json();
+  if (data.message !== "SUCCESS") {
+    return { success: false };
+  }
+  return { success: true, data: data.data.user as  ShortMemberType};
 };
 
 export const getStarredProjects = async () => {

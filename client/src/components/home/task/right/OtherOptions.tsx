@@ -83,6 +83,8 @@ export default function OtherOptions({ taskTitle,taskId,isRedirect=true }: Props
         }, 500);
       }
     }
+    setLoading(false);
+    setShowDeleteDialog(false);
   };
 
   const onSubmit = handleSubmit(async (data) => {

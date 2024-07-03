@@ -68,8 +68,13 @@ export type MyTasksType = {
   due?: Date;
   order: number;
 };
-
-
+export type ShortMemberType = {
+  _id: string;
+  name: string;
+  email: string;
+  profileImage?: string;
+  createdAt: Date;
+};
 
 export type StarredProjectType = {
   _id: string;
