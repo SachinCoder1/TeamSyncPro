@@ -121,7 +121,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="px-0 w-[400px]">
+        <PopoverContent className="px-0 py-0 w-[400px]">
           {/* <CommandDialog open={open} onOpenChange={setOpen}> */}
           <Command>
             <CommandInput
