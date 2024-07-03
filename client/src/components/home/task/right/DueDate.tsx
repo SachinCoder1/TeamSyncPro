@@ -65,6 +65,7 @@ export default function DueDate({ taskId, dueDate,isClearButton }: Props) {
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
+            size={"sm"}
             className={cn(
               "justify-start text-left font-normal items-center",
               !date && "text-muted-foreground"
@@ -74,7 +75,7 @@ export default function DueDate({ taskId, dueDate,isClearButton }: Props) {
             {date || dueDate ? (
               format(date || dueDate, "MMM dd")
             ) : (
-              <span>No due date</span>
+              <span className="text-xs">No due date</span>
             )}
           </Button>
         </PopoverTrigger>

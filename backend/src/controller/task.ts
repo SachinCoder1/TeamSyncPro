@@ -15,6 +15,14 @@ export const createTask = async (req: Request, res: Response) => {
     const { title, projectId, sectionId } = req.body;
     console.log("req.body:", req.body);
 
+    const section = await Section.findById(sectionId)
+      .select("title _id")
+      .lean();
+
+      if(!section){
+        return errorResponseHandler(res, "NOT_FOUND");
+      }
+
     const lastTaskInSection = await Task.findOne({
       project: projectId,
       section: sectionId,
@@ -31,6 +39,10 @@ export const createTask = async (req: Request, res: Response) => {
       section: sectionId,
       order: newOrder,
       taskCreator: req.user?.id,
+      status: {
+        sectionId: sectionId,
+        title: section?.title,
+      },
     });
 
     await Section.findByIdAndUpdate(sectionId, {
@@ -198,7 +210,13 @@ export const removeDueDateFromTask = async (req: Request, res: Response) => {
 
 export const reorderTask = async (req: Request, res: Response) => {
   try {
-    const { taskId, beforeTaskId, afterTaskId } = req.body;
+    const {
+      taskId,
+      beforeTaskId,
+      afterTaskId,
+      beforeSectionId,
+      afterSectionId,
+    } = req.body;
 
     const beforeTask = beforeTaskId
       ? await Task.findById(beforeTaskId).lean()
@@ -207,31 +225,57 @@ export const reorderTask = async (req: Request, res: Response) => {
     const afterTask = afterTaskId
       ? await Task.findById(afterTaskId).lean()
       : null;
+
+    const newOrder = calculateNewOrder(
+      beforeTask ? beforeTask.order : null,
+      afterTask ? afterTask.order : null
+    );
     console.log(
       "task:",
       taskId,
       "beforeTask",
       beforeTaskId,
       "afterTaskId",
-      afterTaskId
-    );
-
-    const newOrder = calculateNewOrder(
-      beforeTask ? beforeTask.order : null,
-      afterTask ? afterTask.order : null
+      afterTaskId,
+      "before sectionid",
+      beforeSectionId,
+      "after section id:",
+      afterSectionId
     );
     console.log("new order:", newOrder);
 
-    const task = await Task.findByIdAndUpdate(
-      taskId,
-      { order: newOrder },
-      { new: true }
-    ).lean();
+    // in between the tasks of one section
+    if (!beforeSectionId && !afterSectionId) {
+      const task = await Task.findByIdAndUpdate(
+        taskId,
+        { order: newOrder },
+        { new: true }
+      ).lean();
 
-    if (!task) {
-      return errorResponseHandler(res, "NOT_FOUND");
+      if (!task) {
+        return errorResponseHandler(res, "NOT_FOUND");
+      }
+
+      return successResponseHandler(res, "UPDATED", { task });
     }
 
+    const section = await Section.findById(afterSectionId)
+      .select("_id title")
+      .lean();
+
+    const task = await Task.findByIdAndUpdate(taskId, {
+      section: section?._id,
+      status: { title: section?.title, sectionId: section?._id },
+      order: newOrder,
+    }).lean();
+
+    await Section.findByIdAndUpdate(task?.section, {
+      $pull: { tasks: task?._id },
+    });
+
+    await Section.findByIdAndUpdate(afterSectionId, {
+      $addToSet: { tasks: task?._id },
+    });
     return successResponseHandler(res, "UPDATED", { task });
   } catch (error) {
     console.log("error occured:", error);

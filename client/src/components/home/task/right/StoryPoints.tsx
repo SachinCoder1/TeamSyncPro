@@ -11,15 +11,18 @@ import React, { useState } from "react";
 type Props = {
   taskId: string;
   point?: number;
+  defaultLabel?: string;
 };
 
-const StoryPoints = ({ taskId, point }: Props) => {
+const StoryPoints = ({ taskId, point,defaultLabel }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pointsValue, setPointsValue] = useState();
+  const [optimisticPoints, setOptimisticPoints] = useState();
 
   const handleStoryPointClick = async () => {
     setIsEditing(false);
     if (Number(pointsValue) === point) return;
+    setOptimisticPoints(pointsValue)
     const update = await updateTask(taskId, {
       storyPoints: Number(pointsValue),
     });
@@ -31,10 +34,11 @@ const StoryPoints = ({ taskId, point }: Props) => {
     <div>
       {!isEditing && (
         <Badge
-          variant={point ? "default" : "secondary"}
+        className="py-0.5 px-1"
+          variant={point || optimisticPoints ? "default" : "secondary"}
           onClick={() => setIsEditing(true)}
         >
-          {point || "None"}
+          {point || optimisticPoints ||  defaultLabel ||  "None"}
         </Badge>
       )}
 

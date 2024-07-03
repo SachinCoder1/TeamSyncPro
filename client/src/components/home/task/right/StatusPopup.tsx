@@ -29,6 +29,7 @@ type Props = {
   label?: string;
 };
 export default function StatusBarDropdown({ status,taskId }: Props) {
+  console.log("status:", status)
   const params = useParams();
   const { data, error, isLoading } = useSWR<{
     success: boolean;
@@ -55,7 +56,7 @@ export default function StatusBarDropdown({ status,taskId }: Props) {
           status?.title === "todo" && "bg-secondary"
         )}
       >
-        <SelectValue />
+        <SelectValue placeholder="status" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

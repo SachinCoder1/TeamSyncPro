@@ -158,6 +158,7 @@ export const validateReOrderTaskBody = (
 ) => {
   try {
     const data = req.body;
+    console.log("data inside reorder........................:", data)
     const schema = Joi.object({
       taskId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -168,6 +169,14 @@ export const validateReOrderTaskBody = (
         .allow(null, ""), // Allow null or empty string
 
       afterTaskId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .allow(null, ""),
+      beforeSectionId: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .allow(null, ""),
+      afterSectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .allow(null, ""),

@@ -498,7 +498,9 @@ export const updateComment = async (commentId: string, comment: string) => {
 export const reorderTaskInBetween = async (
   taskId: string,
   beforeTaskId: string,
-  afterTaskId: string
+  afterTaskId: string,
+  beforeSectionId?: string,
+  afterSectionId?: string,
 ) => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/signin");
@@ -513,6 +515,8 @@ export const reorderTaskInBetween = async (
       taskId,
       beforeTaskId,
       afterTaskId,
+      beforeSectionId: beforeSectionId || "",
+      afterSectionId: afterSectionId || "",
     }),
     // next: {tags: ['project']}
   });

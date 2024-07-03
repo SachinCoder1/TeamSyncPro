@@ -199,16 +199,31 @@ export function ListContainer({
         console.log("updation data between sections:", destinationList.tasks);
         const beforeTaskId =
           destination.index > 0
-            ? destinationList.tasks[destination.index - 1]
+            ? destinationList.tasks[destination.index - 1]?._id
             : null;
         console.log("beforeTaskId: ", beforeTaskId);
         const afterTaskId =
           destination.index < destinationList.tasks.length - 1
-            ? destinationList.tasks[destination.index + 1]
+            ? destinationList.tasks[destination.index + 1]?._id
             : null;
         console.log("afterTaskId: ", afterTaskId);
-        const currentTaskId = destinationList.tasks[destination.index];
+        const currentTaskId = destinationList.tasks[destination.index]?._id;
         console.log("currentTaskId: ", currentTaskId);
+
+        setLoading(true);
+        const isReordered = await reorderTaskInBetween(
+          currentTaskId,
+          beforeTaskId,
+          afterTaskId,
+          source.droppableId,
+          destination.droppableId
+        );
+        if (isReordered.success) {
+          revalidateTagServer("project");
+        }
+        console.log("isReordered:", isReordered);
+        setLoading(false);
+
 
         // mutateUpdateCardOrder({ boardId, items: destinationList.tasks })
       }

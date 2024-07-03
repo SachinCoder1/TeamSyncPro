@@ -92,7 +92,7 @@ export const onboardUser = async (req: Request, res: Response) => {
     const createdTasks = tasks.map((task: string, index: number) => new Task({
       title: task,
       project: project._id,
-      order: index,
+      order: index+1,
       taskCreator: user._id,
       section: null,  // Placeholder for now
     }));
@@ -101,7 +101,7 @@ export const onboardUser = async (req: Request, res: Response) => {
       (section: string, index: number) => ({
         title: section,
         project: project._id,
-        order: index,
+        order: index+1,
         tasks: index === 0 ? createdTasks.map((item: any) => item._id) : [],
       })
     );
@@ -111,7 +111,7 @@ export const onboardUser = async (req: Request, res: Response) => {
     const createdSections = sections.map((section: string, index: number) => new Section({
       title: section,
       project: project._id,
-      order: index,
+      order: index+1,
       tasks: [],
     }));
 
