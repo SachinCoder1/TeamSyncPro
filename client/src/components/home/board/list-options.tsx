@@ -1,98 +1,171 @@
-'use client'
+"use client";
 
 // import { List } from '@prisma/client'
-import { MoreHorizontal, X } from 'lucide-react'
-import { ElementRef, useRef } from 'react'
-import { toast } from 'sonner'
+import { MoreHorizontal, PlusIcon, X } from "lucide-react";
+import { ElementRef, useRef, useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
-import { PopoverClose } from '@radix-ui/react-popover'
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { copySection, deleteSection } from "@/app/actions/section";
+import revalidateTagServer from "@/app/actions/actions";
+import TooltipWrapper from "@/components/TooltipWrapper";
+import DeleteModal from "@/components/ui/DeleteModal";
+import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
+import { Icons } from "@/components/Icon/Icons";
 // import { trpc } from '@/trpc/client'
 
 type ListOptionsProps = {
-  data: any
-  refetchLists: any
-  onAddCart: () => void
-}
+  data: any;
+  refetchLists: any;
+  onAddCart: () => void;
+  setEnableRename: (bool: boolean) => void;
+};
 
-export function ListOptions({ data, refetchLists, onAddCart }: ListOptionsProps) {
-  const closeRef = useRef<ElementRef<'button'>>(null)
+export function ListOptions({
+  data,
+  refetchLists,
+  onAddCart,
+  setEnableRename,
+}: ListOptionsProps) {
+  const closeRef = useRef<ElementRef<"button">>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // const { mutate: mutateCopy, isLoading: isLoadingCopy } = trpc.list.copyList.useMutation({
-  //   onSuccess: ({ list }) => {
-  //     toast.success(`List "${list.title}" copied`)
-  //     closeRef.current?.click()
-  //     refetchLists()
-  //   },
-  //   onError: (err) => {
-  //     toast.error(err.message)
-  //   },
-  // })
+  const onCopy = async () => {
+    setLoading(true);
+    console.log("data:", data);
+    const isCopied = await copySection(data.project, data._id);
+    console.log("is copied:", isCopied);
+    if (isCopied.success) {
+      toast.success("Section copied");
+      revalidateTagServer("project");
+      setOpen(false);
+    }
 
-  // const { mutate: mutateDelete, isLoading: isLoadingDelete } = trpc.list.deleteList.useMutation({
-  //   onSuccess: (list) => {
-  //     toast.success(`List "${list.title}" deleted`)
-  //     closeRef.current?.click()
-  //     refetchLists()
-  //   },
-  //   onError: (err) => {
-  //     toast.error(err.message)
-  //   },
-  // })
+    setLoading(false);
+  };
 
-  const onCopy = () => {
-    // mutateCopy({ id: data.id, boardId: data.boardId })
-  }
+  const onDelete = async () => {
+    setLoading(true);
+    console.log("data:", data);
+    const isDeleted = await deleteSection(data.project, data._id);
+    console.log("is deleted:", isDeleted);
+    if (isDeleted.success) {
+      toast.success("Section deleted");
+      setShowDeleteDialog(false);
+      setLoading(false);
+      revalidateTagServer("project");
+    }
 
-  const onDelete = () => {
-    // mutateDelete({ id: data.id, boardId: data.boardId })
-  }
+    setLoading(false);
+  };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button className="h-auto w-auto p-2" variant="ghost">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="px-0 pb-3 pt-3" side="bottom" align="start">
-        <div className="pb-4 text-center text-sm font-medium text-neutral-600">List actions</div>
-        <PopoverClose asChild ref={closeRef}>
-          <Button
-            className="absolute right-2 top-2 h-auto w-auto p-2 text-neutral-600"
-            variant="ghost"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </PopoverClose>
-
+    <div>
+      <div className="flex items-center">
         <Button
           onClick={onAddCart}
-          className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal"
+          className="h-auto w-full justify-start rounded-none p-2 text-sm font-normal"
           variant="ghost"
         >
-          Add card...
+          <TooltipWrapper
+            trigger={<PlusIcon size={20} className="text-muted-foreground" />}
+          >
+            Add task
+          </TooltipWrapper>
         </Button>
-        <Button
-          className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal"
-          variant="ghost"
-          // disabled={isLoadingCopy}
-          onClick={onCopy}
-        >
-          Copy list...
-        </Button>
-        <Separator />
-        <Button
-          className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal"
-          variant="ghost"
-          // disabled={isLoadingDelete}
-          onClick={onDelete}
-        >
-          Delete this list...
-        </Button>
-      </PopoverContent>
-    </Popover>
-  )
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button className="h-auto w-auto p-2" variant="ghost">
+              <TooltipWrapper trigger={<MoreHorizontal className="h-4 w-4" />}>
+                More actions
+              </TooltipWrapper>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="px-0 pb-3 pt-3"
+            side="bottom"
+            align="start"
+          >
+            <div className="pb-2 pl-4 text-left text-sm font-medium text-neutral-600">
+              Actions
+            </div>
+            <PopoverClose asChild ref={closeRef}>
+              <Button
+                className="absolute right-2 top-2 h-auto w-auto p-2 text-neutral-600"
+                variant="ghost"
+              >
+                <TooltipWrapper trigger={<X className="h-4 w-4" />}>
+                  Close
+                </TooltipWrapper>
+              </Button>
+            </PopoverClose>
+
+            <Button
+              onClick={onAddCart}
+              className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal"
+              variant="ghost"
+            >
+              Add task...
+            </Button>
+            <Button
+              onClick={() => setEnableRename(true)}
+              className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal"
+              variant="ghost"
+            >
+              Rename section...
+            </Button>
+            <Button
+              className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal"
+              variant="ghost"
+              // disabled={isLoadingCopy}
+              onClick={() => setOpen(true)}
+            >
+              Copy this section
+            </Button>
+            <Separator />
+            <Button
+              className="h-auto w-full justify-start rounded-none p-2 px-5 text-sm font-normal text-destructive hover:text-destructive"
+              variant="ghost"
+              // disabled={isLoadingDelete}
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Delete this section
+            </Button>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <DeleteModal
+        description="This action cannot be undone. This section will no longer be accessible by you or others you've shared it with."
+        title="Delete this section?"
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        handleClick={onDelete}
+        isLoading={loading}
+      />
+
+      <ResponsiveModal
+        open={open}
+        setOpen={setOpen}
+        title="Copy this section"
+        description="This will copy everything the section have except the id"
+      >
+        <div className="flex items-start justify-end w-full">
+          <Button className="w-full md:w-fit" disabled={loading} onClick={onCopy}>
+            {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            Copy section
+          </Button>
+        </div>
+      </ResponsiveModal>
+    </div>
+  );
 }

@@ -172,8 +172,10 @@ export const copySection = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
+    console.log("copying section:", id)
 
     const originalSection = await Section.findById(id).populate("tasks").lean();
+    // console.log("orignial section:", originalSection)
     if (!originalSection) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
@@ -208,13 +210,12 @@ export const copySection = async (req: Request, res: Response) => {
     // Copy and reassign tasks from the original section
 
     const copiedTasks = originalSection.tasks.map((task: any) => {
+      console.log("task:", task)
       return {
         title: `${task.title} (Copy)`,
         order: task.order,
-        due: {
-          from: task?.due?.from,
-          to: task?.due?.to,
-        },
+        section: newSection._id,  // Assign the new section ID here
+        due: task.due,
         storyPoints: task?.storyPoints,
         description: task?.description,
         tags: task?.tags,
@@ -222,7 +223,10 @@ export const copySection = async (req: Request, res: Response) => {
         project: project._id,
         taskCreator: task?.taskCreator,
         priority: task?.priority,
-        status: task?.status,
+        status: {
+          ...task.status,
+          sectionId: newSection._id  // Update the status to reference the new section ID
+        },
       };
     });
 
@@ -230,7 +234,8 @@ export const copySection = async (req: Request, res: Response) => {
 
     // Update the project to include the new section
     const ids = insertedTasks.map((task) => task._id);
-    newSection.tasks.push(ids as any);
+    console.log("ids:", ids)
+    newSection.tasks.push(...ids as any);
     project.sections.push(newSection._id);
     await project.save();
     await newSection.save();

@@ -17,6 +17,7 @@ export const validateObjectIDParam = (
   next: NextFunction
 ) => {
   try {
+    console.log("req.params:", req.params)
     const { error } = objectIdSchema.validate(req.params);
 
     if (error) {

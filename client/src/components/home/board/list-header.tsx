@@ -145,6 +145,7 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
 
       <ListOptions
         data={data}
+        setEnableRename={setIsEditing}
         onAddCart={onAddCard}
         refetchLists={refetchLists}
       />
