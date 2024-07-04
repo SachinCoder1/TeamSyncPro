@@ -36,8 +36,6 @@ export const restrictsToWorkspace =
         return errorResponseHandler(res, "NOT_FOUND");
       }
 
-      console.log("workspace", workspace)
-
       const userRoles: Role[] = [];
       if (workspace.admin?.equals(userId)) {
         userRoles.push(ROLES.ADMIN);
@@ -45,7 +43,6 @@ export const restrictsToWorkspace =
       if (workspace.members.some((member) => member.equals(userId))) {
         userRoles.push(ROLES.MEMBER);
       }
-      console.log("userRoles", userRoles)
 
       // Update cache with the roles found
       if (userRoles.length > 0) {

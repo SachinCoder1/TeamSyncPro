@@ -13,7 +13,6 @@ import { UpdateTaskBody } from "~/types";
 export const createTask = async (req: Request, res: Response) => {
   try {
     const { title, projectId, sectionId } = req.body;
-    console.log("req.body:", req.body);
 
     const section = await Section.findById(sectionId)
       .select("title _id")
@@ -53,14 +52,11 @@ export const createTask = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "CREATED", { task });
   } catch (error) {
-    console.log("err: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
 
 export const updateTask = async (req: Request, res: Response) => {
-  console.log("req.params:", req.params);
-  console.log("req.body:", req.body);
   try {
     const { taskId } = req.params;
     const { title, description, priority, storyPoints } =
@@ -173,7 +169,6 @@ export const addDueDateToTask = async (req: Request, res: Response) => {
     const { taskId } = req.params;
     const { dueDate } = req.body;
 
-    console.log("due date:", req.body);
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -192,7 +187,6 @@ export const addDueDateToTask = async (req: Request, res: Response) => {
 export const removeDueDateFromTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    console.log("remove due date..", taskId);
 
     const task = await Task.findByIdAndUpdate(
       taskId,
@@ -230,19 +224,6 @@ export const reorderTask = async (req: Request, res: Response) => {
       beforeTask ? beforeTask.order : null,
       afterTask ? afterTask.order : null
     );
-    console.log(
-      "task:",
-      taskId,
-      "beforeTask",
-      beforeTaskId,
-      "afterTaskId",
-      afterTaskId,
-      "before sectionid",
-      beforeSectionId,
-      "after section id:",
-      afterSectionId
-    );
-    console.log("new order:", newOrder);
 
     // in between the tasks of one section
     if (!beforeSectionId && !afterSectionId) {
@@ -278,7 +259,6 @@ export const reorderTask = async (req: Request, res: Response) => {
     });
     return successResponseHandler(res, "UPDATED", { task });
   } catch (error) {
-    console.log("error occured:", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -318,21 +298,13 @@ export const copyTask = async (req: Request, res: Response) => {
       updatedAt: new Date(),
     };
 
-    console.log("adding...");
 
     const newTask = new Task(newTaskData);
     await newTask.save();
 
-    console.log("added...");
 
     // If the original task is associated with a section, update that section's tasks array
     if (originalTask.section) {
-      console.log(
-        "updating...",
-        originalTask.section,
-        "new task id:",
-        newTask._id
-      );
       await Section.findByIdAndUpdate(originalTask.section, {
         $push: { tasks: newTask._id },
       });
@@ -340,7 +312,6 @@ export const copyTask = async (req: Request, res: Response) => {
 
     return successResponseHandler(res, "CREATED", { task: newTask });
   } catch (error) {
-    console.log("err: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -386,10 +357,8 @@ export const createSubTask = async (req: Request, res: Response) => {
 export const deleteTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    console.log("deleting task:", taskId);
 
     const task = await Task.findByIdAndDelete(taskId).lean(); // delete the task
-    console.log("task:", task)
     if (!task) return errorResponseHandler(res, "NOT_FOUND");
 
     return successResponseHandler(res, "DELETED", {
@@ -563,25 +532,21 @@ export const addTag = async (req: Request, res: Response) => {
   try {
     const { name, color, workspaceId, taskId, tagId } = req.body;
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    console.log("req.body: ", req.body);
 
     const tag = await Tag.findOne({ workspace: workspaceId, name });
     if (tag) {
-      console.log("tag is already there..", tag);
       await Task.findByIdAndUpdate(taskId, {
         $addToSet: { tags: tag._id },
       });
       return successResponseHandler(res, "CREATED", { tag: tag });
     }
 
-    console.log("no tag found.. creating");
 
     const newTag = new Tag({
       name,
       color: color || randomColor,
       workspace: workspaceId,
     });
-    console.log("tag: ", tag);
 
     await newTag.save();
     await Task.findByIdAndUpdate(taskId, {
@@ -597,7 +562,6 @@ export const addTag = async (req: Request, res: Response) => {
 export const removeTag = async (req: Request, res: Response) => {
   try {
     const { taskId, tagId } = req.params;
-    console.log("req.params remove tag: ", req.params);
 
     await Task.findByIdAndUpdate(taskId, {
       $pull: { tags: tagId },
@@ -634,7 +598,6 @@ export const getTask = async (req: Request, res: Response) => {
     if (!task) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
-    console.log("task:", task);
 
     return successResponseHandler(res, "SUCCESS", { task });
   } catch (error) {

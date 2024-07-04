@@ -38,7 +38,6 @@ export const createWorkspace = async (req: Request, res: Response) => {
   try {
     const adminId = req.user?.id;
     const { name, membersEmails } = req.body;
-    console.log("req.body on create worksapace................", req.body);
     const workspace = new Workspace({
       name: name,
       admin: adminId,
@@ -102,7 +101,6 @@ export const createWorkspace = async (req: Request, res: Response) => {
       invitations,
     });
   } catch (error) {
-    console.log("error.. failed..", error)
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -235,7 +233,6 @@ export const deleteWorkspace = async (req: Request, res: Response) => {
 export const getWorkspaceById = async (req: Request, res: Response) => {
   try {
     const { workspaceId } = req.params;
-    console.log("api calledd..");
     const workspace = await Workspace.findById(workspaceId)
       .populate({
         path: "members",
@@ -249,7 +246,6 @@ export const getWorkspaceById = async (req: Request, res: Response) => {
       .select("-updatedAt")
       .lean();
 
-      console.log("projects.....................................................................................:", workspace?.projects)
  
     if (!workspace) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -259,7 +255,6 @@ export const getWorkspaceById = async (req: Request, res: Response) => {
       workspace,
     });
   } catch (error) {
-    console.log("error: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -271,7 +266,6 @@ export const getWorkspaceTags = async (req: Request, res: Response) => {
     })
       .select("-updatedAt -workspace")
       .lean();
-    console.log("tags: ", tags);
 
     if (!tags) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -281,7 +275,6 @@ export const getWorkspaceTags = async (req: Request, res: Response) => {
       tags,
     });
   } catch (error) {
-    console.log("error: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };

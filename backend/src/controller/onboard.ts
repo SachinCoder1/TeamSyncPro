@@ -32,7 +32,6 @@ export const createDefaultWorkspace = async (req: Request, res: Response) => {
 export const onboardUser = async (req: Request, res: Response) => {
   try {
     const { projectName, tasks, sections } = req.body;
-    console.log("req.body", req.body)
     const userId = req.user?.id;
     const user = await User.findById(userId).select("-password");
     if (!user) return errorResponseHandler(res, "NOT_FOUND");
@@ -77,8 +76,6 @@ export const onboardUser = async (req: Request, res: Response) => {
       members: [userId]
     });
 
-    console.log("project", project)
-    console.log("tasks", tasks)
 
     const refractoredTask = tasks.map((task: string, index: number) => ({
       title: task,
@@ -152,7 +149,7 @@ export const onboardUser = async (req: Request, res: Response) => {
       createdTasks,
     });
   } catch (error) {
-    console.log("error", error)
+    console.log("error:", error)
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };

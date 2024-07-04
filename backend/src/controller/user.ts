@@ -172,7 +172,6 @@ export const getQueriedTasksOfSelectedWorkspace = async (
   try {
     const userId = req.user?.id;
     const { searchTerm } = req.query;
-    console.log("search term:", searchTerm);
     if (!searchTerm) {
       return successResponseHandler(res, "SUCCESS", { tasks: [] });
     }
@@ -219,8 +218,6 @@ export const getQueriedTasksOfSelectedWorkspace = async (
       .select("title due status priority workflow done order description _id")
       .lean();
 
-    console.log("filter: ", filter);
-    console.log("tasks: ", tasks);
 
     return successResponseHandler(res, "SUCCESS", { tasks });
   } catch (error) {
@@ -429,7 +426,6 @@ export const getStarredProjects = async (req: Request, res: Response) => {
       "name color icon"
     ).lean();
 
-    console.log("projects in starred.........:", projects);
 
     return successResponseHandler(res, "SUCCESS", { projects });
   } catch (error) {
@@ -476,13 +472,6 @@ export const getStarredItems = async (req: Request, res: Response) => {
       workspace: user.selectedWorkspace,
       project: { $exists: true },
     }).populate("project", "name _id color");
-
-    console.log(
-      "selectedWorkspace:",
-      user.selectedWorkspace,
-      "starred projects",
-      starredProjects
-    );
 
     const starredWorkspaces = await StarredItem.find({
       user: userId,
@@ -541,7 +530,6 @@ export const starProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const projectId = req.params.projectId;
-    console.log("project id in the star project: ", projectId);
     const user = await User.findById(userId);
 
     const starred = new StarredItem({
@@ -561,7 +549,6 @@ export const updateSelectedWorkspace = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const workspaceId = req.params.workspaceId;
-    console.log("workspace id in the update selected workapce: ", workspaceId);
     await User.findByIdAndUpdate(userId, {
       selectedWorkspace: workspaceId,
     });
@@ -577,7 +564,6 @@ export const isStarred = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id, type } = req.params;
-    console.log("req.params..................", req.params);
     // const user = await User.findById(userId);
 
     if (!["project", "workspace"].includes(type)) {
@@ -607,7 +593,6 @@ export const unstarProject = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { projectId } = req.params;
-    console.log("project id in the un star project: ", projectId);
 
     const user = await User.findById(userId);
 

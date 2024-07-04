@@ -58,7 +58,6 @@ export const validateTaskIdParam = (
 ) => {
   try {
     const data = req.params;
-    console.log("delete task:", req.params)
     const schema = Joi.object({
       taskId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -159,7 +158,6 @@ export const validateReOrderTaskBody = (
 ) => {
   try {
     const data = req.body;
-    console.log("data inside reorder........................:", data)
     const schema = Joi.object({
       taskId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -198,7 +196,6 @@ export const validateAddCommentBody = (
   next: NextFunction
 ) => {
   try {
-    console.log("validating comment body", req.body);
     const data = req.body;
     const schema = Joi.object({
       taskId: Joi.string()
@@ -245,7 +242,6 @@ export const validateDeleteCommentParam = (
   next: NextFunction
 ) => {
   try {
-    console.log("delete comment", req.params);
     const data = req.params;
     const schema = Joi.object({
       commentId: Joi.string()

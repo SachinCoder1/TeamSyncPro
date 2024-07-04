@@ -55,7 +55,6 @@ export const updateSection = async (req: Request, res: Response) => {
     const userId = req.user?.id; // Assuming middleware sets `req.user`
     const { title } = req.body; // Assuming section ID and new name are sent in the request body
     const id = req.params.id;
-    console.log("updating title:", title, "id:", id )
     // if (!sectionId || !newName) {
     //   return errorResponseHandler(res, "MISSING_REQUIRED_FIELDS");
     // }
@@ -152,7 +151,6 @@ export const reorderSection = async (req: Request, res: Response) => {
       afterSection ? afterSection.order : null
     );
  
-    console.log("new order:", newOrder, req.params)
 
     const updatedSection = await Section.findByIdAndUpdate(
       sectionId,
@@ -174,10 +172,8 @@ export const copySection = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id } = req.params;
-    console.log("copying section:", id)
 
     const originalSection = await Section.findById(id).populate("tasks").lean();
-    // console.log("orignial section:", originalSection)
     if (!originalSection) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
@@ -212,7 +208,6 @@ export const copySection = async (req: Request, res: Response) => {
     // Copy and reassign tasks from the original section
 
     const copiedTasks = originalSection.tasks.map((task: any) => {
-      console.log("task:", task)
       return {
         title: `${task.title} (Copy)`,
         order: task.order,
@@ -236,7 +231,6 @@ export const copySection = async (req: Request, res: Response) => {
 
     // Update the project to include the new section
     const ids = insertedTasks.map((task) => task._id);
-    console.log("ids:", ids)
     newSection.tasks.push(...ids as any);
     project.sections.push(newSection._id);
     await project.save();
@@ -250,7 +244,6 @@ export const copySection = async (req: Request, res: Response) => {
       section: populateSection,
     });
   } catch (error) {
-    console.log("Error copying section: ", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };

@@ -178,7 +178,6 @@ export const inviteMembersToProject = async (req: Request, res: Response) => {
 export const checkInvitation = async (req: Request, res: Response) => {
   try {
     const { invitationToken } = req.params;
-    console.log("invitation token:", invitationToken)
     const invitation = await Invitation.findOne({
       invitation_token: invitationToken,
     })
@@ -196,7 +195,6 @@ export const checkInvitation = async (req: Request, res: Response) => {
       email: invitation?.invited_to,
     });
 
-    console.log("invitation...................: ", invitation);
 
     if (!invitation) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -221,7 +219,6 @@ export const acceptWorkspaceInvitation = async (
 ) => {
   try {
     const { invitationToken } = req.body;
-    console.log("invitation token:", req.body);
     if (!invitationToken) return errorResponseHandler(res, "NOT_FOUND");
 
     // Find the invitation by token
@@ -229,7 +226,6 @@ export const acceptWorkspaceInvitation = async (
       invitation_token: invitationToken,
     });
 
-    console.log("invitation...................: ", invitation);
 
     if (!invitation) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -241,11 +237,7 @@ export const acceptWorkspaceInvitation = async (
 
     // Find or create the user
     let user = await User.findOne({ email: invitation.invited_to });
-    console.log("user:", user);
-    console.log("type of user.id:", typeof user?._id);
-    console.log("type of req.user.id:", typeof req.user?.id);
     if (!user || user._id != req.user?.id) {
-      console.log("matched...", user, "req.user:", req.user);
       return errorResponseHandler(res, "CONFLICT");
     }
     // if (!user) {
@@ -264,7 +256,6 @@ export const acceptWorkspaceInvitation = async (
 
     // Add the user to the workspace's members
     const workspace = await Workspace.findById(invitation.workspace);
-    console.log("workspace: ", workspace);
     if (!workspace) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
@@ -295,13 +286,11 @@ export const acceptWorkspaceInvitation = async (
 export const getInvites = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    console.log("id: ", id);
     const invitations = await Invitation.find({
       $or: [{ workspace: id }, { project: id }],
     })
       .populate("invited_from", "name _id profileImage")
       .select("-invitation_token -project -workspace");
-    console.log("invitations: ", invitations);
     return successResponseHandler(res, "SUCCESS", invitations);
   } catch (error) {
     console.error("error: ", error);

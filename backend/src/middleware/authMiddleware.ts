@@ -46,10 +46,8 @@ export const authMiddleware = async (
 
 export const authRefreshMiddleware = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
-  console.log("refreshing...")
 
   if (!authHeader) {
-    console.log("no auth header")
     return res.status(401).send("Unauthorized: Token missing");
   }
 
