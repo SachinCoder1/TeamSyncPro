@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { BuildingIcon, PlusIcon } from "lucide-react";
 import MyWorkspacesCard from "../Navbar/MyWorkspacesCard";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 type Props = {
   name: string;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 const Workspaces = ({ id, name, selected, workspaces }: Props) => {
+  const router = useRouter();
   const [accordionOpen, setAccordionOpen] = useState("");
 
   const handleAccordionCollapse = () => {
@@ -33,6 +35,11 @@ const Workspaces = ({ id, name, selected, workspaces }: Props) => {
       return;
     }
     setAccordionOpen(value);
+  };
+
+  const handleAddWorkspace = () => {
+    handleAccordionCollapse();
+    router.push("/workspace/new");
   };
 
   return (
@@ -60,7 +67,10 @@ const Workspaces = ({ id, name, selected, workspaces }: Props) => {
           </AccordionTrigger>
           <AccordionContent className="pt-1 text-neutral-700">
             {workspaces?.map((item, index) => (
-              <div key={`${item._id}:${index}`} onClick={handleAccordionCollapse}>
+              <div
+                key={`${item._id}:${index}`}
+                onClick={handleAccordionCollapse}
+              >
                 <MyWorkspacesCard
                   key={item._id}
                   selectedWorkspace={selected}
@@ -68,14 +78,29 @@ const Workspaces = ({ id, name, selected, workspaces }: Props) => {
                 />
               </div>
             ))}
+
             <Button
               variant={"ghost"}
+              onClick={handleAddWorkspace}
+              className={cn(
+                "w-full justify-between items-center gap-x-2 px-2 text-sm font-normal"
+              )}
+            >
+              <div className="flex gap-x-2">
+                {/* <BuildingIcon size={20} /> */}
+              <PlusIcon size={20} className="text-muted-foreground" />
+                New workspace
+              </div>
+            </Button>
+
+            {/* <Button
+              variant={"ghost"}
               className="flex gap-x-2"
-              onClick={handleAccordionCollapse}
+              onClick={handleAddWorkspace}
             >
               <PlusIcon size={20} className="text-muted-foreground" /> New
               workspace
-            </Button>
+            </Button> */}
           </AccordionContent>
         </AccordionItem>
       </Accordion>

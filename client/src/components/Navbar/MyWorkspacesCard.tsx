@@ -8,6 +8,7 @@ import { BuildingIcon, CheckIcon } from "lucide-react";
 import revalidateTagServer from "@/app/actions/actions";
 import { useSession } from "next-auth/react";
 import { updateSelectedWorkspace } from "@/app/actions/user";
+import { useRouter } from "next/navigation";
 
 type Props = {
   item: {
@@ -18,6 +19,7 @@ type Props = {
 };
 
 const MyWorkspacesCard = ({ item, selectedWorkspace }: Props) => {
+  const router = useRouter();
   const { update } = useSession();
 
   const handleClick = async (id: string) => {
@@ -27,6 +29,8 @@ const MyWorkspacesCard = ({ item, selectedWorkspace }: Props) => {
     });
     await updateSelectedWorkspace(id);
     revalidateTagServer("workspace");
+    router.push("/workspace");
+
   };
   return (
     <Button

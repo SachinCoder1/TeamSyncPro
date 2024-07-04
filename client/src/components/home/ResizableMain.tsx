@@ -19,7 +19,9 @@ export default function ResizableMain({ children }: Props) {
         maxSize={20}
         minSize={10}
       >
+        <ScrollArea className="h-[calc(100vh-56px)]">
         <Sidebar />
+        </ScrollArea>
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel
