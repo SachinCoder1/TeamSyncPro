@@ -1,4 +1,6 @@
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 import { getQueryParam } from "@/lib/utils";
 import { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
@@ -79,6 +81,7 @@ export const authOptions: NextAuthOptions = {
           return user.data;
         } catch (error) {
           console.log("error: ", error);
+          return false;
         }
       },
     }),

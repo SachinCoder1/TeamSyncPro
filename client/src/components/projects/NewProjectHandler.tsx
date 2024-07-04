@@ -1,6 +1,6 @@
 "use client";
 
-import revalidateTagServer from "@/app/actions/actions";
+import revalidateTagServer, { revalidatePathServer } from "@/app/actions/actions";
 import { createProject } from "@/app/actions/project";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
@@ -12,6 +12,8 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { getWorkspace } from "@/app/actions/workspace";
 
 type Props = {
   workspaceId: string;
@@ -40,17 +42,18 @@ const NewProjectHandler = ({ workspaceId }: Props) => {
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
-    const isCreated = await createProject(data.title, workspaceId);
+    const isCreated = await createProject(data.title);
     if (isCreated.success) {
-      revalidateTagServer("workspace");
       toast.success("project created", {
-        description: "Please wait while we redirect you..."
+        description: "Please wait while we redirect you...",
       });
     }
 
     handleReset();
     console.log("iscreated", isCreated);
-    router.push(`/home/${workspaceId}/${isCreated.project?._id}`);
+    revalidateTagServer("workspace")
+    revalidatePathServer("/(home)", "layout")
+    router.push(`/home/${isCreated.project?._id}`);
   });
 
   return (

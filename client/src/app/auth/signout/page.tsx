@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { signOut } from "next-auth/react";
 
 export default function SignoutPage() {
-    // const session = getServerSession(authOptions);
+    // const session = getServerAuth();
     // if(session){
         signOut({redirect: true, callbackUrl: "/auth/signin"});
     // }

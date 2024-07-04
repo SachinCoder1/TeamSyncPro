@@ -6,6 +6,7 @@ import MarkCompleteIncomplete from "@/components/home/task/MarkCompleteIncomplet
 import LeftTaskContainer from "@/components/home/task/left";
 import RightTaskContainer from "@/components/home/task/right";
 import { Button } from "@/components/ui/button";
+import { getServerAuth } from "@/lib/auth";
 import { CircleCheck } from "lucide-react";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
@@ -23,10 +24,11 @@ type Props = {
 };
 
 export default async function Page({ params }: Props) {
+  const session = await getServerAuth();
   const taskData = getPerticularTask(params.task, params.project);
   const subTaskData = getSubTasks(params.task);
   const tagsData = getTags()
-  const workspaceData = getWorkspace(params.workspace);
+  const workspaceData = getWorkspace(session.user.workspace);
   const [tasks, subtasks,tags, workspace] = await Promise.all([taskData, subTaskData, tagsData,workspaceData]);
   console.log("subtasks: ", subtasks);
   if (tasks.success === false) {
@@ -45,9 +47,9 @@ export default async function Page({ params }: Props) {
         </div>
         <ResizableMain
           left={
-            <LeftTaskContainer workspaceId={params.workspace} projectId={params.project} task={tasks.task} subtasks={subtasks?.data} />
+            <LeftTaskContainer workspaceId={session.user.workspace} projectId={params.project} task={tasks.task} subtasks={subtasks?.data} />
           }
-          right={<RightTaskContainer workspaceId={workspace.workspace?._id} workspaceName={workspace.workspace?.name} task={tasks.task} tags={tags.data} members={workspace.workspace?.members} />}
+          right={<RightTaskContainer workspaceId={session.user.workspace} workspaceName={workspace.workspace?.name} task={tasks.task} tags={tags.data} members={workspace.workspace?.members} />}
         />
       </Suspense>
     </div>

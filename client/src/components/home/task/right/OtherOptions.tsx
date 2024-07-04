@@ -79,7 +79,7 @@ export default function OtherOptions({ taskTitle,taskId,isRedirect=true }: Props
       });
       if(isRedirect){
         setTimeout(() => {
-          router.push(`/home/${params.workspace}/${params.project}`);
+          router.push(`/home/${params.project}`);
         }, 500);
       }
     }
@@ -101,7 +101,7 @@ export default function OtherOptions({ taskTitle,taskId,isRedirect=true }: Props
           label: "Open cloned issue",
           onClick: () =>
             router.push(
-              `/home/${params.workspace}/${params.project}/${res.data?._id}`
+              `/home/${params.project}/${res.data?._id}`
             ),
         },
       });

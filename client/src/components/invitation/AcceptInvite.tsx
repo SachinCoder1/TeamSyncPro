@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import revalidateTagServer from "@/app/actions/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { updateSelectedWorkspace } from "@/app/actions/user";
 
 type Props = {
   invitationToken?: string;
@@ -40,13 +41,14 @@ const AcceptInvite = ({ invitationToken }: Props) => {
     //     document.dispatchEvent(event)
     // }
     // reloadSession();
+    updateSelectedWorkspace(isAccepted.data.workspace._id)
     revalidateTagServer("workspace");
     setLoading(false);
     toast.success("Invitation Accepted", {
         description: "Please wait while we redirect you"
     })
     sessionStorage.removeItem("invitationToken")
-    router.push(`/home/${isAccepted.data.workspace._id}`)
+    router.push(`/workspace`)
   };
   return (
     <div>

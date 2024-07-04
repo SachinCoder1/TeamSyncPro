@@ -11,9 +11,9 @@ export const primarySideNav = [
     path: "/tasks",
     icon: SquareCheck,
   },
-  {
-    name: "Inbox",
-    path: "/inbox",
-    icon: Inbox,
-  },
+  // {
+  //   name: "Inbox",
+  //   path: "/inbox",
+  //   icon: Inbox,
+  // },
 ];

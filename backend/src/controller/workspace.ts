@@ -38,6 +38,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
   try {
     const adminId = req.user?.id;
     const { name, membersEmails } = req.body;
+    console.log("req.body on create worksapace................", req.body);
     const workspace = new Workspace({
       name: name,
       admin: adminId,
@@ -101,6 +102,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
       invitations,
     });
   } catch (error) {
+    console.log("error.. failed..", error)
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
@@ -230,12 +232,10 @@ export const deleteWorkspace = async (req: Request, res: Response) => {
 //   }
 // };
 
-let count = 0;
 export const getWorkspaceById = async (req: Request, res: Response) => {
   try {
     const { workspaceId } = req.params;
-    count++;
-    console.log("api calledd..", count);
+    console.log("api calledd..");
     const workspace = await Workspace.findById(workspaceId)
       .populate({
         path: "members",
@@ -243,12 +243,14 @@ export const getWorkspaceById = async (req: Request, res: Response) => {
         // also get the projects of the workspace
       })
       .populate({
-        path: "projects",
+        path: "projects", 
         select: "name description color icon",
       })
-      .select("-__v -updatedAt")
+      .select("-updatedAt")
       .lean();
 
+      console.log("projects.....................................................................................:", workspace?.projects)
+ 
     if (!workspace) {
       return errorResponseHandler(res, "NOT_FOUND");
     }

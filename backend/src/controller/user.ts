@@ -320,13 +320,24 @@ export const getProjects = async (req: Request, res: Response) => {
 export const updateUserProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    const { name, email, description, profileImage } = req.body;
+    const { name, description, profileImage } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { name, email, description, profileImage },
-      { new: true }
-    )
+    let updationData: any = {};
+
+    if (name) {
+      updationData["name"] = name;
+    }
+    if (description) {
+      updationData["description"] = description;
+    }
+
+    if (profileImage) {
+      updationData["profileImage"] = profileImage;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updationData, {
+      new: true,
+    })
       .select("-password")
       .lean();
 
@@ -405,16 +416,20 @@ export const getStarredProjects = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
 
-    const user = await User.findById(userId).select("starredProjects").lean();
+    const user = await User.findById(userId)
+      .select("starredProjects selectedWorkspace")
+      .lean();
 
     if (!user) {
       return errorResponseHandler(res, "NOT_FOUND");
     }
 
     const projects = await Project.find(
-      { _id: { $in: user.starredProjects } },
+      { _id: { $in: user.starredProjects }, workspace: user.selectedWorkspace },
       "name color icon"
     ).lean();
+
+    console.log("projects in starred.........:", projects);
 
     return successResponseHandler(res, "SUCCESS", { projects });
   } catch (error) {
@@ -451,7 +466,7 @@ export const getStarredItems = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("selectedWorkspace").lean();
 
     if (!user) {
       return errorResponseHandler(res, "NOT_FOUND");
@@ -461,8 +476,17 @@ export const getStarredItems = async (req: Request, res: Response) => {
       workspace: user.selectedWorkspace,
       project: { $exists: true },
     }).populate("project", "name _id color");
+
+    console.log(
+      "selectedWorkspace:",
+      user.selectedWorkspace,
+      "starred projects",
+      starredProjects
+    );
+
     const starredWorkspaces = await StarredItem.find({
       user: userId,
+      workspace: user.selectedWorkspace,
       project: { $exists: false },
     }).populate("workspace", "name _id ");
 
@@ -527,6 +551,22 @@ export const starProject = async (req: Request, res: Response) => {
     });
     await starred.save();
     return successResponseHandler(res, "SUCCESS", { starred: true });
+  } catch (error) {
+    console.error(error);
+    return errorResponseHandler(res, "SERVER_ERROR");
+  }
+};
+
+export const updateSelectedWorkspace = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const workspaceId = req.params.workspaceId;
+    console.log("workspace id in the update selected workapce: ", workspaceId);
+    await User.findByIdAndUpdate(userId, {
+      selectedWorkspace: workspaceId,
+    });
+
+    return successResponseHandler(res, "SUCCESS", {});
   } catch (error) {
     console.error(error);
     return errorResponseHandler(res, "SERVER_ERROR");

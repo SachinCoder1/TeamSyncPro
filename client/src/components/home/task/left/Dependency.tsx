@@ -110,7 +110,7 @@ export default function Dependency({
         (dependency?.by ? (
           <div className="flex gap-x-2 items-center border py-1 px-2 rounded-md justify-between hover:bg-secondary">
             <Link
-              href={`/home/${workspaceId}/${projectId}/${dependency?.task._id}`}
+              href={`/home/${projectId}/${dependency?.task._id}`}
               // href={`/home/${row.original.id}/`}
               className=""
               // passHref

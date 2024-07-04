@@ -1,14 +1,16 @@
 "use server";
 
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
 import { ProjectType, StatusType } from "@/types/project";
 
 export const getProject = async (projectid?: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   const res = await fetch(`${BACKEND_URL}/project/${projectid}`, {
     method: "GET",
     headers: {
@@ -28,8 +30,8 @@ export const getProject = async (projectid?: string) => {
 };
 
 export const getAllStatus = async (projectid?: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   const res = await fetch(`${BACKEND_URL}/project/all-status/${projectid}`, {
     method: "GET",
     headers: {
@@ -63,8 +65,8 @@ export const updateProject = async (
   try {
     console.log("projectId:", projectid);
     console.log("update data:", updateData);
-    const session = await getServerSession(authOptions);
-    if (!session) redirect("/auth/signin");
+    const session = await getServerAuth();
+    // if (!session) redirect("/auth/signin");
     const res = await fetch(`${BACKEND_URL}/project/update/${projectid}`, {
       method: "PATCH",
       body: JSON.stringify(updateData),
@@ -91,16 +93,15 @@ export const updateProject = async (
 
 export const createProject = async (
   name: string,
-  workspaceId: string
 ) => {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) redirect("/auth/signin");
+    const session = await getServerAuth();
+    // if (!session) redirect("/auth/signin");
     const res = await fetch(`${BACKEND_URL}/project/create`, {
       method: "POST",
       body: JSON.stringify({
         name,
-        workspaceId
+        workspaceId: session.user.workspace
       }),
       headers: {
         "Content-Type": "application/json",

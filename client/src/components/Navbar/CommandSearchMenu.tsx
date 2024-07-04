@@ -158,7 +158,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
               <CommandSeparator />
               <CommandGroup heading="Projects">
                 {projectItems?.map((item, index) => (
-                  <Link href={`/home/${workspaceId}/${item._id}`}>
+                  <Link href={`/home/${item._id}`}>
                     <CommandItem
                       onSelect={(value) => {
                         setOpen(false);
@@ -199,11 +199,11 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
                       {/* <User className="mr-2 h-4 w-4" /> */}
                       <Link
                         className="flex-1 w-full"
-                        href={`/home/${workspaceId}/${item.project._id}/${item._id}`}
+                        href={`/home/${item.project._id}/${item._id}`}
                       >
                         <span className="flex-1 w-full">{item.title}</span>
                       </Link>
-                      <Link href={`/home/${workspaceId}/${item.project._id}`}>
+                      <Link href={`/home/${item.project._id}`}>
                         <Badge
                           style={{
                             backgroundColor: item.project.color,

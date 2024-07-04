@@ -15,31 +15,31 @@ import { ProjectType } from "@/types/project";
 import { notFound, redirect } from "next/navigation";
 import React, { Suspense } from "react";
 
-type Props = {
-  params: {
-    workspace: string;
-  };
-};
+// type Props = {
+//   params: {
+//     workspace: string;
+//   };
+// };
 
-export default async function page({ params }: Props) {
+export default async function page() {
   const session = await getServerAuth();
 
-  if (!isValidObjectId(params.workspace)) {
-    return redirect(`/home/${session.user.workspace}`);
-  }
+//   if (!isValidObjectId(session.user.workspace)) {
+//     return redirect(`/home/${session.user.workspace}`);
+//   }
 
-  const { success, workspace } = await getWorkspace(params.workspace);
+  const { success, workspace } = await getWorkspace(session.user.workspace);
   if (success === false) {
     // return notFound();
   }
 
-  const invitations = await getInvites(params.workspace)
-  const isWorkspaceStarred = await isStarred(params.workspace, "workspace")
+  const invitations = await getInvites(session.user.workspace)
+  const isWorkspaceStarred = await isStarred(session.user.workspace, "workspace")
   console.log("workspace: ", workspace);
 
   return (
     <div>
-      {/* page and the id is: {params.workspace} */}
+      {/* page and the id is: {session.user.workspace} */}
       <Suspense fallback={<div>Loading...</div>}>
         {/* {JSON.stringify(isWorkspaceStarred, null, 2)} */}
       <div className="flex gap-x-2 items-center">
@@ -64,7 +64,7 @@ export default async function page({ params }: Props) {
         </HeadingCard>
         <HeadingCard heading="Projects">
           <Projects
-            workspaceId={params.workspace}
+            workspaceId={session.user.workspace}
             projects={workspace?.projects as ProjectType[] | undefined}
           />
         </HeadingCard>

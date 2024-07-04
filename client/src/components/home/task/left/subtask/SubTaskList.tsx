@@ -67,13 +67,13 @@ const SubTaskList = ({ subtasks }: Props) => {
               )}
               <Link
                 className={cn("py-2")}
-                href={`/home/${params.workspace}/${params.project}/${item._id}`}
+                href={`/home/${params.project}/${item._id}`}
               >
                 <div>{item.title}</div>
               </Link>
             </div>
             <Link
-              href={`/home/${params.workspace}/${params.project}/${item._id}`}
+              href={`/home/${params.project}/${item._id}`}
               className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
             >
               <ChevronRight className="h-5 w-5" />

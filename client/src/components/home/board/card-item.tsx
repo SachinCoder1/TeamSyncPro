@@ -96,9 +96,9 @@ export function CardItem({
 
                 <Link
                   className={cn("")}
-                  href={`/home/${workspaceId}/${projectId}/${data._id}`}
+                  href={`/home/${projectId}/${data._id}`}
                 >
-                  <div>{data.title}sadfsdfasf asdf</div>
+                  <div>{data.title}</div>
                 </Link>
               </div>
 

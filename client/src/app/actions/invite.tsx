@@ -1,6 +1,8 @@
 "use server";
 
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
@@ -11,8 +13,8 @@ export const inviteToWorkspace = async (
   membersEmails: string[]
 ) => {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) redirect("/auth/signin");
+    const session = await getServerAuth();
+    // // if (!session) redirect("/auth/signin");
     const res = await fetch(`${BACKEND_URL}/invite/workspace`, {
       method: "POST",
       body: JSON.stringify({
@@ -42,8 +44,8 @@ export const inviteToWorkspace = async (
 
 export const acceptInvitation = async (invitationToken: string) => {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) redirect("/auth/signin");
+    const session = await getServerAuth();
+    // if (!session) redirect("/auth/signin");
     console.log("invitation token:", invitationToken);
     const res = await fetch(`${BACKEND_URL}/invite/accept`, {
       method: "POST",
@@ -74,8 +76,8 @@ export const acceptInvitation = async (invitationToken: string) => {
 
 export const getInvites = async (id: string) => {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) redirect("/auth/signin");
+    const session = await getServerAuth();
+    // if (!session) redirect("/auth/signin");
     const res = await fetch(`${BACKEND_URL}/invite/${id}`, {
       method: "GET",
       headers: {
@@ -101,8 +103,8 @@ export const getInvites = async (id: string) => {
 
 export const checkInvitation = async (invitationToken: string) => {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) redirect("/auth/signin");
+    const session = await getServerAuth();
+    // if (!session) redirect("/auth/signin");
     const res = await fetch(
       `${BACKEND_URL}/invite/check-invite/${invitationToken}`,
       {

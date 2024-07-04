@@ -26,7 +26,7 @@ const BreadcrumbMain = ({ params }: Props) => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             {params?.task ? (
-              <Link href={`/home/${params?.workspace}/${params?.project}`}>
+              <Link href={`/home/${params?.project}`}>
                 project
               </Link>
             ) : (

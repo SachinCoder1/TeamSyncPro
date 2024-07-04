@@ -88,7 +88,7 @@ const ProjectMenu = async () => {
             item={{
               name: item.name,
               icon: () => <SquareFilledIcon color={item.color} />,
-              path: `/home/${workspace._id}/${item._id}`,
+              path: `/home/${item._id}`,
             }}
             className="pl-4"
           />

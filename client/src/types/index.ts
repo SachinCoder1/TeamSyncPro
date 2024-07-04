@@ -76,6 +76,8 @@ export type ShortMemberType = {
   createdAt: Date;
 };
 
+export type LabelValueType = { label: string; value: string };
+
 export type StarredProjectType = {
   _id: string;
   user: string;
