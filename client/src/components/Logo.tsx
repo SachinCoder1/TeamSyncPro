@@ -1,8 +1,10 @@
+import { getServerAuth } from "@/lib/auth";
 import Link from "next/link";
 
-export const Logo = ({ isImage = true }: { isImage?: boolean }) => {
+export const Logo = async ({ isImage = true }: { isImage?: boolean }) => {
+  const session = await getServerAuth();
   return (
-    <Link href="/" className="flex z-40 font-semibold">
+    <Link href={!session ? "/" : "/home"} className="flex z-40 font-semibold">
       {isImage && (
         <img
           src="/logo.webp"
