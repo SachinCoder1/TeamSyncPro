@@ -25,7 +25,7 @@ type Props = {
 const LoginPage = async ({searchParams}: Props) => {
   const session = await getServerSession();
   if (session) {
-    redirect("/");
+    redirect("/home");
   }
 
   const invitationToken = getQueryParam(searchParams?.callbackUrl as string, "invitation_token")
