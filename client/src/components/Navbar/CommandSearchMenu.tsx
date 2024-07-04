@@ -157,7 +157,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
               <CommandSeparator />
               <CommandGroup heading="Projects">
                 {projectItems?.map((item, index) => (
-                  <Link href={`/home/${item._id}`}>
+                  <Link href={`/home/${item._id}`} key={`${item._id}:${index}`}>
                     <CommandItem
                       onSelect={(value) => {
                         setOpen(false);
