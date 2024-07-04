@@ -19,7 +19,6 @@ const Page = async ({ searchParams }: Props) => {
   const invitation = await checkInvitation(
     searchParams?.invitation_token as string
   );
-  console.log("invitation:", invitation);
   if ([404, 409, 400].includes(invitation?.errorCode as number)) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">

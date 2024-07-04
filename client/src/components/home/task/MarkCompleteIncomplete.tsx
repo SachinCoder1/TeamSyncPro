@@ -21,13 +21,11 @@ const MarkCompleteIncomplete = ({ tag, isCompleted }: Props) => {
   const handleCompleteSubTask = async (status: "COMPLETE" | "INCOMPLETE") => {
     setLoading(true);
     if (status === "COMPLETE") {
-      console.log("mark compelte");
       setMarkComplete(true);
       await markCompleteIncomplete(params.task as string, true);
     }
 
     if (status === "INCOMPLETE") {
-      console.log("mark incomplete");
       setMarkComplete(false);
       await markCompleteIncomplete(params.task as string, false);
     }

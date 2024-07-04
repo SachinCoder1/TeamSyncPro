@@ -218,7 +218,6 @@ export const starUnstarProject = async (
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
   let link = type === "STAR" ? "starProject" : "unstarProject";
-  console.log("link...............", link, projectId);
   const res = await fetch(`${BACKEND_URL}/user/${link}/${projectId}`, {
     method: "PATCH",
     headers: {
@@ -227,7 +226,6 @@ export const starUnstarProject = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    console.log("res.......", res);
     return { success: false };
   }
   const data = await res.json();
@@ -264,7 +262,6 @@ export const starUnstarWorkspace = async (
 export const isStarred = async (id: string, type: "project" | "workspace") => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("id...................", id, "type: ..........", type);
   const res = await fetch(`${BACKEND_URL}/user/isStarred/${type}/${id}`, {
     method: "GET",
     headers: {
@@ -273,7 +270,6 @@ export const isStarred = async (id: string, type: "project" | "workspace") => {
     next: { tags: ["isStarred"] },
   });
   if (!res.ok) {
-    console.log("failed...........", res);
     return { success: false };
   }
   const data = await res.json();

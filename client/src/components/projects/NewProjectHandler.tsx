@@ -50,7 +50,6 @@ const NewProjectHandler = ({ workspaceId }: Props) => {
     }
 
     handleReset();
-    console.log("iscreated", isCreated);
     revalidateTagServer("workspace")
     revalidatePathServer("/(home)", "layout")
     router.push(`/home/${isCreated.project?._id}`);

@@ -75,13 +75,11 @@ export const UserCard = ({
     if (memberProfile) return;
     setLoading(true);
     if (isOpen === true && name) {
-      console.log("open");
       const profile = await getMemberShortProfile(id);
       setMemberProfile(profile.data || null);
     }
 
     if (isOpen === false) {
-      console.log("close");
     }
     setLoading(false);
   };
@@ -179,7 +177,6 @@ const Members = ({ workspaceId, members, workspaceName }: Props) => {
   );
   const [loading, setLoading] = useState(false);
   const handleMembersAdd = () => {
-    console.log("added emails: ", selected);
     handleReset();
   };
 
@@ -200,9 +197,7 @@ const Members = ({ workspaceId, members, workspaceName }: Props) => {
     async (tagIndex: any) => {
       const tagToRemove = selected[tagIndex];
       setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
-      console.log("tag to remove: ", tagToRemove);
 
-      console.log("removing:", tagIndex);
     },
     [selected]
   );

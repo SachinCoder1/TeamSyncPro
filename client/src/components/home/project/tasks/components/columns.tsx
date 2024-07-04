@@ -70,17 +70,13 @@ export const columns: ColumnDef<Task>[] = [
           // checked={row.getIsSelected()}
           checked={isSelected}
           onCheckedChange={async (value) => {
-            // console.log("value on change check:", value, "row", row.original);
             // return row.toggleSelected(!!value);
             setIsSelected(!!value);
             const data = await markCompleteIncomplete(row.original.id, !!value);
 
-            console.log("data client:", data);
             if (value === false) {
-              console.log("Un selected the task", row.original);
             }
             if (value === true) {
-              console.log("selected the task:", row.original);
             }
             revalidateTagServer("project");
           }}

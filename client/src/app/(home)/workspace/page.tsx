@@ -28,14 +28,13 @@ export default async function page() {
 //     return redirect(`/home/${session.user.workspace}`);
 //   }
 
-  const { success, workspace } = await getWorkspace(session.user.workspace);
+  const { success, workspace } = await getWorkspace();
   if (success === false) {
     // return notFound();
   }
 
   const invitations = await getInvites(session.user.workspace)
   const isWorkspaceStarred = await isStarred(session.user.workspace, "workspace")
-  console.log("workspace: ", workspace);
 
   return (
     <div>

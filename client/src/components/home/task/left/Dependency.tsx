@@ -90,7 +90,6 @@ export default function Dependency({
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("data: ", data);
     const isAdded = await addDependency(taskId, data.task, data.type);
     if (isAdded.success) {
       revalidateTagServer("task");
@@ -213,7 +212,6 @@ export default function Dependency({
                                 value={suggestion.label}
                                 key={suggestion.value}
                                 onSelect={(currentValue) => {
-                                  console.log("selected value: ", currentValue);
                                   setValue(
                                     currentValue === value ? "" : currentValue
                                   );

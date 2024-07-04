@@ -19,7 +19,6 @@ export const signInUser = async (invitation_token: string|null) => {
     },
   });
   const user = await res.json();
-  console.log("this is the user we got in signInUser ......", user);
   if (!user || user.message !== "SUCCESS") {
     redirect("/auth/signin?error=invalid-credentials");
   }
@@ -28,12 +27,11 @@ export const signInUser = async (invitation_token: string|null) => {
     redirect(`/invite/accept?invitation_token=${invitation_token}`);
   }
 
-  console.log("user.data.user.onboarding", user.data.user.onboarding);
   if (user.data.user.onboarding.done === false) {
     redirect("/onboarding?step=1");
   }
 
-  redirect("/");
+  redirect("/home");
 };
 export const signUpUser = async (data: SignupFormData) => {
   const res = await fetch(BACKEND_URL + "/auth/signup-email", {
@@ -48,7 +46,6 @@ export const signUpUser = async (data: SignupFormData) => {
     },
   });
   const user = await res.json();
-  console.log("this is the signup data we got ......", user);
   return user;
 
   // } catch (error) {

@@ -29,7 +29,6 @@ type Props = {
   label?: string;
 };
 export default function StatusBarDropdown({ status,taskId }: Props) {
-  console.log("status:", status)
   const params = useParams();
   const { data, error, isLoading } = useSWR<{
     success: boolean;
@@ -40,7 +39,6 @@ export default function StatusBarDropdown({ status,taskId }: Props) {
     // { revalidateOnFocus: false, revalidateOnMount: false }
   );
   const onValueChange = async (val: string) => {
-    console.log("value changed..", val);
     const changeStatus = await changeTaskStatus(taskId as string, val);
     if (changeStatus.success) {
       revalidateTagServer("task");

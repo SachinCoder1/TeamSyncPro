@@ -30,7 +30,6 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
     id: string
   ) => {
     if (status === "COMPLETE") {
-      console.log("mark compelte");
       setMarkComplete({
         id,
         mark: true,
@@ -39,7 +38,6 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
     }
 
     if (status === "INCOMPLETE") {
-      console.log("mark incomplete");
       setMarkComplete({
         id,
         mark: false,

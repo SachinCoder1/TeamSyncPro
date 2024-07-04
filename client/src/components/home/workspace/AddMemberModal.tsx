@@ -40,9 +40,7 @@ const AddMemberModal = ({
       return;
     }
     setLoading(true);
-    console.log("added emails: ", selected);
     const emails = selected.map((item) => item.value);
-    console.log("emails: ", emails);
     const isAdded = await inviteToWorkspace(workspaceId, emails);
     if (isAdded.success) {
       revalidateTagServer("invitations");
@@ -75,9 +73,7 @@ const AddMemberModal = ({
     async (tagIndex: any) => {
       const tagToRemove = selected[tagIndex];
       setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
-      console.log("tag to remove: ", tagToRemove);
 
-      console.log("removing:", tagIndex);
     },
     [selected]
   );

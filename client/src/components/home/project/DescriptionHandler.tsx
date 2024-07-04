@@ -38,17 +38,14 @@ function DescriptionHandler({
     // call the api
     const payload = { [field]: sanitizedVal };
     const data = await updateFunction(params[id] as string, payload);
-    console.log("data we got:", data);
     const { success } = data;
     if (success) {
-      console.log("data updated successfully");
       revalidateTagServer(revalidateTag);
     }
   };
 
   useEffect(() => {
     if (value && value !== description) {
-      console.log("something changed... updating ");
       updateValue(value);
     }
   }, [isEditing]);

@@ -72,7 +72,6 @@ export function SignupForm({ className, ...props }: UserAuthFormProps) {
         signInUser(sessionStorage.getItem("invitationToken"));
       }
       if (res?.error) {
-        console.log("error: ", res.error);
         setError("root", {
           message: "Invalid email or password. Please try again.",
         });

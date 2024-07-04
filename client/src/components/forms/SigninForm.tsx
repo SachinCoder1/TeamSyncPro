@@ -40,7 +40,6 @@ export function SigninForm({
     resolver: zodResolver(LoginFormDataSchema),
   });
 
-  console.log("invitation token: ", invitationToken);
 
   const onSubmit = handleSubmit(async (data) => {
     const res = await signIn("credentials", {
@@ -53,7 +52,6 @@ export function SigninForm({
       signInUser(sessionStorage.getItem("invitationToken"));
     }
     if (res?.error) {
-      console.log("error: ", res.error);
       setError("root", {
         message: "Invalid email or password. Please try again.",
       });

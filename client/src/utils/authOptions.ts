@@ -13,7 +13,6 @@ async function refreshToken(token: JWT): Promise<JWT> {
       authorization: `Refresh ${token.secret_tokens.refreshToken}`,
     },
   });
-  console.log("refreshed");
 
   const response = await res.json();
 
@@ -52,7 +51,6 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.username || !credentials?.password) return null;
         try {
           const { username, password } = credentials;
-          console.log("credentials: ", credentials);
           const res = await fetch(BACKEND_URL + "/auth/login-email", {
             method: "POST",
             body: JSON.stringify({
@@ -65,7 +63,6 @@ export const authOptions: NextAuthOptions = {
           });
 
           const user = await res.json();
-          console.log("user: ", user);
 
           if (res.status == 401) {
             return null;
@@ -74,13 +71,11 @@ export const authOptions: NextAuthOptions = {
           //   (credentials as any).callbackUrl,
           //   "invitation_token"
           // );
-          // console.log("invitiation token:", invitationToken);
           // if (invitationToken) {
           //   return { ...user.data, invitationToken };
           // }
           return user.data;
         } catch (error) {
-          console.log("error: ", error);
           return false;
         }
       },
@@ -90,7 +85,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (trigger == "update") {
-        console.log("jwt...", trigger, "session:", session);
         if (session?.info) {
           token.user.workspace = session.info;
         }
@@ -103,9 +97,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ token, session, trigger, newSession }) {
-      // console.log("updating... here...", newSession, trigger);
       if (trigger === "update") {
-        console.log("updataing....", newSession);
         if (newSession.info) {
           session.user.workspace = newSession.info;
         }
@@ -116,13 +108,6 @@ export const authOptions: NextAuthOptions = {
       } else {
         session.user = token.user;
         session.accessToken = token.secret_tokens.accessToken;
-        // console.log(
-        //   "token: ",
-        //   token,
-        //   "invitation token: ",
-        //   token?.user?.invitationToken
-        // );
-        // session.invitationToken = token?.invitationToken || "";
       }
 
       return session;

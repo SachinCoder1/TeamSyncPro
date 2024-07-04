@@ -10,7 +10,6 @@ export const onboardUser = async (data: onboardFormDataType) => {
   const { success } = onboardSchema.safeParse(data);
   if (!success) return { error: "INVALID_DATA" };
   const session = await getServerAuth();
-  console.log("data: ", data);
   const res = await fetch(BACKEND_URL + "/onboard", {
     method: "POST",
     body: JSON.stringify({
@@ -24,13 +23,11 @@ export const onboardUser = async (data: onboardFormDataType) => {
     },
   });
   const onboard = await res.json();
-  console.log("onboard data: ", onboard);
-  console.log("onboard data data....: ", onboard.data);
   // if (!onboard || onboard.message !== "SUCCESS") {
   //   return {error: onboard.message}
   // }
 
   if (onboard?.data) {
-    redirect("/");
+    redirect("/home");
   }
 };

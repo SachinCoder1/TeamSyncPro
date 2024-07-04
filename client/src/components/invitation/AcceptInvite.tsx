@@ -23,17 +23,13 @@ const AcceptInvite = ({ invitationToken }: Props) => {
     setLoading(true);
     const isAccepted = await acceptInvitation(invitationToken);
     if (isAccepted.success) {
-      console.log("accepted: ", isAccepted?.data);
     }
-    console.log("after isAccepted..");
     await update({
       info: isAccepted.data.workspace._id
     })
       .then((item) => {
-        console.log("item...", item);
       })
       .catch((err) => {
-        console.log("err: ", err);
       });
     // await update();
     // const reloadSession = () => {

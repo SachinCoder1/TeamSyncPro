@@ -60,7 +60,7 @@ const Workspaces = ({ id, name, selected, workspaces }: Props) => {
           </AccordionTrigger>
           <AccordionContent className="pt-1 text-neutral-700">
             {workspaces?.map((item, index) => (
-              <div onClick={handleAccordionCollapse}>
+              <div key={`${item._id}:${index}`} onClick={handleAccordionCollapse}>
                 <MyWorkspacesCard
                   key={item._id}
                   selectedWorkspace={selected}

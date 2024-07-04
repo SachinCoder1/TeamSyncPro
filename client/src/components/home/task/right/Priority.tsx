@@ -23,7 +23,6 @@ type Props = {
 };
 export default function Priority({ taskId, priority }: Props) {
   const onValueChange = async (val: any) => {
-    console.log("value changed..", val);
     const changeStatus = await updateTask(taskId, {
       priority: val,
     });

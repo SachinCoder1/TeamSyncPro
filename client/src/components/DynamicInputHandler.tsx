@@ -35,17 +35,14 @@ function DynamicInputHandler({
     const data = await updateFunction(params[id] as string, {
       [fieldName]: newValue,
     });
-    console.log("data we got:", data);
     const { success } = data;
     if (success) {
-      console.log("data updated successfully");
       revalidateTagServer(tag);
     }
   };
 
   useEffect(() => {
     if (value && value !== defaultValue) {
-      console.log("something changed... updating ");
       updateValue(value);
     }
   }, [isEditing]);

@@ -51,9 +51,6 @@ export default async function ProjectList({ projectId }: Props) {
 
   transformedData?.sort((a, b) => a.order - b.order);
 
-  console.log("transformedData...........", transformedData)
-
-
   return (
     <>
       {/* <div className="md:hidden">

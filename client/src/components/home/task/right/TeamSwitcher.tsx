@@ -113,7 +113,6 @@ export default function TeamSwitcher({
     if (isAssigned.success) {
       revalidateTagServer("task");
     }
-    console.log("selected member:", member);
     setSelectedTeam(member);
     setOpen(false);
   };

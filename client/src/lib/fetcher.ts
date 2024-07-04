@@ -12,7 +12,6 @@ import { getServerAuth } from "@/lib/auth";
  */
 export async function fetcher(url: string, options = {} as any) {
   const {token, body, ...rest } = options;
-  console.log("token: ", token);
 
   // Determine the method based on the presence of a body or use the method specified in options.
   const method = options.method || (body ? "POST" : "GET");
@@ -42,7 +41,6 @@ export async function fetcher(url: string, options = {} as any) {
   }
 
   const response = await fetch(fullUrl, fetchOptions);
-  console.log("response: ", response);
   // if (response.ok === false) {
   //   throw new Error(`Network response was not ok: ${response.statusText}`);
   // }

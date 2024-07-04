@@ -41,11 +41,9 @@ export const getAllStatus = async (projectid?: string) => {
     next: {tags: ['status']}
   });
   if (!res.ok) {
-    console.log("res not ok..", res)
     return { success: false };
   }
   const project = await res.json();
-  console.log("project: ", project)
   if (project.message !== "SUCCESS") {
     return { success: false };
   }
@@ -63,8 +61,6 @@ export const updateProject = async (
   updateData?: UpdateProjectType
 ) => {
   try {
-    console.log("projectId:", projectid);
-    console.log("update data:", updateData);
     const session = await getServerAuth();
     // if (!session) redirect("/auth/signin");
     const res = await fetch(`${BACKEND_URL}/project/update/${projectid}`, {
@@ -80,13 +76,11 @@ export const updateProject = async (
       return { success: false };
     }
     const project = await res.json();
-    console.log("project parsed json:", project);
     if (project.message !== "SUCCESS") {
       return { success: false };
     }
     return { success: true, project: project.data as ProjectType };
   } catch (error) {
-    console.log("error in updating projectsssss:", error);
     return { success: false };
   }
 };
@@ -113,13 +107,11 @@ export const createProject = async (
       return { success: false };
     }
     const project = await res.json();
-    console.log("project parsed json:", project);
     if (project.message !== "SUCCESS") {
       return { success: false };
     }
     return { success: true, project: project.data?.project as ProjectType };
   } catch (error) {
-    console.log("error in updating projectsssss:", error);
     return { success: false };
   }
 };

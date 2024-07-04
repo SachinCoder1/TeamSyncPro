@@ -70,7 +70,6 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
   const debouncedSearch = useDebouncedCallback(async (term) => {
     setLoading(true);
 
-    console.log(`Searching... ${term}`);
     const isQueried = await getQueriedTasks(term);
     if (isQueried.success) {
       setItems(isQueried.data || []);

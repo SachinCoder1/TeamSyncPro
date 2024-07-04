@@ -43,7 +43,6 @@ const ProjectMenu = async () => {
   if (!success) {
     // return notFound();
   }
-  console.log("workspace in the hello", workspace);
   return (
     <div>
       <div className="flex items-center justify-between">

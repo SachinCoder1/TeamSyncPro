@@ -66,10 +66,8 @@ export default function OtherOptions({ taskTitle,taskId,isRedirect=true }: Props
 
   const handleDeleteConfirmClick = async () => {
     setLoading(true);
-    console.log("deleting");
 
     const isDeleted = await deleteTask(taskId || params?.task as string);
-    console.log("deleted....", isDeleted)
     if (isDeleted.success) {
       revalidateTagServer("project");
       setLoading(false);
@@ -92,9 +90,8 @@ export default function OtherOptions({ taskTitle,taskId,isRedirect=true }: Props
     const res = await cloneTask(taskId || params?.task as string, data.title);
     if (res.success) {
       revalidateTagServer("project");
-      console.log("res:", res.data);
       toast("Cloning complete", {
-        duration: 7000,
+        duration: 4000,
         description:
           "You can find the cloned task in the list or by clicking the link below",
         action: {

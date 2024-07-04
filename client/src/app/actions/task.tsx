@@ -22,12 +22,10 @@ export const markCompleteIncomplete = async (
     },
     // next: {tags: ['project']}
   });
-  console.log("todo:", todo, "res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("complete/incomplete data:", todo, data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -37,7 +35,6 @@ export const markCompleteIncomplete = async (
 export const getPerticularTask = async (taskId: string, projectId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("task:", taskId);
   const res = await fetch(`${BACKEND_URL}/task/get/${projectId}/${taskId}`, {
     method: "GET",
     headers: {
@@ -46,12 +43,10 @@ export const getPerticularTask = async (taskId: string, projectId: string) => {
     next: { tags: ["task"] },
     cache: "force-cache",
   });
-  console.log("data", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("task data:", data);
   if (data.message !== "SUCCESS") {
     return { success: false };
   }
@@ -68,7 +63,6 @@ type UpdateTaskType = {
 export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/update/${taskId}`, {
     method: "PATCH",
     headers: {
@@ -82,7 +76,6 @@ export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -98,7 +91,6 @@ type AddTagType = {
 export const addTag = async (payload: AddTagType) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/add-tag`, {
     method: "POST",
     headers: {
@@ -112,7 +104,6 @@ export const addTag = async (payload: AddTagType) => {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "CREATED") {
     return { success: false };
   }
@@ -121,7 +112,6 @@ export const addTag = async (payload: AddTagType) => {
 export const removeTag = async (tagId: string, taskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-tag/${tagId}/${taskId}`, {
     method: "PATCH",
     headers: {
@@ -134,7 +124,6 @@ export const removeTag = async (tagId: string, taskId: string) => {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -144,7 +133,6 @@ export const removeTag = async (tagId: string, taskId: string) => {
 export const getSubTasks = async (parentTaskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/get-subtask/${parentTaskId}`, {
     method: "GET",
     headers: {
@@ -153,11 +141,9 @@ export const getSubTasks = async (parentTaskId: string) => {
     next: { tags: ["subtasks"] },
   });
   if (!res.ok) {
-    console.log("taskId", parentTaskId, "not ok", res);
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "SUCCESS") {
     return { success: false };
   }
@@ -167,7 +153,6 @@ export const getSubTasks = async (parentTaskId: string) => {
 export const createSubTask = async (parentTaskId: string, title: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/createSubTask`, {
     method: "POST",
     headers: {
@@ -181,11 +166,9 @@ export const createSubTask = async (parentTaskId: string, title: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    console.log("taskId", parentTaskId, title, "not ok", res);
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "CREATED") {
     return { success: false };
   }
@@ -195,7 +178,6 @@ export const createSubTask = async (parentTaskId: string, title: string) => {
 export const deleteTask = async (taskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/delete/${taskId}`, {
     method: "DELETE",
     headers: {
@@ -203,12 +185,10 @@ export const deleteTask = async (taskId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "DELETED") {
     return { success: false };
   }
@@ -218,7 +198,6 @@ export const deleteTask = async (taskId: string) => {
 export const cloneTask = async (taskId: string, title: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/copy/${taskId}`, {
     method: "POST",
     headers: {
@@ -230,12 +209,10 @@ export const cloneTask = async (taskId: string, title: string) => {
     }),
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "CREATED") {
     return { success: false };
   }
@@ -245,7 +222,6 @@ export const cloneTask = async (taskId: string, title: string) => {
 export const addDueDate = async (taskId: string, dueDate: Date) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/due/${taskId}`, {
     method: "PATCH",
     headers: {
@@ -257,12 +233,10 @@ export const addDueDate = async (taskId: string, dueDate: Date) => {
     }),
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -276,7 +250,6 @@ export const addDependency = async (
 ) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(
     `${BACKEND_URL}/task/add-dependency/${taskId}/${dependencyId}/${dependencyType}`,
     {
@@ -287,12 +260,10 @@ export const addDependency = async (
       // next: {tags: ['project']}
     }
   );
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -302,7 +273,6 @@ export const addDependency = async (
 export const removeDependency = async (taskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-dependency/${taskId}`, {
     method: "PATCH",
     headers: {
@@ -310,12 +280,10 @@ export const removeDependency = async (taskId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -325,7 +293,6 @@ export const removeDependency = async (taskId: string) => {
 export const removeDueDate = async (taskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-due/${taskId}`, {
     method: "PATCH",
     headers: {
@@ -333,12 +300,10 @@ export const removeDueDate = async (taskId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -348,7 +313,6 @@ export const removeDueDate = async (taskId: string) => {
 export const assignTask = async (taskId: string, userId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/assign/${taskId}/${userId}`, {
     method: "PATCH",
     headers: {
@@ -356,12 +320,10 @@ export const assignTask = async (taskId: string, userId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -371,7 +333,6 @@ export const assignTask = async (taskId: string, userId: string) => {
 export const unAssignTask = async (taskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/unassign/${taskId}`, {
     method: "PATCH",
     headers: {
@@ -379,12 +340,10 @@ export const unAssignTask = async (taskId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -394,7 +353,6 @@ export const unAssignTask = async (taskId: string) => {
 export const changeTaskStatus = async (taskId: string, sectionId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(
     `${BACKEND_URL}/task/change-status/${sectionId}/${taskId}`,
     {
@@ -405,12 +363,10 @@ export const changeTaskStatus = async (taskId: string, sectionId: string) => {
       // next: {tags: ['project']}
     }
   );
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("delete task data:", data);
   if (data.message !== "CREATED") {
     return { success: false };
   }
@@ -422,7 +378,6 @@ export const changeTaskStatus = async (taskId: string, sectionId: string) => {
 export const addComment = async (taskId: string, comment: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/add-comment`, {
     method: "POST",
     headers: {
@@ -436,11 +391,9 @@ export const addComment = async (taskId: string, comment: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    console.log("taskId", taskId, comment, "not ok", res);
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -450,7 +403,6 @@ export const addComment = async (taskId: string, comment: string) => {
 export const getComments = async (taskId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/get-comments/${taskId}`, {
     method: "GET",
     headers: {
@@ -463,7 +415,6 @@ export const getComments = async (taskId: string) => {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "SUCCESS") {
     return { success: false };
   }
@@ -473,7 +424,6 @@ export const getComments = async (taskId: string) => {
 export const updateComment = async (commentId: string, comment: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/update-comment`, {
     method: "PUT",
     headers: {
@@ -490,7 +440,6 @@ export const updateComment = async (commentId: string, comment: string) => {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -506,7 +455,6 @@ export const reorderTaskInBetween = async (
 ) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/reorder`, {
     method: "PATCH",
     headers: {
@@ -526,7 +474,6 @@ export const reorderTaskInBetween = async (
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }
@@ -540,7 +487,6 @@ export const createTask = async (
 ) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/create`, {
     method: "POST",
     headers: {
@@ -558,7 +504,6 @@ export const createTask = async (
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "CREATED") {
     return { success: false };
   }
@@ -568,7 +513,6 @@ export const createTask = async (
 export const deleteComment = async (commentId: string) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-comment/${commentId}`, {
     method: "DELETE",
     headers: {
@@ -576,12 +520,10 @@ export const deleteComment = async (commentId: string) => {
     },
     // next: {tags: ['project']}
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "DELETED") {
     return { success: false };
   }
@@ -594,7 +536,6 @@ export const likeOrUnlikeTask = async (
 ) => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
-  console.log("calling api");
   const path = type == "LIKE" ? "like" : "unlike";
   const res = await fetch(`${BACKEND_URL}/task/${path}/${taskId}`, {
     method: "PATCH",
@@ -602,12 +543,10 @@ export const likeOrUnlikeTask = async (
       authorization: `Bearer ${session.accessToken.token}`,
     },
   });
-  console.log("res:", res);
   if (!res.ok) {
     return { success: false };
   }
   const data = await res.json();
-  console.log("update task data:", data);
   if (data.message !== "UPDATED") {
     return { success: false };
   }

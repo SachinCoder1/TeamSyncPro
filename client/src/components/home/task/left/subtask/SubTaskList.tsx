@@ -21,7 +21,6 @@ const SubTaskList = ({ subtasks }: Props) => {
     id: string
   ) => {
     if (status === "COMPLETE") {
-      console.log("mark compelte");
       setMarkComplete({
         id,
         mark: true,
@@ -30,7 +29,6 @@ const SubTaskList = ({ subtasks }: Props) => {
     }
 
     if (status === "INCOMPLETE") {
-      console.log("mark incomplete");
       setMarkComplete({
         id,
         mark: false,

@@ -57,7 +57,6 @@ export default function TagsSelector({
   //   label: item.name,
   //   value: item._id,
   // }));
-  // console.log("suggestions: ", suggestions);
   // const suggestions = data?.data?.map((item) => ({
   //   label: item.name,
   //   value: item._id,
@@ -65,26 +64,20 @@ export default function TagsSelector({
   // const preSelected = suggestions?.filter((suggestion) =>
   //   tags?.includes(suggestion.value)
   // );
-  console.log("suggestions: ", suggestions);
-  // console.log("preSelected: ", preSelected);
   const [toggleEditor, setToggleEditor] = useState(false);
   const [selected, setSelected] = useState<any>(
     suggestions?.filter((suggestion: any) => tags?.includes(suggestion.value))
   );
-  console.log("selected: ", selected);
-  // console.log("data:", data);
 
   const api = useRef<any>(null);
   const focus = useCallback(() => {
     // if (!api || !api.current) return;
-    console.log("focusing...");
     api.current.input.focus();
   }, [api]);
 
   const onAdd = useCallback(
     async (newTag: any) => {
       setSelected([...selected, newTag]);
-      console.log("added tag:", newTag, "workspaceId: ", workspaceId);
       await addTag({
         name: newTag?.label || newTag?.value,
         taskId: taskId,
@@ -98,10 +91,8 @@ export default function TagsSelector({
     async (tagIndex: any) => {
       const tagToRemove = selected[tagIndex];
       setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
-      console.log("tag to remove: ", tagToRemove)
       await removeTag(tagToRemove.value, taskId);
 
-      console.log("removing:", tagIndex);
     },
     [selected]
   );
@@ -116,13 +107,10 @@ export default function TagsSelector({
 
   // useEffect(() => {
   //   if (data?.success) {
-  //     console.log("data got successed..")
   //     const preSelected = data?.data?.filter((suggestion) =>
   //       tags?.includes(suggestion._id)
   //     );
   //     if (preSelected) {
-  //       console.log("tags: ", tags)
-  //       console.log("pre selected are there...", preSelected)
   //       setSelected([...preSelected]);
   //     }
   //   }

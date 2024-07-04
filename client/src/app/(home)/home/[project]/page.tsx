@@ -41,7 +41,6 @@ export default async function page({ params }: Props) {
   // if (success === false) {
   //   return notFound();
   // }
-  // console.log("project: ", project);
   return redirect(`/home/${params.project}/list`);
 
   // return (

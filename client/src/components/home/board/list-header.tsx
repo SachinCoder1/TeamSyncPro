@@ -71,24 +71,19 @@ export function ListHeader({ data, refetchLists, onAddCard }: ListHeaderProps) {
   // })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("here...")
     const { id, title } = values;
-    console.log("values:", values);
     if (title === data.title) {
       return disableEditing();
     }
     disableEditing();
 
     const isAdded = await updateSection(title, id);
-    console.log("is updated:", isAdded);
 
 
     // mutate({ boardId, id, title })
   }
 
   const onBlur = () => {
-    console.log("blurred...");
-    console.log("formref.crrent:", formRef.current)
     formRef.current?.requestSubmit();
   };
 

@@ -39,7 +39,6 @@ export function CardItem({
     id: string
   ) => {
     if (status === "COMPLETE") {
-      console.log("mark compelte");
       setMarkComplete({
         id,
         mark: true,
@@ -48,7 +47,6 @@ export function CardItem({
     }
 
     if (status === "INCOMPLETE") {
-      console.log("mark incomplete");
       setMarkComplete({
         id,
         mark: false,

@@ -28,7 +28,6 @@ const LoginPage = async ({searchParams}: Props) => {
     redirect("/");
   }
 
-  console.log("search param: ", searchParams.callbackUrl)
   const invitationToken = getQueryParam(searchParams?.callbackUrl as string, "invitation_token")
   return (
     <div className="container relative hidden min-h-[calc(100vh-56px)] flex-col items-center justify-center md:flex lg:max-w-none lg:grid-cols-2 lg:px-0">

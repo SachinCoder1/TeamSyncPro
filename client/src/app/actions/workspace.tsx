@@ -69,12 +69,11 @@ export const createWorkspace = async (
   };
 };
 
-export const getTags = async (workspaceId?: string) => {
-  console.log("workspaceId", workspaceId);
+export const getTags = async () => {
   const session = await getServerAuth();
   // if (!session) redirect("/auth/signin");
   const res = await fetch(
-    `${BACKEND_URL}/workspace/tags/${workspaceId || session.user.workspace}`,
+    `${BACKEND_URL}/workspace/tags/${session.user.workspace}`,
     {
       method: "GET",
       headers: {

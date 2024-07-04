@@ -29,9 +29,7 @@ export const login = async (email: string, password: string) => {
         },
         });
     const data = await res.json();
-    console.log("data: ", data);
     return data;
   } catch (error) {
-    console.log("error: ", error);
   }
 };

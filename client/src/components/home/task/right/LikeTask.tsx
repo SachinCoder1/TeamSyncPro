@@ -19,13 +19,11 @@ const LikeHandler = ({ isLiked, likesCount = 0, taskId }: Props) => {
   const [totalLikes, setTotalLikes] = useState(likesCount);
   const onClickHandler = async () => {
     const like = await likeOrUnlikeTask(taskId, toggle ? "UNLIKE" : "LIKE");
-    console.log("like:", like);
     if (like.success) {
       revalidateTagServer("task")
       setToggle(!toggle);
       setTotalLikes(toggle ? totalLikes - 1 : totalLikes + 1);
     }
-    console.log(toggle ? "liked" : "unliked");
   };
 
   useEffect(() => {

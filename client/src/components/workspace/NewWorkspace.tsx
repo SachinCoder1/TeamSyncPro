@@ -84,19 +84,14 @@ const NewWorkspace = (props: Props) => {
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
     const emails = selected.map((item) => item.value);
-    console.log("data:", data);
-    console.log("emails: ", emails);
     const isCreated = await createWorkspace(data.name, emails);
-    console.log("is create:", isCreated);
     if (isCreated.success) {
       await update({
         info: isCreated.workspace?._id,
       })
         .then((item) => {
-          console.log("item...", item);
         })
         .catch((err) => {
-          console.log("err: ", err);
         });
       fireConfetti();
       await updateSelectedWorkspace(isCreated.workspace?._id as string);

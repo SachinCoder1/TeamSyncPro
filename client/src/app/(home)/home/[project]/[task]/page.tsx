@@ -28,9 +28,8 @@ export default async function Page({ params }: Props) {
   const taskData = getPerticularTask(params.task, params.project);
   const subTaskData = getSubTasks(params.task);
   const tagsData = getTags()
-  const workspaceData = getWorkspace(session.user.workspace);
+  const workspaceData = getWorkspace();
   const [tasks, subtasks,tags, workspace] = await Promise.all([taskData, subTaskData, tagsData,workspaceData]);
-  console.log("subtasks: ", subtasks);
   if (tasks.success === false) {
     return <>not found</>;
   }

@@ -77,12 +77,10 @@ export default async function SettingsLayout({
   }
 
   const { success, project } = await getProject(params.project);
-  console.log("arrived here...", searchParams)
   if (success === false && !searchParams?.invitation_token) {
     // return notFound();
   }
-  console.log("project: ", project);
-
+  
   const isProjectStarred = await isStarred(params?.project, "project")
 
   return (

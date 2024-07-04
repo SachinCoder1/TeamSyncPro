@@ -54,13 +54,11 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
       setLoading(true);
-      console.log(values, params.project, listId);
       const isCreated = await createTask(
         values.title,
         params.project as string,
         listId
       );
-      console.log("is created:", isCreated);
       if (isCreated.success) {
         revalidateTagServer("project");
       }

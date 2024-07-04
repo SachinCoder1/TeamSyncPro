@@ -30,9 +30,6 @@ const InviteMembers = ({ selected, setSelected }: Props) => {
     async (tagIndex: any) => {
       const tagToRemove = selected[tagIndex];
       setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
-      console.log("tag to remove: ", tagToRemove);
-
-      console.log("removing:", tagIndex);
     },
     [selected]
   );

@@ -30,9 +30,7 @@ export default function OnboardForm({ step }: { step: number }) {
   const handleFinalSubmit = async (data: onboardFormDataType) => {
     const finalData = { ...formData, ...data };
     setFormData(finalData);
-    console.log("Final Form Data:", finalData);
     const res = await onboardUser(finalData);
-    console.log("Response:", res);
   };
 
   const onSubmit = (data: any) => {

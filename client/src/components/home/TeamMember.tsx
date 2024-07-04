@@ -69,7 +69,6 @@ export function TeamMembers({ id, name, role, src, label }: Props) {
   const { toast } = useToast();
 
   const handleItemSelect = (item: any) => {
-    console.log("clicked on:", item.role);
     if (role === "ADMIN") {
       toast({
         title: `Uh oh! Sorry Owner cannot be Changed`,

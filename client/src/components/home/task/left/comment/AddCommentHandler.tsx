@@ -37,7 +37,6 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
     handleReset();
     const data = await addComment(taskId, comment);
     revalidateTagServer("comments");
-    console.log("data received after done", data);
   };
 
   const handleReset = () => {
@@ -54,14 +53,10 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
 
   const handleDeleteConfirmClick = async () => {
     if (!currentComment) return;
-    console.log("deleting..");
     setDeleteModalOpen(false);
-    console.log("deleting comment...", currentComment);
     // return;
     const isDeleted = await deleteComment(currentComment?._id as string);
-    console.log("isDeleted:", isDeleted);
     if (isDeleted.success) {
-      console.log("comment deleted successfully");
       revalidateTagServer("comments");
     }
   };

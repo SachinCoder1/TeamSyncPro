@@ -71,11 +71,7 @@ export function ListContainer({
   //   })
 
   const onDragEnd = async (result: DropResult) => {
-    console.log("result: ", result);
     const { destination, source, type } = result;
-    console.log("destination: ", destination);
-    console.log("source: ", source);
-    console.log("type: ", type);
 
     if (!destination) {
       return;
@@ -98,19 +94,23 @@ export function ListContainer({
         })
       );
       setOrderedData(items);
-      const beforeSectionId = destination.index > 0 ? items[destination.index - 1]._id : null;
-      const afterSectionId = destination.index < items.length - 1 ? items[destination.index + 1]._id : null;
-  
-      const isReordered = await reorderSection(items[destination.index]._id, beforeSectionId, afterSectionId,projectId);
-      console.log("is reordered:", isReordered)
+      const beforeSectionId =
+        destination.index > 0 ? items[destination.index - 1]._id : null;
+      const afterSectionId =
+        destination.index < items.length - 1
+          ? items[destination.index + 1]._id
+          : null;
+
+      const isReordered = await reorderSection(
+        items[destination.index]._id,
+        beforeSectionId,
+        afterSectionId,
+        projectId
+      );
 
       if (isReordered.success) {
         revalidateTagServer("project");
       }
-  
-      console.log("isReordered:", isReordered);
-  
-      //   mutateUpdateListOrder({ items, boardId })
     }
 
     // User moves a card
@@ -154,7 +154,6 @@ export function ListContainer({
         sourceList.tasks = reorderedCards;
 
         setOrderedData(newOrderedData);
-        console.log("updating data between tasks:", reorderedCards);
         const beforeTaskId =
           destination.index > 0
             ? sourceList.tasks[destination.index - 1]._id
@@ -173,12 +172,8 @@ export function ListContainer({
         if (isReordered.success) {
           revalidateTagServer("project");
         }
-        console.log("isReordered:", isReordered);
         setLoading(false);
 
-        console.log("beforeTaskId: ", beforeTaskId);
-        console.log("afterTaskId: ", afterTaskId);
-        console.log("currentTaskId: ", currentTaskId);
         // mutateUpdateCardOrder({ boardId, items: reorderedCards })
       } else {
         // Moving the card in different list
@@ -206,22 +201,17 @@ export function ListContainer({
           card.order = idx;
         });
 
-        // console.log("new order data:", newOrderedData)
 
         setOrderedData(newOrderedData);
-        console.log("updation data between sections:", destinationList.tasks);
         const beforeTaskId =
           destination.index > 0
             ? destinationList.tasks[destination.index - 1]?._id
             : null;
-        console.log("beforeTaskId: ", beforeTaskId);
         const afterTaskId =
           destination.index < destinationList.tasks.length - 1
             ? destinationList.tasks[destination.index + 1]?._id
             : null;
-        console.log("afterTaskId: ", afterTaskId);
         const currentTaskId = destinationList.tasks[destination.index]?._id;
-        console.log("currentTaskId: ", currentTaskId);
 
         setLoading(true);
         const isReordered = await reorderTaskInBetween(
@@ -234,9 +224,7 @@ export function ListContainer({
         if (isReordered.success) {
           revalidateTagServer("project");
         }
-        console.log("isReordered:", isReordered);
         setLoading(false);
-
 
         // mutateUpdateCardOrder({ boardId, items: destinationList.tasks })
       }

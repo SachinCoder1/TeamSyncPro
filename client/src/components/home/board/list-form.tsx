@@ -70,12 +70,10 @@ export function ListForm({ refetchLists }: ListFormProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
-    console.log(values, params.project);
     const isCreated = await createSection(
       values.title,
       params.project as string
     );
-    console.log("is created:", isCreated);
     if (isCreated.success) {
       revalidateTagServer("project");
     }

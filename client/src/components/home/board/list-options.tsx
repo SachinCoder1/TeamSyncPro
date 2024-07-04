@@ -41,9 +41,7 @@ export function ListOptions({
 
   const onCopy = async () => {
     setLoading(true);
-    console.log("data:", data);
     const isCopied = await copySection(data.project, data._id);
-    console.log("is copied:", isCopied);
     if (isCopied.success) {
       toast.success("Section copied");
       revalidateTagServer("project");
@@ -55,9 +53,7 @@ export function ListOptions({
 
   const onDelete = async () => {
     setLoading(true);
-    console.log("data:", data);
     const isDeleted = await deleteSection(data.project, data._id);
-    console.log("is deleted:", isDeleted);
     if (isDeleted.success) {
       toast.success("Section deleted");
       setShowDeleteDialog(false);
