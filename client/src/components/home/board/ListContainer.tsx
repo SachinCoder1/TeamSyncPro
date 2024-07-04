@@ -8,6 +8,7 @@ import { ListItem } from "./list-item";
 import { reorderTaskInBetween } from "@/app/actions/task";
 import revalidateTagServer from "@/app/actions/actions";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { reorderSection } from "@/app/actions/section";
 
 // import { trpc } from '@/trpc/client'
 // import { ListWithCards } from '@/types'
@@ -97,6 +98,18 @@ export function ListContainer({
         })
       );
       setOrderedData(items);
+      const beforeSectionId = destination.index > 0 ? items[destination.index - 1]._id : null;
+      const afterSectionId = destination.index < items.length - 1 ? items[destination.index + 1]._id : null;
+  
+      const isReordered = await reorderSection(items[destination.index]._id, beforeSectionId, afterSectionId,projectId);
+      console.log("is reordered:", isReordered)
+
+      if (isReordered.success) {
+        revalidateTagServer("project");
+      }
+  
+      console.log("isReordered:", isReordered);
+  
       //   mutateUpdateListOrder({ items, boardId })
     }
 

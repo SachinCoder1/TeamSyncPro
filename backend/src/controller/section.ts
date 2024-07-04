@@ -151,6 +151,8 @@ export const reorderSection = async (req: Request, res: Response) => {
       beforeSection ? beforeSection.order : null,
       afterSection ? afterSection.order : null
     );
+ 
+    console.log("new order:", newOrder, req.params)
 
     const updatedSection = await Section.findByIdAndUpdate(
       sectionId,

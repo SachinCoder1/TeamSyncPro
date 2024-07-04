@@ -28,7 +28,7 @@ router.patch(
   authMiddleware,
   // restrictsToProject(ROLES.MEMBER),
   updateSection
-);
+); 
 router.patch(
   "/reorder",
   validateReOrderSectionBody,

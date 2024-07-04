@@ -38,7 +38,7 @@ export const validateUpdateSectionBody = (
       //   .regex(/^[0-9a-fA-F]{24}$/)
       //   .required(),
     });
-    console.log("here in update section")
+    console.log("here in update section");
     const error = schema.validate(data).error;
     if (error) {
       return errorResponseHandler(res, { status: 400, message: error.message });
@@ -56,16 +56,19 @@ export const validateReOrderSectionBody = (
 ) => {
   try {
     const data = req.body;
+    console.log("reorder req.body:", req.body);
     const schema = Joi.object({
       sectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required(),
       beforeSectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
-        .required(),
+        .required()
+        .allow(null, ""),
       afterSectionId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
-        .required(),
+        .required()
+        .allow(null, ""),
       projectId: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required(),

@@ -76,18 +76,18 @@ export function ListOptions({
           className="h-auto w-full justify-start rounded-none p-2 text-sm font-normal"
           variant="ghost"
         >
-          <TooltipWrapper
-            trigger={<PlusIcon size={20} className="text-muted-foreground" />}
-          >
-            Add task
-          </TooltipWrapper>
+          {/* <TooltipWrapper
+            trigger={}
+          > */}
+            <PlusIcon size={20} className="text-muted-foreground" />
+          {/* </TooltipWrapper> */}
         </Button>
         <Popover>
           <PopoverTrigger asChild>
             <Button className="h-auto w-auto p-2" variant="ghost">
-              <TooltipWrapper trigger={<MoreHorizontal className="h-4 w-4" />}>
-                More actions
-              </TooltipWrapper>
+              {/* <TooltipWrapper trigger={<MoreHorizontal className="h-4 w-4" />}> */}
+              <MoreHorizontal className="h-4 w-4" />
+              {/* </TooltipWrapper> */}
             </Button>
           </PopoverTrigger>
           <PopoverContent
@@ -103,9 +103,9 @@ export function ListOptions({
                 className="absolute right-2 top-2 h-auto w-auto p-2 text-neutral-600"
                 variant="ghost"
               >
-                <TooltipWrapper trigger={<X className="h-4 w-4" />}>
+                {/* <TooltipWrapper trigger={<X className="h-4 w-4" />}> */}
                   Close
-                </TooltipWrapper>
+                {/* </TooltipWrapper> */}
               </Button>
             </PopoverClose>
 
