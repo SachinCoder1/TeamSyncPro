@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { fireConfetti } from "@/components/workspace/NewWorkspace";
 
 type Props = {
   tasks?: MyTasksType[];
@@ -35,6 +36,7 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
         mark: true,
       });
       await markCompleteIncomplete(id, true);
+      fireConfetti()
     }
 
     if (status === "INCOMPLETE") {
@@ -78,14 +80,15 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
               (item._id === markComplete.id && markComplete.mark) ? (
                 <CircleCheckIcon
                   onClick={() => handleCompleteSubTask("INCOMPLETE", item._id)}
-                  // fill="#58a182"
-                  className="h-6 w-6 -ml-0.5 text-white fill-[#58a182] rounded-full cursor-pointer"
-                />
+                  size={25}
+                  className="-ml-0.5 text-background fill-[#58a182] rounded-full cursor-pointer"
+            />
               ) : (
                 <CircleCheckIcon
+                size={20}
                   onClick={() => handleCompleteSubTask("COMPLETE", item._id)}
-                  className="h-5 w-5 hover:text-[#0d7f56] hover:!fill-white rounded-full cursor-pointer"
-                />
+                  className="hover:text-[#0d7f56] hover:!fill-background rounded-full cursor-pointer text-muted-foreground"
+                  />
               )}
               <Link
                 className={cn("py-2")}

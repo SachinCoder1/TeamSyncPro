@@ -37,7 +37,7 @@ function fire(particleRatio: any, opts: any) {
   });
 }
 
-const fireConfetti = () => {
+export const fireConfetti = () => {
   fire(0.25, {
     spread: 26,
     startVelocity: 55,

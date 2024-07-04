@@ -3,6 +3,7 @@
 import revalidateTagServer from "@/app/actions/actions";
 import { markCompleteIncomplete } from "@/app/actions/task";
 import { buttonVariants } from "@/components/ui/button";
+import { fireConfetti } from "@/components/workspace/NewWorkspace";
 import { cn } from "@/lib/utils";
 import { TaskType } from "@/types/project";
 import { ChevronRight, CircleCheckIcon } from "lucide-react";
@@ -26,6 +27,7 @@ const SubTaskList = ({ subtasks }: Props) => {
         mark: true,
       });
       await markCompleteIncomplete(id, true);
+      fireConfetti()
     }
 
     if (status === "INCOMPLETE") {

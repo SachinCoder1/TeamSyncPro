@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { UserAvatarCard, UserCard } from "../workspace/Members";
 import DueDate from "../task/right/DueDate";
 import StoryPoints from "../task/right/StoryPoints";
+import { fireConfetti } from "@/components/workspace/NewWorkspace";
 
 // import { useCardModal } from '@/hooks/use-card-modal'
 
@@ -44,6 +45,8 @@ export function CardItem({
         mark: true,
       });
       await markCompleteIncomplete(id, true);
+      fireConfetti()
+
     }
 
     if (status === "INCOMPLETE") {
