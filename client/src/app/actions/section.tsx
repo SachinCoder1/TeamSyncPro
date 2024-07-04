@@ -1,6 +1,8 @@
 "use server";
 
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
@@ -11,8 +13,8 @@ export const createSection = async (
     projectId: string
   ) => {
     try {
-      const session = await getServerSession(authOptions);
-      if (!session) redirect("/auth/signin");
+      const session = await getServerAuth();
+      // if (!session) redirect("/auth/signin");
       const res = await fetch(`${BACKEND_URL}/section/add`, {
         method: "POST",
         body: JSON.stringify({
@@ -45,8 +47,8 @@ export const updateSection = async (
     sectionId: string
   ) => {
     try {
-      const session = await getServerSession(authOptions);
-      if (!session) redirect("/auth/signin");
+      const session = await getServerAuth();
+      // if (!session) redirect("/auth/signin");
       const res = await fetch(`${BACKEND_URL}/section/update/${sectionId}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -78,8 +80,8 @@ export const copySection = async (
     sectionId: string,
   ) => {
     try {
-      const session = await getServerSession(authOptions);
-      if (!session) redirect("/auth/signin");
+      const session = await getServerAuth();
+      // if (!session) redirect("/auth/signin");
       const res = await fetch(`${BACKEND_URL}/section/copy/${projectId}/${sectionId}`, {
         method: "POST",
         headers: {

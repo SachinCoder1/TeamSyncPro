@@ -10,6 +10,9 @@ export const SubTaskFormSchema = z.object({
 export const CreateProjectSchema = z.object({
   title: z.string().min(1, "Project name is required"),
 });
+export const CreateWorkspaceSchema = z.object({
+  name: z.string().min(1, "Workspace name is required"),
+});
 
 export const FirstTimeSignupSchema = z
   .object({

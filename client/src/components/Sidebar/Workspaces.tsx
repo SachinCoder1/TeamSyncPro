@@ -9,8 +9,9 @@ import {
 } from "../ui/accordion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { BuildingIcon } from "lucide-react";
+import { BuildingIcon, PlusIcon } from "lucide-react";
 import MyWorkspacesCard from "../Navbar/MyWorkspacesCard";
+import { Button } from "../ui/button";
 
 type Props = {
   name: string;
@@ -27,9 +28,9 @@ const Workspaces = ({ id, name, selected, workspaces }: Props) => {
   };
 
   const handleAccordionExpand = (value: string) => {
-    if(accordionOpen) {
-        handleAccordionCollapse();
-        return;
+    if (accordionOpen) {
+      handleAccordionCollapse();
+      return;
     }
     setAccordionOpen(value);
   };
@@ -67,6 +68,14 @@ const Workspaces = ({ id, name, selected, workspaces }: Props) => {
                 />
               </div>
             ))}
+            <Button
+              variant={"ghost"}
+              className="flex gap-x-2"
+              onClick={handleAccordionCollapse}
+            >
+              <PlusIcon size={20} className="text-muted-foreground" /> New
+              workspace
+            </Button>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

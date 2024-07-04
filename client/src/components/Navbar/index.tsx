@@ -15,6 +15,7 @@ import { authOptions } from "@/utils/authOptions";
 import CreateOptions from "./CreateOptions";
 import { getWorkspace } from "@/app/actions/workspace";
 import CommandSearchMenu from "./CommandSearchMenu";
+import { getServerAuth } from "@/lib/auth";
 
 type MyType = {
   name: string;
@@ -22,7 +23,7 @@ type MyType = {
   picture?: string;
 };
 const Navbar = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerAuth();
   const user = session?.user as MyType | undefined;
   const workspace = await getWorkspace();
   // let user: null | MyType = null;
@@ -42,7 +43,10 @@ const Navbar = async () => {
       {/* <MaxWidthWrapper> */}
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
           <Logo />
+          {
+            user && 
           <CommandSearchMenu workspaceId={workspace.workspace?._id as string} projects={workspace.workspace?.projects} />
+          }
 
           <MobileNav isAuth={!!user} />
 

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { BuildingIcon, CheckIcon } from "lucide-react";
 import revalidateTagServer from "@/app/actions/actions";
 import { useSession } from "next-auth/react";
+import { updateSelectedWorkspace } from "@/app/actions/user";
 
 type Props = {
   item: {
@@ -24,6 +25,7 @@ const MyWorkspacesCard = ({ item, selectedWorkspace }: Props) => {
     await update({
       info: id,
     });
+    await updateSelectedWorkspace(id);
     revalidateTagServer("workspace");
   };
   return (

@@ -7,7 +7,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export default async function MyHomePage() {
-  // const session = await getServerSession(authOptions);
+  // const session = await getServerAuth();
   // if (session && session?.user.workspace) {
   //   return redirect(`/home/${session.user.workspace}`);
   // }

@@ -11,13 +11,14 @@ import UserLableAvatarCard from "@/components/ui/UserLableAvatarCard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { TeamMembers } from "../TeamMember";
+import { getServerAuth } from "@/lib/auth";
 
 type Props = {
   projectId: string;
 };
 
 const ProjectDashboard = async ({ projectId }: Props) => {
-   const session = await getServerSession(authOptions);
+   const session = await getServerAuth();
    console.log("session.user...........", session?.user)
   const { success, project } = await getProject(projectId);
   if (success === false) {

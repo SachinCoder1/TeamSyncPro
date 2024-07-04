@@ -41,7 +41,6 @@ export default async function SettingsLayout({
   params,
   searchParams
 }: SettingsLayoutProps) {
-  const session = await getServerAuth();
     const url = `/home/${params.project}`
     const sidebarNavItems = [
         {
@@ -74,7 +73,7 @@ export default async function SettingsLayout({
       ];
 
   if (!isValidObjectId(params.project)) {
-    return redirect(`/workspace`);
+    // return redirect(`/workspace`);
   }
 
   const { success, project } = await getProject(params.project);

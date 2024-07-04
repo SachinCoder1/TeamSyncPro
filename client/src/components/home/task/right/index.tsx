@@ -22,6 +22,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { getTags, getWorkspace } from "@/app/actions/workspace";
 import { MembersType } from "@/types";
+import { getServerAuth } from "@/lib/auth";
 
 type Props = {
   task?: TaskType;
@@ -79,7 +80,7 @@ const RightTaskContainer = async ({
   workspaceName,
 }: Props) => {
   // const { data: user } = useSession();
-  const user = await getServerSession(authOptions);
+  const user = await getServerAuth();
   // const tags = await getTags();
   // const members = await getWorkspace(session.user.workspace);
   const suggestions = tags?.map((item, index) => ({

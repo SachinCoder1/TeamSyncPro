@@ -1,6 +1,8 @@
 "use server";
 
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
@@ -8,8 +10,8 @@ import { SignupFormData } from "@/components/forms/SignupForm";
 import { authOptions } from "@/utils/authOptions";
 
 export const signInUser = async (invitation_token: string|null) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // // if (!session) redirect("/auth/signin");
   const res = await fetch(BACKEND_URL + "/user", {
     method: "GET",
     headers: {

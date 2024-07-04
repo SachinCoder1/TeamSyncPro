@@ -1,6 +1,8 @@
 "use server";
 
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 
 /**
  * Custom fetcher that abstracts away common headers and method selection.

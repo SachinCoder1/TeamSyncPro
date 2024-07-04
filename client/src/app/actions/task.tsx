@@ -1,6 +1,8 @@
 "use server";
 
 import { BACKEND_URL } from "@/config";
+import { getServerAuth } from "@/lib/auth";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/utils/authOptions";
@@ -10,8 +12,8 @@ export const markCompleteIncomplete = async (
   taskId?: string,
   mark?: boolean
 ) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   let todo = mark ? "mark-complete" : "mark-incomplete";
   const res = await fetch(`${BACKEND_URL}/task/${todo}/${taskId}`, {
     method: "PATCH",
@@ -33,8 +35,8 @@ export const markCompleteIncomplete = async (
 };
 
 export const getPerticularTask = async (taskId: string, projectId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("task:", taskId);
   const res = await fetch(`${BACKEND_URL}/task/get/${projectId}/${taskId}`, {
     method: "GET",
@@ -64,8 +66,8 @@ type UpdateTaskType = {
 };
 
 export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/update/${taskId}`, {
     method: "PATCH",
@@ -94,8 +96,8 @@ type AddTagType = {
 };
 
 export const addTag = async (payload: AddTagType) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/add-tag`, {
     method: "POST",
@@ -117,8 +119,8 @@ export const addTag = async (payload: AddTagType) => {
   return { success: true, data: data.data?.tag as TagType };
 };
 export const removeTag = async (tagId: string, taskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-tag/${tagId}/${taskId}`, {
     method: "PATCH",
@@ -140,8 +142,8 @@ export const removeTag = async (tagId: string, taskId: string) => {
 };
 
 export const getSubTasks = async (parentTaskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/get-subtask/${parentTaskId}`, {
     method: "GET",
@@ -163,8 +165,8 @@ export const getSubTasks = async (parentTaskId: string) => {
 };
 
 export const createSubTask = async (parentTaskId: string, title: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/createSubTask`, {
     method: "POST",
@@ -191,8 +193,8 @@ export const createSubTask = async (parentTaskId: string, title: string) => {
 };
 
 export const deleteTask = async (taskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/delete/${taskId}`, {
     method: "DELETE",
@@ -214,8 +216,8 @@ export const deleteTask = async (taskId: string) => {
 };
 
 export const cloneTask = async (taskId: string, title: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/copy/${taskId}`, {
     method: "POST",
@@ -241,8 +243,8 @@ export const cloneTask = async (taskId: string, title: string) => {
 };
 
 export const addDueDate = async (taskId: string, dueDate: Date) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/due/${taskId}`, {
     method: "PATCH",
@@ -272,8 +274,8 @@ export const addDependency = async (
   dependencyId: string,
   dependencyType: "BLOCKS" | "IS_BLOCKED_BY"
 ) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(
     `${BACKEND_URL}/task/add-dependency/${taskId}/${dependencyId}/${dependencyType}`,
@@ -298,8 +300,8 @@ export const addDependency = async (
 };
 
 export const removeDependency = async (taskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-dependency/${taskId}`, {
     method: "PATCH",
@@ -321,8 +323,8 @@ export const removeDependency = async (taskId: string) => {
 };
 
 export const removeDueDate = async (taskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-due/${taskId}`, {
     method: "PATCH",
@@ -344,8 +346,8 @@ export const removeDueDate = async (taskId: string) => {
 };
 
 export const assignTask = async (taskId: string, userId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/assign/${taskId}/${userId}`, {
     method: "PATCH",
@@ -367,8 +369,8 @@ export const assignTask = async (taskId: string, userId: string) => {
 };
 
 export const unAssignTask = async (taskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/unassign/${taskId}`, {
     method: "PATCH",
@@ -390,8 +392,8 @@ export const unAssignTask = async (taskId: string) => {
 };
 
 export const changeTaskStatus = async (taskId: string, sectionId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(
     `${BACKEND_URL}/task/change-status/${sectionId}/${taskId}`,
@@ -418,8 +420,8 @@ export const changeTaskStatus = async (taskId: string, sectionId: string) => {
 // Comments
 
 export const addComment = async (taskId: string, comment: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/add-comment`, {
     method: "POST",
@@ -446,8 +448,8 @@ export const addComment = async (taskId: string, comment: string) => {
 };
 
 export const getComments = async (taskId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/get-comments/${taskId}`, {
     method: "GET",
@@ -469,8 +471,8 @@ export const getComments = async (taskId: string) => {
 };
 
 export const updateComment = async (commentId: string, comment: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/update-comment`, {
     method: "PUT",
@@ -502,8 +504,8 @@ export const reorderTaskInBetween = async (
   beforeSectionId?: string,
   afterSectionId?: string,
 ) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/reorder`, {
     method: "PATCH",
@@ -536,8 +538,8 @@ export const createTask = async (
   projectId: string,
   sectionId: string
 ) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/create`, {
     method: "POST",
@@ -564,8 +566,8 @@ export const createTask = async (
 };
 
 export const deleteComment = async (commentId: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const res = await fetch(`${BACKEND_URL}/task/remove-comment/${commentId}`, {
     method: "DELETE",
@@ -590,8 +592,8 @@ export const likeOrUnlikeTask = async (
   taskId: string,
   type: "LIKE" | "UNLIKE"
 ) => {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/auth/signin");
+  const session = await getServerAuth();
+  // if (!session) redirect("/auth/signin");
   console.log("calling api");
   const path = type == "LIKE" ? "like" : "unlike";
   const res = await fetch(`${BACKEND_URL}/task/${path}/${taskId}`, {
