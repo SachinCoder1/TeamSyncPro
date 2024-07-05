@@ -7,6 +7,7 @@ import { getServerAuth } from "@/lib/auth";
 import { CheckIcon } from "lucide-react";
 import MyWorkspacesCard from "./MyWorkspacesCard";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
+import Loading from "@/app/(home)/home/[project]/loading";
 
 type Props = {};
 
@@ -15,7 +16,7 @@ const MyWorkspaces = async (props: Props) => {
   const selectedWorkspace = await getServerAuth();
   return (
     <div className="space-y-2">
-      {!workspaces && <div>loading...</div>}
+      {!workspaces && <div><Loading /></div>}
       {/* {JSON.stringify(workspaces, null,2)} */}
       {workspaces?.data?.map((item, index) => (
         <DropdownMenuItem className="hover:!bg-transparent focus:!bg-none px-0 py-0 !p-0 w-full m-0">

@@ -10,6 +10,7 @@ import { getServerAuth } from "@/lib/auth";
 import { CircleCheck } from "lucide-react";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
+import Loading from "../loading";
 export const metadata: Metadata = {
   title: "Task - TeamSyncPro",
   description: "A task and issue tracker build using Tanstack Table.",
@@ -35,7 +36,7 @@ export default async function Page({ params }: Props) {
   }
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div><Loading /></div>}>
         {/* {JSON.stringify(tasks.task, null, 2)} */}
         <BreadcrumbMain params={params} />
         <div className="ml-4 mt-4">

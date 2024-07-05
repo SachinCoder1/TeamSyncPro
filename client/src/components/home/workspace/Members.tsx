@@ -26,6 +26,7 @@ import {
 import { getMemberProfile, getMemberShortProfile } from "@/app/actions/user";
 import { format } from "date-fns";
 import Link from "next/link";
+import Loading from "@/app/(home)/home/[project]/loading";
 
 type Props = {
   members?: MembersType[];
@@ -123,7 +124,7 @@ export const UserCard = ({
         </HoverCardTrigger>
         {name && (
           <HoverCardContent className="w-max">
-            {loading && !memberProfile && <div>loading...</div>}
+            {loading && !memberProfile && <div><Loading /></div>}
             {memberProfile && (
               <div className="flex gap-x-2 w-max h-max">
                 <UserAvatarCard

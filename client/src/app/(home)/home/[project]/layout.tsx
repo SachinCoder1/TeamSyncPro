@@ -16,6 +16,7 @@ import ProjectOptions from "@/components/home/project/ProjectOptions";
 import { headingClasses } from "@/components/ui/typography";
 import { ProjectNav } from "@/components/home/project/ProjectNav";
 import { isStarred } from "@/app/actions/user";
+import Loading from "./loading";
 // import { SidebarNav } from "@/app/(app)/examples/forms/components/sidebar-nav"
 
 export const metadata: Metadata = {
@@ -85,7 +86,7 @@ export default async function SettingsLayout({
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div><Loading /></div>}>
         {/* <div className="md:hidden">
           <Image
             src="/examples/forms-light.png"

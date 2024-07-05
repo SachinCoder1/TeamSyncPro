@@ -23,6 +23,7 @@ import { authOptions } from "@/utils/authOptions";
 import { getTags, getWorkspace } from "@/app/actions/workspace";
 import { MembersType } from "@/types";
 import { getServerAuth } from "@/lib/auth";
+import Loading from "@/app/(home)/home/[project]/loading";
 
 type Props = {
   task?: TaskType;
@@ -109,7 +110,7 @@ const RightTaskContainer = async ({
     },
   ];
   
-  if (!task) return <>Loading...</>;
+  if (!task) return <>loading...</>;
   return (
     <div className="p-2">
       <div className="flex justify-between w-full">
