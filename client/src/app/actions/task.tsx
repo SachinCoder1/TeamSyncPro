@@ -23,7 +23,7 @@ export const markCompleteIncomplete = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -44,7 +44,7 @@ export const getPerticularTask = async (taskId: string, projectId: string) => {
     cache: "force-cache",
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -73,7 +73,7 @@ export const updateTask = async (taskId?: string, payload?: UpdateTaskType) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -101,7 +101,7 @@ export const addTag = async (payload: AddTagType) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "CREATED") {
@@ -121,7 +121,7 @@ export const removeTag = async (tagId: string, taskId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -141,7 +141,7 @@ export const getSubTasks = async (parentTaskId: string) => {
     next: { tags: ["subtasks"] },
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -166,7 +166,7 @@ export const createSubTask = async (parentTaskId: string, title: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "CREATED") {
@@ -186,7 +186,7 @@ export const deleteTask = async (taskId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "DELETED") {
@@ -210,7 +210,7 @@ export const cloneTask = async (taskId: string, title: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "CREATED") {
@@ -234,7 +234,7 @@ export const addDueDate = async (taskId: string, dueDate: Date) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -261,7 +261,7 @@ export const addDependency = async (
     }
   );
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -281,7 +281,7 @@ export const removeDependency = async (taskId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -301,7 +301,7 @@ export const removeDueDate = async (taskId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -321,7 +321,7 @@ export const assignTask = async (taskId: string, userId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -341,7 +341,7 @@ export const unAssignTask = async (taskId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -364,7 +364,7 @@ export const changeTaskStatus = async (taskId: string, sectionId: string) => {
     }
   );
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "CREATED") {
@@ -391,7 +391,7 @@ export const addComment = async (taskId: string, comment: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -412,7 +412,7 @@ export const getComments = async (taskId: string) => {
     cache: "force-cache",
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -437,7 +437,7 @@ export const updateComment = async (commentId: string, comment: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -471,7 +471,7 @@ export const reorderTaskInBetween = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {
@@ -501,7 +501,7 @@ export const createTask = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "CREATED") {
@@ -521,7 +521,7 @@ export const deleteComment = async (commentId: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "DELETED") {
@@ -544,7 +544,7 @@ export const likeOrUnlikeTask = async (
     },
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "UPDATED") {

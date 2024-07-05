@@ -10,6 +10,7 @@ import CONNECT_MONGO_DB from "~/db";
 import { PORT } from "~/constants";
 import { CLIENT_URL, DEFAULT_API_URL } from "~/config";
 import routes from "~/routes";
+import { limiter } from "./service/rateLimit";
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use(
 app.get("/", async (req, res) => {
   res.send("Hello World!");
 });
+
+app.use(limiter)
 
 app.use(`${DEFAULT_API_URL}/auth`, routes.auth);
 app.use(`${DEFAULT_API_URL}/user`, routes.user);

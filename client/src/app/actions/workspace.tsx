@@ -26,7 +26,7 @@ export const getWorkspace = async () => {
     }
   );
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const parsedWorkspace = await res.json();
   if (parsedWorkspace.message !== "SUCCESS") {
@@ -57,7 +57,7 @@ export const createWorkspace = async (
     }),
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const parsedWorkspace = await res.json();
   if (parsedWorkspace.message !== "SUCCESS") {
@@ -83,7 +83,7 @@ export const getTags = async () => {
     }
   );
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const parsedWorkspace = await res.json();
   if (parsedWorkspace.message !== "SUCCESS") {

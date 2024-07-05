@@ -20,7 +20,7 @@ export const getMyTasks = async () => {
     next: {tags: ['myStarredItems']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -43,7 +43,7 @@ export const getQueriedTasks = async (query: string) => {
     }
   );
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -63,7 +63,7 @@ export const getLikedTasks = async () => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -83,7 +83,7 @@ export const getMyWorkspaces = async () => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -103,7 +103,7 @@ export const getMemberProfile = async (id: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -123,7 +123,7 @@ export const getMemberShortProfile = async (id: string) => {
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -143,7 +143,7 @@ export const getStarredProjects = async () => {
     next: {tags: ['myStarredItems']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -163,7 +163,7 @@ export const getStarredWorkspaces = async () => {
     next: {tags: ['myStarredItems']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -183,7 +183,7 @@ export const getStarredItems = async () => {
     next: { tags: ["starred-items", "isStarred","myStarredItems"] },
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -202,7 +202,7 @@ export const updateSelectedWorkspace = async (workspaceId:string) => {
     },
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -226,7 +226,7 @@ export const starUnstarProject = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -250,7 +250,7 @@ export const starUnstarWorkspace = async (
     // next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {
@@ -270,7 +270,7 @@ export const isStarred = async (id: string, type: "project" | "workspace") => {
     next: { tags: ["isStarred"] },
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const data = await res.json();
   if (data.message !== "SUCCESS") {

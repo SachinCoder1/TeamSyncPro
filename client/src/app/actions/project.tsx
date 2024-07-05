@@ -20,7 +20,7 @@ export const getProject = async (projectid?: string) => {
     next: {tags: ['project']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const project = await res.json();
   if (project.message !== "SUCCESS") {
@@ -41,7 +41,7 @@ export const getAllStatus = async (projectid?: string) => {
     next: {tags: ['status']}
   });
   if (!res.ok) {
-    return { success: false };
+    return { success: false,status: res?.status };
   }
   const project = await res.json();
   if (project.message !== "SUCCESS") {
