@@ -73,7 +73,7 @@ export const navLinks = [
   },
   {
     title: "Docs",
-    href: "/docs",
+    href: "/https://documenter.getpostman.com/view/26033696/2sA3dyiWb2",
   },
   {
     title: "Components",
@@ -82,13 +82,13 @@ export const navLinks = [
   },
   {
     title: "Getting Started",
-    href: "/",
+    href: "/auth/signup",
     children: gettingStarted,
     asChild: {
       title: "Getting started",
-      href: "/",
+      href: "/auth/signup",
       description:
-        "Beautify your app with our components. Radix ui and Tailwind CSS.",
+        "Signup in 2 mins and get started.",
     },
   },
   {
@@ -107,7 +107,7 @@ export const loggedInNavLinks = [
     href: "/workspace",
   },
   {
-    title: "Account",
-    href: "/account",
+    title: "My Tasks",
+    href: "/tasks",
   },
 ];
