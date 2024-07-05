@@ -115,7 +115,7 @@ const AddCommentHandler = ({ taskId, comments }: Props) => {
       </div>
       <div className="my-4">
         {comments?.map((m, k) => (
-          <div key={m._id + k} className={cn("flex items-start gap-x-4")}>
+          <div key={m._id} className={cn("flex items-start gap-x-4")}>
             <Avatar className="w-8 h-8">
               <AvatarImage
                 //   src={session || "https://github.com/shadcn.png"}

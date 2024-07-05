@@ -19,7 +19,7 @@ const MyWorkspaces = async (props: Props) => {
       {!workspaces && <div><Loading /></div>}
       {/* {JSON.stringify(workspaces, null,2)} */}
       {workspaces?.data?.map((item, index) => (
-        <DropdownMenuItem className="hover:!bg-transparent focus:!bg-none px-0 py-0 !p-0 w-full m-0">
+        <DropdownMenuItem key={item._id} className="hover:!bg-transparent focus:!bg-none px-0 py-0 !p-0 w-full m-0">
           <MyWorkspacesCard
             key={item._id}
             selectedWorkspace={selectedWorkspace.user.workspace}

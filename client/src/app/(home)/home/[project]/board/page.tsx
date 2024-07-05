@@ -19,17 +19,12 @@ type Props = {
 
 const page = async ({ params }: Props) => {
   const session = await getServerAuth();
-  const project = await new Promise(resolve => {
-    setTimeout(() => {
-      resolve(true);
-    }, 20000000);
-  })
+  const project = await getProject(params.project)
   return (
     <div className="mt-4">
       <Suspense fallback={<Loading />}>
 
-hello
-      {/* <Board project={project.project} workspaceId={session.user.workspace} projectId={params.project}  /> */}
+      <Board project={project.project} workspaceId={session.user.workspace} projectId={params.project}  />
       </Suspense>
     </div>
   );
