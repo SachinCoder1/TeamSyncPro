@@ -31,12 +31,12 @@ const MyTasks = ({ tasks, workspaceId }: Props) => {
     <div>
       {/* {JSON.stringify(tasks, null, 2)} */}
 
-      <Tabs defaultValue="upcoming">
+      <Tabs defaultValue="overdue">
         {" "}
         <div className="space-between flex items-center mx-4">
           <TabsList className="h-full">
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
             <TabsTrigger value="overdue">Overdue</TabsTrigger>
+            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
           <div className="ml-auto">
@@ -55,18 +55,19 @@ const MyTasks = ({ tasks, workspaceId }: Props) => {
             </Link>
           </div>
         </div>
-        <TabsContent value="upcoming">
-          <TasksList
-            workspaceId={workspaceId}
-            tasks={tasks?.filter((task) => isAfter(task?.due || "", now) && task.done === false)}
-          />
-        </TabsContent>
         <TabsContent value="overdue">
           <TasksList
             workspaceId={workspaceId}
             tasks={tasks?.filter((task) => isBefore(task?.due || "", now) && task.done === false)}
           />
         </TabsContent>
+        <TabsContent value="upcoming">
+          <TasksList
+            workspaceId={workspaceId}
+            tasks={tasks?.filter((task) => isAfter(task?.due || "", now) && task.done === false)}
+          />
+        </TabsContent>
+
         <TabsContent value="completed">
           <TasksList
             workspaceId={workspaceId}

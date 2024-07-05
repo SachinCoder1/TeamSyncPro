@@ -55,7 +55,7 @@ const Navbar = async () => {
               <>
                 <NavigationMenuMain navLinks={navLinks} />
                 <Link
-                  href={"/"}
+                  href={"/auth/signup"}
                   className={buttonVariants({
                     size: "sm",
                   })}

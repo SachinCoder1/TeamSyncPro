@@ -18,13 +18,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { fireConfetti } from "@/components/workspace/NewWorkspace";
+import { format, isAfter, isBefore, parseISO } from "date-fns";
 
 type Props = {
   tasks?: MyTasksType[];
   workspaceId: string;
 };
 const TasksList = ({ tasks, workspaceId }: Props) => {
+  const now = new Date();
   const [markComplete, setMarkComplete] = useState({ id: "", mark: false });
+
   const params = useParams();
   const handleCompleteSubTask = async (
     status: "COMPLETE" | "INCOMPLETE",
@@ -36,7 +39,7 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
         mark: true,
       });
       await markCompleteIncomplete(id, true);
-      fireConfetti()
+      fireConfetti();
     }
 
     if (status === "INCOMPLETE") {
@@ -67,65 +70,74 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
         ))}
       {tasks
         ?.sort((a, b) => a.order - b.order)
-        ?.map((item, index) => (
-          <div
-            key={index + item._id}
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "w-full !text-left border-t rounded-none flex justify-between gap-x-2 group"
-            )}
-          >
-            <div className="flex gap-x-2 items-center">
-              {item.done === true ||
-              (item._id === markComplete.id && markComplete.mark) ? (
-                <CircleCheckIcon
-                  onClick={() => handleCompleteSubTask("INCOMPLETE", item._id)}
-                  size={25}
-                  className="-ml-0.5 text-background fill-[#58a182] rounded-full cursor-pointer"
-            />
-              ) : (
-                <CircleCheckIcon
-                size={20}
-                  onClick={() => handleCompleteSubTask("COMPLETE", item._id)}
-                  className="hover:text-[#0d7f56] hover:!fill-background rounded-full cursor-pointer text-muted-foreground"
-                  />
+        ?.map((item, index) => {
+          // const dueDate = item.due ? parseISO(item.due) : null;
+          const isOverdue = item.due && isBefore(item?.due || "", now);
+  
+          return (
+            <div
+              key={index + item._id}
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                "w-full !text-left border-t rounded-none flex justify-between gap-x-2 group"
               )}
-              <Link
-                className={cn("py-2")}
-                href={`/home/${item.project._id}/${item._id}`}
-              >
-                <div>{item.title}</div>
-              </Link>
-            </div>
-            <div className="flex gap-x-4">
-              <TooltipProvider delayDuration={250}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Link href={`/home/${item.project._id}`}>
-                      <Badge
-                        style={{
-                          backgroundColor: item.project.color,
-                        }}
-                      >
-                        {item.project.name}
-                      </Badge>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Click to view all tasks in {item.project.name}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            >
+              <div className="flex gap-x-2 items-center">
+                {item.done === true ||
+                (item._id === markComplete.id && markComplete.mark) ? (
+                  <CircleCheckIcon
+                    onClick={() =>
+                      handleCompleteSubTask("INCOMPLETE", item._id)
+                    }
+                    size={25}
+                    className="-ml-0.5 text-background fill-[#58a182] rounded-full cursor-pointer"
+                  />
+                ) : (
+                  <CircleCheckIcon
+                    size={20}
+                    onClick={() => handleCompleteSubTask("COMPLETE", item._id)}
+                    className="hover:text-[#0d7f56] hover:!fill-background rounded-full cursor-pointer text-muted-foreground"
+                  />
+                )}
+                <Link
+                  className={cn("py-2")}
+                  href={`/home/${item.project._id}/${item._id}`}
+                >
+                  <div>{item.title}</div>
+                </Link>
+              </div>
+              <div className="flex gap-x-4">
+                <TooltipProvider delayDuration={250}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link href={`/home/${item.project._id}`}>
+                        <Badge
+                          style={{
+                            backgroundColor: item.project.color,
+                          }}
+                        >
+                          {item.project.name}
+                        </Badge>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Click to view all tasks in {item.project.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
 
-              <Link
-                href={`/home/${item.project._id}/${item._id}`}
-                className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </Link>
+                {item.due && <p className={cn(isOverdue && "text-destructive")}>{format(item.due, "MMM d")}</p>}
+
+                <Link
+                  href={`/home/${item.project._id}/${item._id}`}
+                  className="transition-all duration-150 scale-0 group-hover:scale-100 hover:!scale-110 cursor-pointer"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
     </div>
   );
 };
