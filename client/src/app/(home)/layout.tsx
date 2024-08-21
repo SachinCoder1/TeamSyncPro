@@ -8,6 +8,16 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-      <ResizableMain>{children}</ResizableMain>
+    <div>
+      <div className="lg:block hidden">
+        <ResizableMain>
+          <div className="">{children}</div>
+        </ResizableMain>
+      </div>
+      <div className="lg:hidden block">
+        {/* <MySidebar /> */}
+        <div className="">{children}</div>
+      </div>
+    </div>
   );
 }

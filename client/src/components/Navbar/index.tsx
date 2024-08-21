@@ -16,6 +16,8 @@ import CreateOptions from "./CreateOptions";
 import { getWorkspace } from "@/app/actions/workspace";
 import CommandSearchMenu from "./CommandSearchMenu";
 import { getServerAuth } from "@/lib/auth";
+import MobileSidebar from "../Sidebar/MobileSidebar";
+import MainMobileSidebar from "../Sidebar/MainMobileSidebar";
 
 type MyType = {
   name: string;
@@ -41,47 +43,51 @@ const Navbar = async () => {
   return (
     <nav className="sticky h-14 px-8 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all">
       {/* <MaxWidthWrapper> */}
-        <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-          <Logo />
-          {
-            user && 
-          <CommandSearchMenu workspaceId={workspace.workspace?._id as string} projects={workspace.workspace?.projects} />
-          }
+      <div className="flex h-14 items-center justify-between border-b border-zinc-200">
+        <Logo />
+        {user && (
+          <CommandSearchMenu
+            workspaceId={workspace.workspace?._id as string}
+            projects={workspace.workspace?.projects}
+          />
+        )}
 
-          <MobileNav isAuth={!!user} />
-
-          <div className="hidden items-center space-x-4 sm:flex">
-            {!user ? (
-              <>
-                <NavigationMenuMain navLinks={navLinks} />
-                <Link
-                  href={"/auth/signup"}
-                  className={buttonVariants({
-                    size: "sm",
-                  })}
-                >
-                  Get started <ArrowRight className="ml-1.5 h-5 w-5" />
-                </Link>
-              </>
-            ) : (
-              <>
-              <CreateOptions workspaceId={workspace.workspace?._id} workspaceName={workspace.workspace?.name} />
-                <NavigationMenuMain navLinks={loggedInNavLinks} />
-
-                <UserAccountNav
-                  name={
-                    !user.name
-                      ? "Your Account"
-                      : user.name
-                  }
-                  email={user.email ?? ""}
-                  imageUrl={user.picture ?? ""}
-                />
-              </>
-            )}
-            <ThemeSwitcher />
-          </div>
+        {/* <MobileNav isAuth={!!user} /> */}
+        <div className="lg:hidden">
+          <MainMobileSidebar />
         </div>
+
+        <div className="hidden items-center space-x-4 sm:flex">
+          {!user ? (
+            <>
+              <NavigationMenuMain navLinks={navLinks} />
+              <Link
+                href={"/auth/signup"}
+                className={buttonVariants({
+                  size: "sm",
+                })}
+              >
+                Get started <ArrowRight className="ml-1.5 h-5 w-5" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <CreateOptions
+                workspaceId={workspace.workspace?._id}
+                workspaceName={workspace.workspace?.name}
+              />
+              <NavigationMenuMain navLinks={loggedInNavLinks} />
+
+              <UserAccountNav
+                name={!user.name ? "Your Account" : user.name}
+                email={user.email ?? ""}
+                imageUrl={user.picture ?? ""}
+              />
+            </>
+          )}
+          <ThemeSwitcher />
+        </div>
+      </div>
       {/* </MaxWidthWrapper> */}
     </nav>
   );

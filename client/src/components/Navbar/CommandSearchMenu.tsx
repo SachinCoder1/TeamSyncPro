@@ -101,7 +101,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
     <>
       {/* </p> */}
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger className="w-[400px]" asChild>
+        <PopoverTrigger className="lg:w-[400px] w-[200px]" asChild>
           <Button
             className="flex justify-between items-center text-muted-foreground"
             variant={"outline"}
