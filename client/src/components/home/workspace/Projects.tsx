@@ -20,7 +20,7 @@ type ProjectCardProps = {
 };
 const ProjectCard = ({ color, name, id, workspaceId }: ProjectCardProps) => (
   <div className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer">
-    <SquareFilledIcon className="w-10 h-10" color={color} />
+    <SquareFilledIcon className="md:w-10 md:h-10 w-6 h-6" color={color} />
     <Link href={`/home/${id}`} className="font-semibold">
       {name}
     </Link>
@@ -31,11 +31,11 @@ const Projects = ({ projects, workspaceId,className }: Props) => {
     <div className={cn(className)}>
       <Link
         href={`/projects/new`}
-        className="hover:bg-secondary py-3 px-4 flex items-center gap-x-4 cursor-pointer"
+        className="hover:bg-secondary md:py-3 py-2 md:px-4 px-4 flex items-center gap-x-4 cursor-pointer"
       >
         <PlusSquareIcon
           strokeWidth={"1px"}
-          className="w-10 h-10 text-muted-foreground !font-normal"
+          className="md:w-10 md:h-10 h-6 w-6 text-muted-foreground !font-normal"
         />
         <p className="font-semibold">New project</p>
       </Link>

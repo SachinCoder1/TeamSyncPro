@@ -25,11 +25,7 @@ export default async function Page() {
   const myTasks = await getMyTasks();
   const starredItems = await getStarredItems();
   return (
-    <div className="mt-6 px-4">
-      {/* <h1>Home</h1> */}
-      {/* <p>Welcome {session.user.name}</p> */}
-      {/* your workspace is {session.user.workspace} */}
-      {/* {JSON.stringify(starredItems, null, 2)} */}
+    <div className="mt-6 md:px-4 px-2">
       <div className="space-y-2 my-4">
         <Heading className="font-semibold">Home</Heading>
       </div>
@@ -37,10 +33,13 @@ export default async function Page() {
         <Heading variant="h5" className="font-normal">
           {format(new Date(), "EEEE, MMMM d")}
         </Heading>
-        <Heading variant="h2" className="font-normal">
+        <Heading variant="h2" className="font-normal md:block hidden">
           {getGreeting()}, {session.user.name}
         </Heading>
-        <div className="rounded-2xl bg-secondary flex mt-6 gap-x-6 px-8 py-3 items-center">
+        <Heading variant="h3" className="font-normal md:hidden block text-center">
+          {getGreeting()}, {session.user.name}
+        </Heading>
+        <div className="rounded-2xl bg-secondary flex mt-6 md:gap-x-6 gap-x-2 md:px-8 px-4 py-3 items-center">
           <Badge variant={"secondary"} className="text-muted-foreground">
             My week
           </Badge>{" "}
@@ -53,15 +52,15 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 w-full gap-x-6 gap-y-6 grid-cols-1 my-6">
+      <div className="grid md:grid-cols-2 w-full md:gap-x-6 gap-y-6 grid-cols-1 my-6">
         <Card title="My Tasks">
           <MyTasks tasks={myTasks?.data} workspaceId={session.user.workspace} />
         </Card>
-          <Card title="Projects" className="px-6">
+          <Card title="Projects" className="md:px-6">
             <Projects
               workspaceId={session.user.workspace}
               projects={projects.workspace?.projects}
-               className="grid md:grid-cols-2 grid-cols-1 gap-4"
+               className="grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-2"
             />
           </Card>
           {/* <Card title="Starred projects" className="px-6">

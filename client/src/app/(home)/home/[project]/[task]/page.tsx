@@ -28,15 +28,26 @@ export default async function Page({ params }: Props) {
   const session = await getServerAuth();
   const taskData = getPerticularTask(params.task, params.project);
   const subTaskData = getSubTasks(params.task);
-  const tagsData = getTags()
+  const tagsData = getTags();
   const workspaceData = getWorkspace();
-  const [tasks, subtasks,tags, workspace] = await Promise.all([taskData, subTaskData, tagsData,workspaceData]);
+  const [tasks, subtasks, tags, workspace] = await Promise.all([
+    taskData,
+    subTaskData,
+    tagsData,
+    workspaceData,
+  ]);
   if (tasks.success === false) {
     return <>not found</>;
   }
   return (
     <div>
-      <Suspense fallback={<div><Loading /></div>}>
+      <Suspense
+        fallback={
+          <div>
+            <Loading />
+          </div>
+        }
+      >
         {/* {JSON.stringify(tasks.task, null, 2)} */}
         <BreadcrumbMain params={params} />
         <div className="ml-4 mt-4">
@@ -45,12 +56,42 @@ export default async function Page({ params }: Props) {
             isCompleted={tasks.task?.done as boolean}
           />
         </div>
-        <ResizableMain
-          left={
-            <LeftTaskContainer workspaceId={session.user.workspace} projectId={params.project} task={tasks.task} subtasks={subtasks?.data} />
-          }
-          right={<RightTaskContainer workspaceId={session.user.workspace} workspaceName={workspace.workspace?.name} task={tasks.task} tags={tags.data} members={workspace.workspace?.members} />}
-        />
+        <div className="md:block hidden">
+          <ResizableMain
+            left={
+              <LeftTaskContainer
+                workspaceId={session.user.workspace}
+                projectId={params.project}
+                task={tasks.task}
+                subtasks={subtasks?.data}
+              />
+            }
+            right={
+              <RightTaskContainer
+                workspaceId={session.user.workspace}
+                workspaceName={workspace.workspace?.name}
+                task={tasks.task}
+                tags={tags.data}
+                members={workspace.workspace?.members}
+              />
+            }
+          />
+        </div>
+        <div className="md:hidden block space-y-2">
+          <LeftTaskContainer
+            workspaceId={session.user.workspace}
+            projectId={params.project}
+            task={tasks.task}
+            subtasks={subtasks?.data}
+          />
+          <RightTaskContainer
+            workspaceId={session.user.workspace}
+            workspaceName={workspace.workspace?.name}
+            task={tasks.task}
+            tags={tags.data}
+            members={workspace.workspace?.members}
+          />
+        </div>
       </Suspense>
     </div>
   );

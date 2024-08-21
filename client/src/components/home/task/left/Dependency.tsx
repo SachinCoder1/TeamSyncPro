@@ -107,14 +107,14 @@ export default function Dependency({
     <div>
       {!isEditing &&
         (dependency?.by ? (
-          <div className="flex gap-x-2 items-center border py-1 px-2 rounded-md justify-between hover:bg-secondary">
+          <div className="md:flex gap-x-2 items-center border py-1 px-2 rounded-md justify-between hover:bg-secondary">
             <Link
               href={`/home/${projectId}/${dependency?.task._id}`}
               // href={`/home/${row.original.id}/`}
               className=""
               // passHref
             >
-              <div className="flex space-x-2">
+              <div className="md:flex space-x-2">
                 {dependency?.by && (
                   <Badge variant={"outline"}>
                     {dependencyType[dependency.by]?.label}

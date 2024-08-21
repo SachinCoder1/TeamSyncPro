@@ -106,8 +106,8 @@ export default async function SettingsLayout({
         <div className="p-2 pb-4">
           <div className="flex flex-col">
            
-            <div className="flex justify-between items-center w-full gap-x-2">
-              <div className="flex items-center gap-x-4 flex-1">
+            <div className="md:flex justify-between items-center w-full gap-x-2 md:space-y-0 space-y-2">
+              <div className="flex items-center md:gap-x-4 gap-x-2 flex-1">
                 <SquareFilledIcon
                   className="p-2 w-8 h-8"
                   color={project?.color || ""}
@@ -141,7 +141,7 @@ export default async function SettingsLayout({
                 </Button>
               </div>
             </div>
-            <aside className="">
+            <aside className="mt-4 md:my-0">
               <ProjectNav items={sidebarNavItems} />
             </aside>
             <div className="flex-1">{children}</div>

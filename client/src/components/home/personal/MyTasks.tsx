@@ -33,7 +33,7 @@ const MyTasks = ({ tasks, workspaceId }: Props) => {
 
       <Tabs defaultValue="overdue">
         {" "}
-        <div className="space-between flex items-center mx-4">
+        <div className="space-between md:flex items-center lg:mx-4 mx-2 space-y-2 md:space-y-0">
           <TabsList className="h-full">
             <TabsTrigger value="overdue">Overdue</TabsTrigger>
             <TabsTrigger value="upcoming">Upcoming</TabsTrigger>

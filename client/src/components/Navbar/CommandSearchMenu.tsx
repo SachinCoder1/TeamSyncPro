@@ -101,7 +101,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
     <>
       {/* </p> */}
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger className="lg:w-[400px] w-[200px]" asChild>
+        <PopoverTrigger className="lg:w-[400px] w-[90px]" asChild>
           <Button
             className="flex justify-between items-center text-muted-foreground"
             variant={"outline"}
@@ -111,7 +111,7 @@ export default function CommandSearchMenu({ workspaceId, projects }: Props) {
               <SearchIcon className="text-muted-foreground w-4 h-4" /> Search
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground hidden md:block">
               Press{" "}
               <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                 <span className="text-xs">⌘</span>J

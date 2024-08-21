@@ -55,7 +55,7 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
     <div>
       {!tasks ||
         (tasks.length <= 0 && (
-          <div className="flex flex-col items-center p-6 rounded-lg">
+          <div className="flex flex-col items-center md:p-6 p-2 rounded-lg">
             <h2 className="mb-2 text-xl font-semibold text-gray-700">
               No Tasks Found
             </h2>
@@ -100,10 +100,10 @@ const TasksList = ({ tasks, workspaceId }: Props) => {
                   />
                 )}
                 <Link
-                  className={cn("py-2")}
+                  className={cn("py-2 max-w-[100px] md:max-w-full truncate md:text-base text-xs")}
                   href={`/home/${item.project._id}/${item._id}`}
                 >
-                  <div>{item.title}</div>
+                  {item.title}
                 </Link>
               </div>
               <div className="flex gap-x-4">
