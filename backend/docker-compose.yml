@@ -8,8 +8,14 @@ services:
     volumes:
       - mongo-data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: adminUser
+      MONGO_INITDB_ROOT_PASSWORD: strongPassword123
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
 
   backend:
     build: .
@@ -18,6 +24,7 @@ services:
       - "8000:8000"
     depends_on:
       - mongodb
+      - redis
     env_file:
       - .env
     command: npm start
