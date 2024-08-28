@@ -13,8 +13,8 @@ const config = {
     CLIENT_URL: "",
   },
   [PRODUCTION]: {
-    BASE_URL: "http:coming:soon",
-    CLIENT_URL: "http:coming:soon",
+    BASE_URL: "https://teamsynpro-backend.sachingurjar.me",
+    CLIENT_URL: "https://teamsyncpro.sachingurjar.me",
   },
 };
 
