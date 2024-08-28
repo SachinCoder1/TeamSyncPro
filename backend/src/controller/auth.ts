@@ -10,8 +10,10 @@ import {
 } from "~/utils";
 
 export const signupWithEmail = async (req: Request, res: Response) => {
+  console.log("arrived at signup with email");
   try {
     const { email, password, name } = req.body;
+    console.log("name:", name)
 
     const user = await User.findOne({ email });
 
@@ -33,6 +35,7 @@ export const signupWithEmail = async (req: Request, res: Response) => {
       user: { email: newUser.email, name: newUser.name },
     });
   } catch (error) {
+    console.log("error occured in signup with email:", error);
     return errorResponseHandler(res, "SERVER_ERROR");
   }
 };
