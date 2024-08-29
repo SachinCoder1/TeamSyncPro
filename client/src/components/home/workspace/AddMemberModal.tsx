@@ -6,6 +6,7 @@ import { Icons } from "@/components/Icon/Icons";
 import { ResponsiveModal } from "@/components/ui/ResponsiveModal";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import InviteMembers from "@/components/workspace/InviteMembers";
 import { cn } from "@/lib/utils";
 import { PlusCircleIcon } from "lucide-react";
 import React, { useCallback, useState } from "react";
@@ -18,6 +19,8 @@ type Props = {
   buttonTrigger?: React.ReactNode;
   setPopOverOpen?: any;
   className?: string;
+  open: boolean;
+  setOpen: (val: boolean) => void;
 };
 
 const AddMemberModal = ({
@@ -25,9 +28,11 @@ const AddMemberModal = ({
   workspaceName,
   buttonTrigger,
   setPopOverOpen,
+  open,
+  setOpen,
   className,
 }: Props) => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<{ label: string; value: string }[]>(
     []
   );
@@ -44,7 +49,7 @@ const AddMemberModal = ({
     const isAdded = await inviteToWorkspace(workspaceId, emails);
     if (isAdded.success) {
       revalidateTagServer("invitations");
-      toast.success("Invitations sent to join")
+      toast.success("Invitations sent to join");
       handleReset();
       return;
     }
@@ -59,58 +64,21 @@ const AddMemberModal = ({
     setSelected([]);
     if (setPopOverOpen) {
       setPopOverOpen(false);
+      setOpen(false);
     }
   };
 
-  const onAdd = useCallback(
-    async (newTag: any) => {
-      setSelected([...selected, newTag]);
-    },
-    [selected]
-  );
-
-  const onDelete = useCallback(
-    async (tagIndex: any) => {
-      const tagToRemove = selected[tagIndex];
-      setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
-
-    },
-    [selected]
-  );
-  function isValidEmail(value: any) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value);
-  }
-
-  const onValidate = useCallback((value: any) => isValidEmail(value), []);
-
   return (
-    <div>
+    <div className="">
       <ResponsiveModal
         open={open}
         setOpen={setOpen}
         title={`Invite people to ${workspaceName}`}
         description=""
       >
-        <Label>Email addresses</Label>
-        <ReactTags
-          labelText="e.g. john@company.com"
-          placeholderText="e.g. john@company.com"
-          selected={selected || []}
-          suggestions={[]}
-          // ref={api}
-          onAdd={onAdd}
-          onDelete={onDelete}
-          noOptionsText="No emails found"
-          allowNew
-          ariaDescribedBy="custom-tags-description"
-          // collapseOnSelect
-          id="custom-tags-demo"
-          onValidate={onValidate}
-          activateFirstOption={true}
-          allowBackspace={true}
-          // onCollapse={() => setToggleEditor(false)}
-        />
+        <div className="grid gap-2">
+          <InviteMembers selected={selected} setSelected={setSelected} />
+        </div>
         <div className="flex items-start justify-end w-full mt-2">
           <Button
             onClick={handleMembersAdd}
@@ -124,11 +92,12 @@ const AddMemberModal = ({
       </ResponsiveModal>
       <div
         onClick={(e) => {
-          // e.preventDefault();
-          // e.stopPropagation();
           setOpen(true);
         }}
-        className={cn("flex items-center gap-x-2 ml-1 cursor-pointer hover:bg-secondary rounded-md px-2 py-2", className)}
+        className={cn(
+          "flex items-center gap-x-2 ml-1 cursor-pointer hover:bg-secondary rounded-md px-2 py-2",
+          className
+        )}
       >
         {buttonTrigger}
       </div>
