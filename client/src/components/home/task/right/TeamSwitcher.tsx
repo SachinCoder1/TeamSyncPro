@@ -103,6 +103,7 @@ export default function TeamSwitcher({
 }: TeamSwitcherProps) {
   const [open, setOpen] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState<Team | undefined>(assignee);
+  const [isInviteMemberModalOpen, setIsInviteMemberModalOpen] = React.useState(false);
 
   const changeAssignee = async (member: Team) => {
     if (selectedTeam?.value === member.value) {
@@ -198,6 +199,8 @@ export default function TeamSwitcher({
                 >
                   <AddMemberModal
                     setPopOverOpen={setOpen}
+                    open={isInviteMemberModalOpen}
+                    setOpen={setIsInviteMemberModalOpen}
                     workspaceId={workspaceId}
                     workspaceName={workspaceName}
                     className="gap-x-0 py-0 ml-0 px-0"
