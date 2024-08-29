@@ -16,6 +16,7 @@ const app = express();
 
 CONNECT_MONGO_DB();
 
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use(compression());
 app.use(helmet());
