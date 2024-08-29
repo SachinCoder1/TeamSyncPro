@@ -6,7 +6,6 @@ import { MONGO_URI } from "~/constants";
 export default function CONNECT_MONGO_DB() {
   try {
     mongoose.set("strictQuery", true);
-    console.log("mongodb uri: ", MONGO_URI)
     mongoose
       .connect(MONGO_URI)
       .then(() => {

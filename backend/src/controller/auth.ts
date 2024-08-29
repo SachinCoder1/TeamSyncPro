@@ -10,10 +10,8 @@ import {
 } from "~/utils";
 
 export const signupWithEmail = async (req: Request, res: Response) => {
-  console.log("arrived at signup with email");
   try {
     const { email, password, name } = req.body;
-    console.log("name:", name)
 
     const user = await User.findOne({ email });
 
