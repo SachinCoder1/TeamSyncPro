@@ -124,7 +124,11 @@ export const UserCard = ({
         </HoverCardTrigger>
         {name && (
           <HoverCardContent className="w-max">
-            {loading && !memberProfile && <div><Loading /></div>}
+            {loading && !memberProfile && (
+              <div>
+                <Loading />
+              </div>
+            )}
             {memberProfile && (
               <div className="flex gap-x-2 w-max h-max">
                 <UserAvatarCard
@@ -140,12 +144,11 @@ export const UserCard = ({
 
                     {/* </Link> */}
                     <div className="flex items-center">
-                    <MailIcon className="mr-2 h-3 w-3 opacity-70" />{" "}
-                    <span className="text-xs text-muted-foreground">
-                      {memberProfile.email}
-
-                    </span>
-                  </div>
+                      <MailIcon className="mr-2 h-3 w-3 opacity-70" />{" "}
+                      <span className="text-xs text-muted-foreground">
+                        {memberProfile.email}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex items-center py-2">
                     <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
@@ -173,46 +176,13 @@ export const UserCard = ({
 
 const Members = ({ workspaceId, members, workspaceName }: Props) => {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<{ label: string; value: string }[]>(
-    []
-  );
-  const [loading, setLoading] = useState(false);
-  const handleMembersAdd = () => {
-    handleReset();
-  };
-
-  const handleReset = () => {
-    setOpen(false);
-    setLoading(false);
-    setSelected([]);
-  };
-
-  const onAdd = useCallback(
-    async (newTag: any) => {
-      setSelected([...selected, newTag]);
-    },
-    [selected]
-  );
-
-  const onDelete = useCallback(
-    async (tagIndex: any) => {
-      const tagToRemove = selected[tagIndex];
-      setSelected(selected.filter((_: any, i: any) => i !== tagIndex));
-
-    },
-    [selected]
-  );
-  function isValidEmail(value: any) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value);
-  }
-
-  const onValidate = useCallback((value: any) => isValidEmail(value), []);
 
   return (
     <div>
       <div className="grid grid-cols-3 gap-x-4 gap-y-3 items-center ">
         <AddMemberModal
+          open={open}
+          setOpen={setOpen}
           workspaceId={workspaceId}
           workspaceName={workspaceName}
           buttonTrigger={
