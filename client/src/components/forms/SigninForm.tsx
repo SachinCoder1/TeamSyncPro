@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInUser } from "@/app/actions/auth";
 import { signIn } from "next-auth/react";
 import { PasswordInput } from "../ui/password-input";
+import { GuestLoginButton } from "./GuestLoginBtn";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   invitationToken: string | null;
@@ -72,6 +73,7 @@ export function SigninForm({
         <p className="text-red-500 text-sm">{errors?.root.message}</p>
       )}
       <form onSubmit={onSubmit}>
+        <GuestLoginButton />
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>

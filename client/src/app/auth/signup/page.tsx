@@ -20,8 +20,8 @@ export default async function AuthenticationPage() {
   }
   return (
     <>
-      <div className="md:hidden">hello</div>
-      <div className="container relative hidden min-h-[calc(100vh-56px)] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      {/* <div className="md:hidden">hello</div> */}
+      <div className="container relative min-h-[calc(100vh-56px)] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/auth/signin"
           className={cn(
@@ -40,9 +40,7 @@ export default async function AuthenticationPage() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
+                &ldquo;TeamSyncPro has revolutionized the way I manage projects. It's intuitive, efficient, and has saved me countless hours while helping me deliver top-notch results to my clients&rdquo;
               </p>
               <footer className="text-sm">Sofia Davis</footer>
             </blockquote>

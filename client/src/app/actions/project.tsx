@@ -16,7 +16,7 @@ export const getProject = async (projectid?: string) => {
     headers: {
       authorization: `Bearer ${session.accessToken.token}`,
     },
-    cache: "force-cache",
+    cache: "no-cache",
     next: {tags: ['project']}
   });
   if (!res.ok) {

@@ -21,8 +21,8 @@ export const getWorkspace = async () => {
       headers: {
         authorization: `Bearer ${session.accessToken.token}`,
       },
-      cache: "force-cache",
-      next: { tags: ["workspace", "my-workspace"] },
+      cache: "no-cache",
+      next: { tags: ["workspace", "my-workspace"], revalidate: 15 },
     }
   );
   if (!res.ok) {

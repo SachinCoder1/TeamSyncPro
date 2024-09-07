@@ -74,7 +74,7 @@ function DescriptionHandler({
           }}
           className={cn(
             "border border-transparent px-2 py-1 min-h-[100px]",
-            !isEditing && "hover:border-gray-300 rounded-xl" 
+            !isEditing && "hover:border-gray-300 rounded-xl prose" 
             // hover:bg-[#EBECF0]
           )}
           dangerouslySetInnerHTML={{

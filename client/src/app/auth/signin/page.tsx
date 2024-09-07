@@ -30,7 +30,7 @@ const LoginPage = async ({searchParams}: Props) => {
 
   const invitationToken = getQueryParam(searchParams?.callbackUrl as string, "invitation_token")
   return (
-    <div className="container relative hidden min-h-[calc(100vh-56px)] flex-col items-center justify-center md:flex lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="container relative min-h-[calc(100vh-56px)] flex-col items-center justify-center flex lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="flex w-full !max-h-[60%] max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
         <div className="hidden bg-cover lg:block lg:w-1/2">
           <img className="h-full" src="/login.svg" />
