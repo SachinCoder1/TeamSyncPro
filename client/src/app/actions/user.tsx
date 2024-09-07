@@ -15,7 +15,7 @@ export const getMyTasks = async () => {
   const res = await fetch(`${BACKEND_URL}/user/getMyTasks`, {
     method: "GET",
     headers: {
-      authorization: `Bearer ${session.accessToken.token}`,
+      authorization: `Bearer ${session?.accessToken?.token}`,
     },
     next: {tags: ['myStarredItems']}
   });
@@ -78,7 +78,7 @@ export const getMyWorkspaces = async () => {
   const res = await fetch(`${BACKEND_URL}/user/getMyWorkspaces`, {
     method: "GET",
     headers: {
-      authorization: `Bearer ${session.accessToken.token}`,
+      authorization: `Bearer ${session?.accessToken?.token}`,
     },
     // next: {tags: ['project']}
   });
@@ -178,7 +178,7 @@ export const getStarredItems = async () => {
   const res = await fetch(`${BACKEND_URL}/user/getStarredItems`, {
     method: "GET",
     headers: {
-      authorization: `Bearer ${session.accessToken.token}`,
+      authorization: `Bearer ${session?.accessToken?.token}`,
     },
     next: { tags: ["starred-items", "isStarred","myStarredItems"] },
   });

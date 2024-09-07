@@ -22,16 +22,19 @@ export default async function Sidebar() {
     starredItemsData,
     workspacesData,
   ]);
-  
+
   return (
     <aside className="min-h-full w-full px-2 py-2">
       <div className="space-y-1">
-        <Workspaces
-          workspaces={workspaces.data}
-          id={workspace.workspace?._id as string}
-          name={workspace.workspace?.name as string}
-          selected={session.user.workspace}
-        />
+        {session?.user && (
+          <Workspaces
+            workspaces={workspaces.data}
+            id={workspace.workspace?._id as string}
+            name={workspace.workspace?.name as string}
+            selected={session.user.workspace}
+          />
+        )}
+
         {/* {workspace?.workspace?.name || session.user.id} */}
         {primarySideNav.map((item, index) => (
           <MenuLink key={index} item={item} />

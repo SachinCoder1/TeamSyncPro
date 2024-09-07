@@ -41,7 +41,7 @@ export const getPerticularTask = async (taskId: string, projectId: string) => {
       authorization: `Bearer ${session.accessToken.token}`,
     },
     next: { tags: ["task"] },
-    cache: "force-cache",
+    cache: "no-store",
   });
   if (!res.ok) {
     return { success: false,status: res?.status };
