@@ -4,6 +4,7 @@ import { errorResponseHandler, successResponseHandler } from "~/utils";
 import { v4 as uuidv4 } from "uuid";
 import { Types } from "mongoose";
 import { sendEmail } from "~/service/email";
+import { CLIENT_URL } from "~/config";
 
 export const inviteUsersToWorkspace = async (req: Request, res: Response) => {
   try {
@@ -60,8 +61,9 @@ export const inviteUsersToWorkspace = async (req: Request, res: Response) => {
            ${admin?.name} Invited You to join ${workspace.name}     
         </h1>
         <p>You can join It in just 2 mins using the below link</p>
-         <a href=http://localhost:3000/invitation/${invitationToken} />
-         <p> if the above link do not work please use this ${invitationToken} </p>
+         <a href=${CLIENT_URL}/invite/accept?invitation_token=${invitationToken}>Join</a>
+         <p> if the above link do not work please use this ${CLIENT_URL}/invite/accept?invitation_token=${invitationToken} </p>
+         <p> if the above link do not work please use this code ${invitationToken} </p>
         `
       );
 
